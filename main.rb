@@ -28,57 +28,57 @@ end
 
 
 
-#scrapers
-def hofequipment(input)
-	mechanize = Mechanize.new
+# #scrapers
+# def hofequipment(input)
+# 	mechanize = Mechanize.new
 
-	page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
+# 	page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
 	
-	product = page.at('span.item-name a')
+# 	product = page.at('span.item-name a')
 	
-	if product
-		page = mechanize.click(product)
+# 	if product
+# 		page = mechanize.click(product)
 
-		price = page.at(".item-price").text.strip
-		table = page.at("table")
+# 		price = page.at(".item-price").text.strip
+# 		table = page.at("table")
 
-		if page.at(".chartPersonalization")
+# 		if page.at(".chartPersonalization")
 
-			table_data = table.search('tr').map do |row|
-				row.search('th, td').map { |cell| cell.text.strip }
-			end
+# 			table_data = table.search('tr').map do |row|
+# 				row.search('th, td').map { |cell| cell.text.strip }
+# 			end
 
-			#CSV.open('example.csv', 'a') do |csv|
-			table_data.each do |row|
-				row.each do |x|
-					if x == input
-						mynum = row[-2]
-						mynum = mynum.gsub(/[()]/, "")
-						mynum = mynum.gsub(/[$]/, "")
-						return mynum
+# 			#CSV.open('example.csv', 'a') do |csv|
+# 			table_data.each do |row|
+# 				row.each do |x|
+# 					if x == input
+# 						mynum = row[-2]
+# 						mynum = mynum.gsub(/[()]/, "")
+# 						mynum = mynum.gsub(/[$]/, "")
+# 						return mynum
 
-					end
-				end
-			end
-			#end
+# 					end
+# 				end
+# 			end
+# 			#end
 
-		elsif page.at(".item-price")
-				price = price.gsub(/[()]/, "")
-				price = price.gsub(/[$]/, "")
-				return price
-				# open("example.csv", "a") do |fileopen|
-				# 	fileopen << input
-				# 	fileopen << ","
-				# 	fileopen << price
-				# 	fileopen << "\n"
-				# end
+# 		elsif page.at(".item-price")
+# 				price = price.gsub(/[()]/, "")
+# 				price = price.gsub(/[$]/, "")
+# 				return price
+# 				# open("example.csv", "a") do |fileopen|
+# 				# 	fileopen << input
+# 				# 	fileopen << ","
+# 				# 	fileopen << price
+# 				# 	fileopen << "\n"
+# 				# end
 			
-		end
+# 		end
 
-	else
-		return "0.00"
-	end
-end
+# 	else
+# 		return "0.00"
+# 	end
+# end
 
 # def industrialproducts(input)
 # 	mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
@@ -128,52 +128,52 @@ def industrialsafety(input)
 	end
 end
 
-def toolfetch(input)
-	mechanize = Mechanize.new
-	url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
+# def toolfetch(input)
+# 	mechanize = Mechanize.new
+# 	url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
 		
-	page = mechanize.get(url)
+# 	page = mechanize.get(url)
 
-	price = page.at("li.b_algo h2 a")
+# 	price = page.at("li.b_algo h2 a")
 
-	newprice = mechanize.click(price)
+# 	newprice = mechanize.click(price)
 
-	newprice = newprice.at("span.price").text	
-	newprice = newprice.gsub(/[$]/, "")
-	return newprice
-end
+# 	newprice = newprice.at("span.price").text	
+# 	newprice = newprice.gsub(/[$]/, "")
+# 	return newprice
+# end
 
-#returns lowest number
-def lowestnum(arr1, arr2, arr3, arr4)
+# #returns lowest number
+# def lowestnum(arr1, arr2, arr3, arr4)
 
-	arr1, arr2, arr3, arr4 = arr1.to_f, arr2.to_f, arr3.to_f, arr4.to_f
+# 	arr1, arr2, arr3, arr4 = arr1.to_f, arr2.to_f, arr3.to_f, arr4.to_f
 
 
-	myarr = [arr1, arr2, arr3, arr4]
+# 	myarr = [arr1, arr2, arr3, arr4]
 
-	myarr.each do |x| 
-		if myarr.min == 0
-			myarr.delete(myarr.min)
-			return myarr.min
-		else
-			return myarr.min
-		end
-	end
-end
+# 	myarr.each do |x| 
+# 		if myarr.min == 0
+# 			myarr.delete(myarr.min)
+# 			return myarr.min
+# 		else
+# 			return myarr.min
+# 		end
+# 	end
+# end
 
-#returns company of lowest number
-def company(arr1, arr2, arr3, arr4)
+# #returns company of lowest number
+# def company(arr1, arr2, arr3, arr4)
 
-	if arr1.to_f == @lowestnum
-		return "Industrial Safety"
-	elsif arr2.to_f == @lowestnum
-		return "HOFequipment"
-	elsif arr3.to_f == @lowestnum
-		return "Toolfetch"
-	elsif arr4.to_f == @lowestnum
-		return "Industrial Products"
-	else
-		return "something broke, tell sam"
-	end
-end
+# 	if arr1.to_f == @lowestnum
+# 		return "Industrial Safety"
+# 	elsif arr2.to_f == @lowestnum
+# 		return "HOFequipment"
+# 	elsif arr3.to_f == @lowestnum
+# 		return "Toolfetch"
+# 	elsif arr4.to_f == @lowestnum
+# 		return "Industrial Products"
+# 	else
+# 		return "something broke, tell sam"
+# 	end
+# end
 
