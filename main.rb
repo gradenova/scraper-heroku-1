@@ -81,7 +81,7 @@ def hofequipment(input)
 end
 
 def industrialproducts(input)
-	mechanize = Mechanize.new { |mechanize| mechanize.user_agent_alias = 'Windows Chrome'}
+	mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
 
 
 
