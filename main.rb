@@ -89,20 +89,22 @@ def industrialproducts(input)
 
 	page = mechanize.get(url)
 
-	search_form = page.form
+	if page
+		search_form = page.form
 
-	search_form['q'] = input
+		search_form['q'] = input
 
-	page = search_form.submit
+		page = search_form.submit
 
-	price = page.at(".price")
+		price = page.at(".price")
 
-	if price
-		price = price.text
-		price = price.gsub(/[$]/, "")
-		return price
-	else
-		return "0.00"
+		if price
+			price = price.text
+			price = price.gsub(/[$]/, "")
+			return price
+		else
+			return "0.00"
+		end
 	end
 end
 
