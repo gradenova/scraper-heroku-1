@@ -81,7 +81,9 @@ def hofequipment(input)
 end
 
 def industrialproducts(input)
-	mechanize = Mechanize.new
+	mechanize = Mechanize.new { |mechanize| mechanize.user_agent_alias = 'Windows Chrome'}
+
+
 
 	url = "http://www.industrialproducts.com/"
 
