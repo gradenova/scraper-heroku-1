@@ -80,33 +80,33 @@ def hofequipment(input)
 	end
 end
 
-def industrialproducts(input)
-	mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
+# def industrialproducts(input)
+# 	mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
 
 
 
-	url = "http://www.industrialproducts.com/"
+# 	url = "http://www.industrialproducts.com/"
 
-	page = mechanize.get(url)
+# 	page = mechanize.get(url)
 
-	if page
-		search_form = page.form
+# 	if page
+# 		search_form = page.form
 
-		search_form['q'] = input
+# 		search_form['q'] = input
 
-		page = search_form.submit
+# 		page = search_form.submit
 
-		price = page.at(".price")
+# 		price = page.at(".price")
 
-		if price
-			price = price.text
-			price = price.gsub(/[$]/, "")
-			return price
-		else
-			return "0.00"
-		end
-	end
-end
+# 		if price
+# 			price = price.text
+# 			price = price.gsub(/[$]/, "")
+# 			return price
+# 		else
+# 			return "0.00"
+# 		end
+# 	end
+# end
 
 def industrialsafety(input)
 	url = "http://www.industrialsafety.com/searchresults.asp?Search=" + input + "&Submit="
