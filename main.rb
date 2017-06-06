@@ -11,13 +11,13 @@ post "/" do
 	query = params[:q]
 
 	#assigns lowest number variable
-	@lowestnum = lowestnum(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
+	@lowestnum = lowestnum( hofequipment(query), toolfetch(query), industrialproducts(query))
 
 	#assigns company variable
-	@company = company(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
+	@company = company( hofequipment(query), toolfetch(query), industrialproducts(query))
 
 	#scraper numbers
-	@industrialsafety = industrialsafety(query)
+	#@industrialsafety = industrialsafety(query)
 	@hofequipment = hofequipment(query)
 	@toolfetch = toolfetch(query)
 	@industrialproducts = industrialproducts(query)
