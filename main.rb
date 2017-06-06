@@ -11,16 +11,16 @@ post "/" do
 	query = params[:q]
 
 	#assigns lowest number variable
-	#@lowestnum = lowestnum(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
+	@lowestnum = lowestnum(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
 
 	#assigns company variable
-	#@company = company(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
+	@company = company(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
 
 	#scraper numbers
 	@industrialsafety = industrialsafety(query)
 	@hofequipment = hofequipment(query)
 	@toolfetch = toolfetch(query)
-	#@industrialproducts = industrialproducts(query)
+	@industrialproducts = industrialproducts(query)
 
 	#returns views/index.erb
 	erb :index
@@ -73,8 +73,6 @@ end
 
 def industrialproducts(input)
 	mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
-
-
 
 	url = "http://www.industrialproducts.com/"
 
