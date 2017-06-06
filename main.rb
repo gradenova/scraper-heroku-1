@@ -115,7 +115,10 @@ def toolfetch(input)
 			newprice = newprice.gsub(/[$]/, "")
 
 			return newprice
+		else
+			return "0.00"
 		end
+
 	else
 		return "0.00"
 	end
