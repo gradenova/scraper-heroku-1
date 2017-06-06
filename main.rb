@@ -18,9 +18,9 @@ post "/" do
 
 	#scraper numbers
 	@industrialsafety = industrialsafety(query)
-	@hofequipment = hofequipment(query)
-	@toolfetch = toolfetch(query)
-	@industrialproducts = industrialproducts(query)
+	#@hofequipment = hofequipment(query)
+	#@toolfetch = toolfetch(query)
+	#@industrialproducts = industrialproducts(query)
 
 	#returns views/index.erb
 	erb :index
