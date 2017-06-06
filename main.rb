@@ -148,12 +148,12 @@ def toolfetch(input)
 end
 
 #returns lowest number
-def lowestnum(arr1, arr2, arr3, arr4)
+def lowestnum(arr1, arr2)
 
-	arr1, arr2, arr3, arr4 = arr1.to_f, arr2.to_f, arr3.to_f, arr4.to_f
+	arr1, arr2 = arr1.to_f, arr2.to_f
 
 
-	myarr = [arr1, arr2, arr3, arr4]
+	myarr = [arr1, arr2]
 
 	myarr.each do |x| 
 		if myarr.min == 0
@@ -166,16 +166,16 @@ def lowestnum(arr1, arr2, arr3, arr4)
 end
 
 #returns company of lowest number
-def company(arr1, arr2, arr3, arr4)
+def company(arr1, arr2)
 
 	if arr1.to_f == @lowestnum
 		return "Industrial Safety"
 	elsif arr2.to_f == @lowestnum
 		return "HOFequipment"
-	elsif arr3.to_f == @lowestnum
-		return "Toolfetch"
-	elsif arr4.to_f == @lowestnum
-		return "Industrial Products"
+	# elsif arr3.to_f == @lowestnum
+	# 	return "Toolfetch"
+	# elsif arr4.to_f == @lowestnum
+	# 	return "Industrial Products"
 	else
 		return "something broke, tell sam"
 	end
