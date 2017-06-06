@@ -97,33 +97,28 @@ def industrialproducts(input)
 	end
 end
 
-def industrialsafety(input)
-	url = "http://www.industrialsafety.com/searchresults.asp?Search=" + input + "&Submit="
+# def industrialsafety(input)
+# 	url = "http://www.industrialsafety.com/searchresults.asp?Search=" + input + "&Submit="
 
-	mechanize = Mechanize.new
+# 	mechanize = Mechanize.new
 
-	page = mechanize.get(url)
+# 	page = mechanize.get(url)
 
-	if page
+# 	if page
 		
-		product = page.at(".pricecolor")
+# 		product = page.at(".pricecolor")
 
-		if product
+# 		if product
 
-			textInfo = product.text.strip
-			clean_string = textInfo.gsub(/[()]/, "")
-			clean_string = clean_string.gsub(/[$]/, "")
-			clean_string.slice! "Our Price: "
-			return clean_string
+# 			textInfo = product.text.strip
+# 			clean_string = textInfo.gsub(/[()]/, "")
+# 			clean_string = clean_string.gsub(/[$]/, "")
+# 			clean_string.slice! "Our Price: "
+# 			return clean_string
 
-		end
-
-	else
-
-		return "0.00"
-	end
-
-end
+# 		end
+# 	end
+# end
 
 def toolfetch(input)
 	mechanize = Mechanize.new
