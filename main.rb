@@ -118,17 +118,26 @@ end
 
 def toolfetch(input)
 	mechanize = Mechanize.new
+
 	url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
 		
 	page = mechanize.get(url)
 
-	price = page.at("li.b_algo h2 a")
+	if page
 
-	newprice = mechanize.click(price)
+		price = page.at("li.b_algo h2 a")
 
-	newprice = newprice.at("span.price").text	
-	newprice = newprice.gsub(/[$]/, "")
-	return newprice
+		if price
+
+			newprice = mechanize.click(price)
+
+			newprice = newprice.at("span.price").text	
+
+			newprice = newprice.gsub(/[$]/, "")
+
+			return newprice
+		end
+	end
 end
 
 #returns lowest number
