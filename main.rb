@@ -104,14 +104,25 @@ def industrialsafety(input)
 
 	page = mechanize.get(url)
 
-	product = page.at(".pricecolor")
-	if product
-		textInfo = product.text.strip
-		clean_string = textInfo.gsub(/[()]/, "")
-		clean_string = clean_string.gsub(/[$]/, "")
-		clean_string.slice! "Our Price: "
-		return clean_string
+	if page
+		
+		product = page.at(".pricecolor")
+
+		if product
+
+			textInfo = product.text.strip
+			clean_string = textInfo.gsub(/[()]/, "")
+			clean_string = clean_string.gsub(/[$]/, "")
+			clean_string.slice! "Our Price: "
+			return clean_string
+
+		end
+
+	else
+
+		return "0.00"
 	end
+
 end
 
 def toolfetch(input)
@@ -135,7 +146,10 @@ def toolfetch(input)
 
 			return newprice
 		end
+	else
+		return "0.00"
 	end
+
 end
 
 #returns lowest number
