@@ -110,30 +110,29 @@ def toolfetch(input)
 
 			newprice = mechanize.click(price)
 
-			newprice = newprice.at("span.price").text	
+			newprice = newprice.at("span.price").text.strip
 
 			newprice = newprice.gsub(/[$]/, "")
 
 			return newprice
+
 		else
 			return "0.00"
+
 		end
 
 	else
 		return "0.00"
+
 	end
 end
 
 #returns lowest number
 def lowestnum(arr1, arr2, arr3)
-
-	arr1, arr2, arr3, arr4 = arr1.to_f, arr2.to_f, arr3.to_f, arr4.to_f
-
-
-	myarr = [arr1, arr2, arr3, arr4]
+	myarr = [arr1, arr2, arr3]
 
 	myarr.each do |x|
-		if myarr.min == 0
+		if myarr.min == 0 || myarr.min == "0.00"
 			myarr.delete(myarr.min)
 			return myarr.min
 		else
@@ -145,11 +144,11 @@ end
 #returns company of lowest number
 def company(arr1, arr2, arr3)
 
-	if arr1.to_f == @lowestnum
+	if arr1 == @lowestnum
 		return "Industrial Safety"
-	elsif arr2.to_f == @lowestnum
+	elsif arr2 == @lowestnum
 		return "HOFequipment"
-	elsif arr3.to_f == @lowestnum
+	elsif arr3 == @lowestnum
 	 	return "Toolfetch"
 	else
 		return "company name function is broken"
