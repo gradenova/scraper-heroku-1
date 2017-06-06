@@ -11,16 +11,16 @@ post "/" do
 	query = params[:q]
 
 	#assigns lowest number variable
-	@lowestnum = lowestnum(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
+	@lowestnum = lowestnum(industrialsafety(query), hofequipment(query), toolfetch(query))
 
 	#assigns company variable
-	@company = company(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
+	@company = company(industrialsafety(query), hofequipment(query), toolfetch(query))
 
 	#scraper numbers
 	@industrialsafety = industrialsafety(query)
 	@hofequipment = hofequipment(query)
 	@toolfetch = toolfetch(query)
-	@industrialproducts = industrialproducts(query)
+
 
 	#this returns views/index.erb
 	erb :index
@@ -68,37 +68,6 @@ def hofequipment(input)
 
 	else
 		return "0.00"
-	end
-end
-
-def industrialproducts(input)
-	mechanize = Mechanize.new
-
-	url = "http://www.industrialproducts.com/"
-
-	page = mechanize.get(url)
-
-	if page
-
-		search_form = page.form
-
-		search_form['q'] = input
-
-		page = search_form.submit
-
-		price = page.at(".price")
-
-		if price
-
-			price = price.text
-			price = price.gsub(/[$]/, "")
-			return price
-
-		else
-
-			return "0.00"
-
-		end
 	end
 end
 
@@ -150,11 +119,10 @@ def toolfetch(input)
 	else
 		return "0.00"
 	end
-
 end
 
 #returns lowest number
-def lowestnum(arr1, arr2, arr3, arr4)
+def lowestnum(arr1, arr2, arr3)
 
 	arr1, arr2, arr3, arr4 = arr1.to_f, arr2.to_f, arr3.to_f, arr4.to_f
 
@@ -172,7 +140,7 @@ def lowestnum(arr1, arr2, arr3, arr4)
 end
 
 #returns company of lowest number
-def company(arr1, arr2, arr3, arr4)
+def company(arr1, arr2, arr3)
 
 	if arr1.to_f == @lowestnum
 		return "Industrial Safety"
@@ -180,8 +148,6 @@ def company(arr1, arr2, arr3, arr4)
 		return "HOFequipment"
 	elsif arr3.to_f == @lowestnum
 	 	return "Toolfetch"
-	elsif arr4.to_f == @lowestnum
-		return "Industrial Products"
 	else
 		return "company name function is broken"
 	end
