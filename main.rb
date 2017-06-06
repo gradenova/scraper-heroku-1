@@ -11,18 +11,18 @@ post "/" do
 	query = params[:q]
 
 	#assigns lowest number variable
-	@lowestnum = lowestnum( hofequipment(query), toolfetch(query))
+	@lowestnum = lowestnum(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
 
 	#assigns company variable
-	@company = company( hofequipment(query), toolfetch(query))
+	@company = company(industrialsafety(query), hofequipment(query), toolfetch(query), industrialproducts(query))
 
 	#scraper numbers
-	#@industrialsafety = industrialsafety(query)
+	@industrialsafety = industrialsafety(query)
 	@hofequipment = hofequipment(query)
 	@toolfetch = toolfetch(query)
-	#@industrialproducts = industrialproducts(query)
+	@industrialproducts = industrialproducts(query)
 
-	#returns views/index.erb
+	#this returns views/index.erb
 	erb :index
 end
 
@@ -71,54 +71,60 @@ def hofequipment(input)
 	end
 end
 
-# def industrialproducts(input)
-# 	mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
+def industrialproducts(input)
+	mechanize = Mechanize.new
 
-# 	url = "http://www.industrialproducts.com/"
+	url = "http://www.industrialproducts.com/"
 
-# 	page = mechanize.get(url)
+	page = mechanize.get(url)
 
-# 	if page
-# 		search_form = page.form
+	if page
 
-# 		search_form['q'] = input
+		search_form = page.form
 
-# 		page = search_form.submit
+		search_form['q'] = input
 
-# 		price = page.at(".price")
+		page = search_form.submit
 
-# 		if price
-# 			price = price.text
-# 			price = price.gsub(/[$]/, "")
-# 			return price
-# 		else
-# 			return "0.00"
-# 		end
-# 	end
-# end
+		price = page.at(".price")
 
-# def industrialsafety(input)
-# 	url = "http://www.industrialsafety.com/searchresults.asp?Search=" + input + "&Submit="
+		if price
 
-# 	mechanize = Mechanize.new
+			price = price.text
+			price = price.gsub(/[$]/, "")
+			return price
 
-# 	page = mechanize.get(url)
+		else
 
-# 	if page
+			return "0.00"
+
+		end
+	end
+end
+
+def industrialsafety(input)
+	url = "http://www.industrialsafety.com/searchresults.asp?Search=" + input + "&Submit="
+
+	mechanize = Mechanize.new
+
+	page = mechanize.get(url)
+
+	if page
 		
-# 		product = page.at(".pricecolor")
+		product = page.at(".pricecolor")
 
-# 		if product
+		if product
 
-# 			textInfo = product.text.strip
-# 			clean_string = textInfo.gsub(/[()]/, "")
-# 			clean_string = clean_string.gsub(/[$]/, "")
-# 			clean_string.slice! "Our Price: "
-# 			return clean_string
+			textInfo = product.text.strip
+			clean_string = textInfo.gsub(/[()]/, "")
+			clean_string = clean_string.gsub(/[$]/, "")
+			clean_string.slice! "Our Price: "
+			return clean_string
 
-# 		end
-# 	end
-# end
+		end
+
+	end
+end
 
 def toolfetch(input)
 	mechanize = Mechanize.new
@@ -148,14 +154,14 @@ def toolfetch(input)
 end
 
 #returns lowest number
-def lowestnum(arr1, arr2)
+def lowestnum(arr1, arr2, arr3, arr4)
 
-	arr1, arr2 = arr1.to_f, arr2.to_f
+	arr1, arr2, arr3, arr4 = arr1.to_f, arr2.to_f, arr3.to_f, arr4.to_f
 
 
-	myarr = [arr1, arr2]
+	myarr = [arr1, arr2, arr3, arr4]
 
-	myarr.each do |x| 
+	myarr.each do |x|
 		if myarr.min == 0
 			myarr.delete(myarr.min)
 			return myarr.min
@@ -166,18 +172,18 @@ def lowestnum(arr1, arr2)
 end
 
 #returns company of lowest number
-def company(arr1, arr2)
+def company(arr1, arr2, arr3, arr4)
 
 	if arr1.to_f == @lowestnum
 		return "Industrial Safety"
 	elsif arr2.to_f == @lowestnum
 		return "HOFequipment"
-	# elsif arr3.to_f == @lowestnum
-	# 	return "Toolfetch"
-	# elsif arr4.to_f == @lowestnum
-	# 	return "Industrial Products"
+	elsif arr3.to_f == @lowestnum
+	 	return "Toolfetch"
+	elsif arr4.to_f == @lowestnum
+		return "Industrial Products"
 	else
-		return "something broke, tell sam"
+		return "company name function is broken"
 	end
 end
 
