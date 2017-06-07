@@ -38,6 +38,30 @@ post "/hofequipment" do
 	erb :hofequipment
 end
 
+get "/industrialsafety" do
+	erb :industrialsafety
+end
+
+post "/industrialsafety" do
+	query = params[:query]
+
+	@returnedarray = arrayindustrialsafety(query)
+
+	erb :industrialsafety
+end
+
+get "/toolfetch" do
+	erb :toolfetch
+end
+
+post "/toolfetch" do
+	query = params[:query]
+
+	@returnedarray = arraytoolfetch(query)
+
+	erb :industrialsafety
+end
+
 
 
 #arrayHofequipment 
@@ -94,6 +118,84 @@ def arrayhofequipment(query)
 
 	return foundprices
 end
+
+def arrayindustrialsafety(query)
+	foundprices = []
+
+	myarray = query.split(",")
+
+	myarray.each do |input|
+
+		url = "http://www.industrialsafety.com/searchresults.asp?Search=" + input + "&Submit="
+
+		mechanize = Mechanize.new
+
+		page = mechanize.get(url)
+
+		if page
+			
+			product = page.at(".pricecolor")
+
+			if product
+
+				textInfo = product.text.strip
+				clean_string = textInfo.gsub(/[()]/, "")
+				clean_string = clean_string.gsub(/[$]/, "")
+				clean_string.slice! "Our Price: "
+				foundprices.push(input)
+				foundprices.push(clean_string)
+			end
+
+		end
+	end
+	return foundprices
+end
+
+def arraytoolfetch(query)
+	foundprices = []
+	
+	myarray = query.split(",")
+
+		myarray.each do |input|
+
+		mechanize = Mechanize.new
+
+		url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
+			
+		page = mechanize.get(url)
+
+		if page
+
+			price = page.at("li.b_algo h2 a")
+
+			if price
+
+				newprice = mechanize.click(price)
+
+				newprice = newprice.at("span.price").text.strip
+
+				newprice = newprice.gsub(/[$]/, "")
+
+				foundprices.push(input)
+				foundprices.push(newprice)
+
+			else
+				foundprices.push(input)
+				foundprices.push(newprice)
+
+			end
+
+		else
+			foundprices.push(input)
+			foundprices.push(newprice)
+
+		end
+	end
+
+	return foundprices
+
+end
+
 
 #scrapers
 def hofequipment(input)
@@ -220,10 +322,4 @@ def company(arr1, arr2, arr3)
 	else
 		return "company name function is broken"
 	end
-end
-
-def returnMyArray(stringy)
-
-	return returnArray = stringy.split(",")
-
 end
