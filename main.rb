@@ -26,7 +26,71 @@ post "/" do
 	erb :index
 end
 
+get "/hofequipment" do
+	erb :hofequipment
+end
 
+post "/hofequipment" do
+	query = params[:query]
+
+	@returnedarray = arrayhofequipment(query)
+
+	erb :hofequipment
+end
+
+
+
+#arrayHofequipment 
+def arrayhofequipment(query)
+	foundprices = []
+
+	myarray = query.split(",")
+
+	myarray.each do |input|
+
+		mechanize = Mechanize.new
+
+		page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
+		
+		product = page.at('span.item-name a')
+		
+		if product
+			page = mechanize.click(product)
+
+			price = page.at(".item-price").text.strip
+			table = page.at("table")
+
+			if page.at(".chartPersonalization")
+
+				table_data = table.search('tr').map do |row|
+					row.search('th, td').map { |cell| cell.text.strip }
+				end
+
+				table_data.each do |row|
+					row.each do |x|
+						if x == input
+							mynum = row[-2]
+							mynum = mynum.gsub(/[()]/, "")
+							mynum = mynum.gsub(/[$]/, "")
+							foundprices.push(mynum)
+
+						end
+					end
+				end
+
+			elsif page.at(".item-price")
+					price = price.gsub(/[()]/, "")
+					price = price.gsub(/[$]/, "")
+					foundprices.push(price)
+			end
+
+		else
+			foundprices.push("0.00")
+		end
+	end
+
+	return foundprices
+end
 
 #scrapers
 def hofequipment(input)
@@ -106,7 +170,7 @@ def toolfetch(input)
 
 		price = page.at("li.b_algo h2 a")
 
-		if price
+		if pricecolor
 
 			newprice = mechanize.click(price)
 
