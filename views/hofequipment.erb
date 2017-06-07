@@ -28,10 +28,18 @@
 		<thead class="thead-inverse">
 			<td>Product Key</td>
 			<td>Price</td>
-			<td><% @returnedarray.each do |x| %></h1></td>
-				<%= x %>
-				<% end %>
 		</thead>
+		<% if @returnedarray %>
+			<% @returnedarray.each_with_index do |item, index| %>
+				<% if index % 2 == 0 %>
+				<tr>
+					<td><%= item %></td>
+					<% elsif index % 2 == 1 %>
+					<td>$<%= item %></td>
+				</tr>				
+				<% end %>
+			<% end %>
+		<% end %>
 	</table>
 </div>
 

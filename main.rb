@@ -72,6 +72,7 @@ def arrayhofequipment(query)
 							mynum = row[-2]
 							mynum = mynum.gsub(/[()]/, "")
 							mynum = mynum.gsub(/[$]/, "")
+							foundprices.push(input)
 							foundprices.push(mynum)
 
 						end
@@ -81,10 +82,12 @@ def arrayhofequipment(query)
 			elsif page.at(".item-price")
 					price = price.gsub(/[()]/, "")
 					price = price.gsub(/[$]/, "")
+					foundprices.push(input)
 					foundprices.push(price)
 			end
 
 		else
+			foundprices.push(input)
 			foundprices.push("0.00")
 		end
 	end
@@ -170,7 +173,7 @@ def toolfetch(input)
 
 		price = page.at("li.b_algo h2 a")
 
-		if pricecolor
+		if price
 
 			newprice = mechanize.click(price)
 
@@ -219,3 +222,8 @@ def company(arr1, arr2, arr3)
 	end
 end
 
+def returnMyArray(stringy)
+
+	return returnArray = stringy.split(",")
+
+end
