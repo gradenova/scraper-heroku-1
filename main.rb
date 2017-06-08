@@ -106,9 +106,6 @@ def arrayhofequipment(query)
 		if product
 			page = mechanize.click(product)
 
-			price = page.at(".item-price").text.strip
-			table = page.at("table")
-
 			if page.at(".chartPersonalization")
 
 				table_data = table.search('tr').map do |row|
@@ -216,8 +213,8 @@ def arrayindustrialsafety(query)
 			# if product_code == input
 				if product
 
-					textInfo = product.text.strip
-					price = textInfo.gsub(/[()]/, "")
+					price = product.text.strip
+					price = price.gsub(/[()]/, "")
 					price = price.gsub(/[$]/, "")
 					price = price.gsub(/[,]/, "")
 					price.slice! "Our Price: "
@@ -279,13 +276,13 @@ def arraytoolfetch(query)
 
 		if page
 
-			price = page.at("li.b_algo h2 a")
+			product = page.at("li.b_algo h2 a")
 
 			if price
 
-				price = mechanize.click(price)
+				page = mechanize.click(product)
 
-				price = price.at("span.price").text.strip
+				price = page.at("span.price").text.strip
 
 				price = price.gsub(/[$]/, "")
 				price = price.gsub(/[,]/, "")
