@@ -1,1 +1,1 @@
-web: bundle exec ruby main.rb -p 3000
+web: bundle exec ruby main.rb -p $PORT
