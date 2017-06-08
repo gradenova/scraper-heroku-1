@@ -67,6 +67,10 @@ post "/toolfetch" do
 	erb :toolfetch
 end
 
+get "/individual" do
+	erb :individual
+end
+
 get "/csv/hofequipment" do
 	send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
 end
