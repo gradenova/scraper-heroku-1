@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	  <%= erb(:header) %>
+<body>
+<%= erb(:navbar) %>
+<div class="container p-3">
+	<div class="row">
+		<div class="col align-self-center">
+			<form action="/multiple" method="POST" class="form-inline">
+				<div>
+					<input type="text" name="q" class="form-control">
+				</div>
+				<div>
+					<input type="submit" class="btn btn-primary btn-md ml-1">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+	<table class="table table-striped table-hover">
+		<thead class="thead-inverse">
+			<td>Name</td>
+			<td>Prices</td>
+		</thead>
+		<tr>
+			<td>Industrial Safety</td>
+			<td>$<%= @industrialsafety %></td>
+		</tr>
+		<tr>
+			<td>HOFequipment</td>
+			<td>$<%= @hofequipment %></td>
+		</tr>
+		<tr>
+			<td>Toolfetch</td>
+			<td>$<%= @toolfetch %></td>
+		</tr>
+		<tr class="bg-success">
+			<td><%= @company %></td>
+			<td>$<%= @lowestnum %></td>
+		</tr>	
+	</table>
+</div>
+
+
+</body>
+</html>

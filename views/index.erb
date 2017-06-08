@@ -1,53 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Product Key Search</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-</head>
+	  <%= erb(:header) %>
 <body>
+<%= erb(:navbar) %>
 
-
-<div class="container p-3">
-	<div class="row">
-		<div class="col align-self-center">
-			<form action="/" method="POST" class="form-inline">
-				<div>
-					<input type="text" name="q" class="form-control">
-				</div>
-				<div>
-					<input type="submit" class="btn btn-primary btn-md ml-1">
-				</div>
-			</form>
-		</div>
+<div class="jumbotron">
+	<div class="mt-5 col-sm-8 mx-auto">
+		<h1 class="pb-3">Welcome to Product Key Search</h1>
+		<p>Click <span class="text-success">Search Individual Websites</span> to search multiple queries at once, separate by commas, and get them returned as a table.</p>
+		<p>Click <span class="text-warning">Search Multiple Websites</span> to search one query at once and get it returned as a table result.</p>
 	</div>
 </div>
-
-
-<div class="container">
-	<table class="table table-striped table-hover">
-		<thead class="thead-inverse">
-			<td>Name</td>
-			<td>Prices</td>
-		</thead>
-		<tr>
-			<td>Industrial Safety</td>
-			<td>$<%= @industrialsafety %></td>
-		</tr>
-		<tr>
-			<td>HOFequipment</td>
-			<td>$<%= @hofequipment %></td>
-		</tr>
-		<tr>
-			<td>Toolfetch</td>
-			<td>$<%= @toolfetch %></td>
-		</tr>
-		<tr class="bg-success">
-			<td><%= @company %></td>
-			<td>$<%= @lowestnum %></td>
-		</tr>	
-	</table>
-</div>
-
 
 </body>
 </html>

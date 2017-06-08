@@ -2,10 +2,13 @@
 <html>
 	  <%= erb(:header) %>
 <body>
+<%= erb(:navbar) %>
 
 <div class="container p-3">
 	<div class="row">
 		<div class="col align-self-center">
+		<h1>Toolfetch</h1>
+		<%= erb(:example) %>
 			<form action="/toolfetch" method="POST" class="form-inline">
 				<%= erb(:innerform) %>
 			</form>
@@ -15,6 +18,11 @@
 
 
 <%= erb(:table) %>
+<div class="container">
+	<div class="row">
+		<a class="btn btn-primary btn-lg btn-block" href="/csv/toolfetch" role="button" download="Toolfetch">Download this table as a CSV</a>	
+	</div>	
+</div>
 
 </body>
 </html>
