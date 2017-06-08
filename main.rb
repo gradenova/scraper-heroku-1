@@ -6,26 +6,6 @@ get "/" do
 	erb :index
 end
 
-post "/" do
-	#gets query
-	query = params[:q]
-
-	#assigns lowest number variable
-	@lowestnum = lowestnum(industrialsafety(query), hofequipment(query), toolfetch(query))
-
-	#assigns company variable
-	@company = company(industrialsafety(query), hofequipment(query), toolfetch(query))
-
-	#scraper numbers
-	@industrialsafety = industrialsafety(query)
-	@hofequipment = hofequipment(query)
-	@toolfetch = toolfetch(query)
-
-
-	#this returns views/index.erb
-	erb :index
-end
-
 get "/multiple" do
 	erb :multiple
 end
@@ -87,20 +67,20 @@ post "/toolfetch" do
 	erb :toolfetch
 end
 
-get "/csv/hofequipment" do
-	send_file('csv/hofequipment.csv', :filename => "/csv/hofequipment.csv")
+get "csv/hofequipment" do
+	send_file('/csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
 end
 
-get "/csv/industrialsafety" do
-	send_file('csv/industrialsafety.csv', :filename => "/csv/industrialsafety.csv")
+get "csv/industrialsafety" do
+	send_file('/csv/industrialsafety.csv', :filename => "csv/industrialsafety.csv")
 end
 
-get "/csv/toolfetch" do
-	send_file('csv/toolfetch.csv', :filename => "/csv/toolfetch.csv")
+get "csv/toolfetch" do
+	send_file('/csv/toolfetch.csv', :filename => "csv/toolfetch.csv")
 end
 
-get "/csv/mixed" do
-	send_file('csv/mixed.csv', :filename => "/csv/mixed.csv")
+get "csv/mixed" do
+	send_file('/csv/mixed.csv', :filename => "csv/mixed.csv")
 end
 
 #returns table of results from query 
@@ -108,6 +88,8 @@ def arrayhofequipment(query)
 	open("csv/hofequipment.csv", "w") do |csv|
 		csv.truncate(0)				
 	end
+
+	query = query.gsub(/\s+/, '')	
 
 	foundprices = []
 
@@ -136,12 +118,12 @@ def arrayhofequipment(query)
 				table_data.each do |row|
 					row.each do |x|
 						if x == input
-							mynum = row[-2]
-							mynum = mynum.gsub(/[()]/, "")
-							mynum = mynum.gsub(/[$]/, "")
-							mynum = mynum.gsub(/[,]/, "")
+							price = row[-2]
+							price = price.gsub(/[()]/, "")
+							price = price.gsub(/[$]/, "")
+							price = price.gsub(/[,]/, "")
 							foundprices.push(input)
-							foundprices.push(mynum)
+							foundprices.push(price)
 							
 							
 							open("csv/hofequipment.csv", "a") do |csv|
@@ -149,7 +131,7 @@ def arrayhofequipment(query)
 								csv << ","
 								csv << input
 								csv << ","	
-								csv << mynum
+								csv << price
 								csv << "\n"
 							
 							end
@@ -208,6 +190,8 @@ def arrayindustrialsafety(query)
 		csv.truncate(0)				
 	end	
 
+	query = query.gsub(/\s+/, '')	
+
 	foundprices = []
 
 	myarray = query.split(",")
@@ -224,39 +208,54 @@ def arrayindustrialsafety(query)
 			
 			product = page.at(".pricecolor")
 
-			if product
+			# product_code = page.at(".v-product .colors_productname").text
 
-				textInfo = product.text.strip
-				clean_string = textInfo.gsub(/[()]/, "")
-				clean_string = clean_string.gsub(/[$]/, "")
-				clean_string = clean_string.gsub(/[,]/, "")
-				clean_string.slice! "Our Price: "
-				foundprices.push(input)
-				foundprices.push(clean_string)
+			# product_code = product_code.slice input			
 
-				open("csv/industrialsafety.csv", "a") do |csv|
-					csv << "Industrial Safety"
-					csv << ","
-					csv << input
-					csv << ","	
-					csv << clean_string
-					csv << "\n"
+
+			# if product_code == input
+				if product
+
+					textInfo = product.text.strip
+					price = textInfo.gsub(/[()]/, "")
+					price = price.gsub(/[$]/, "")
+					price = price.gsub(/[,]/, "")
+					price.slice! "Our Price: "
+					foundprices.push(input)
+					foundprices.push(price)
+
+					open("csv/industrialsafety.csv", "a") do |csv|
+						csv << "Industrial Safety"
+						csv << ","
+						csv << input
+						csv << ","	
+						csv << price
+						csv << "\n"
+					end
+				else 
+					open("csv/industrialsafety.csv", "a") do |csv|
+						csv << "Industrial Safety"
+						csv << ","
+						csv << input
+						csv << ","	
+						csv << "0.00"
+						csv << "\n"
+					end
 				end
-			else 
-				open("csv/industrialsafety.csv", "a") do |csv|
-					csv << "Industrial Safety"
-					csv << ","
-					csv << input
-					csv << ","	
-					csv << "0.00"
-					csv << "\n"
-				end
-			end		
+			# else
+			# 	open("csv/industrialsafety.csv", "a") do |csv|
+			# 		csv << "Industrial Safety"
+			# 		csv << ","
+			# 		csv << input
+			# 		csv << ","	
+			# 		csv << "0.00"
+			# 		csv << "\n"
+			# 	end
+			#end
 		end
 	end
 
 	return foundprices
-
 end
 
 def arraytoolfetch(query)
@@ -266,6 +265,8 @@ def arraytoolfetch(query)
 
 	foundprices = []
 	
+	query = query.gsub(/\s+/, '')	
+
 	myarray = query.split(",")
 
 		myarray.each do |input|
@@ -282,22 +283,22 @@ def arraytoolfetch(query)
 
 			if price
 
-				newprice = mechanize.click(price)
+				price = mechanize.click(price)
 
-				newprice = newprice.at("span.price").text.strip
+				price = price.at("span.price").text.strip
 
-				newprice = newprice.gsub(/[$]/, "")
-				newprice = newprice.gsub(/[,]/, "")
+				price = price.gsub(/[$]/, "")
+				price = price.gsub(/[,]/, "")
 
 				foundprices.push(input)
-				foundprices.push(newprice)
+				foundprices.push(price)
 				
 				open("csv/toolfetch.csv", "a") do |csv|
 					csv << "Toolfetch"
 					csv << ","
 					csv << input
 					csv << ","	
-					csv << newprice
+					csv << price
 					csv << "\n"
 				end								
 
@@ -333,7 +334,6 @@ def arraytoolfetch(query)
 	end
 
 	return foundprices
-
 end
 
 
