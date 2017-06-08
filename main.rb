@@ -67,20 +67,20 @@ post "/toolfetch" do
 	erb :toolfetch
 end
 
-get "csv/hofequipment" do
-	send_file('/csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
+get "/csv/hofequipment" do
+	send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
 end
 
-get "csv/industrialsafety" do
-	send_file('/csv/industrialsafety.csv', :filename => "csv/industrialsafety.csv")
+get "/csv/industrialsafety" do
+	send_file('csv/industrialsafety.csv', :filename => "csv/industrialsafety.csv")
 end
 
-get "csv/toolfetch" do
-	send_file('/csv/toolfetch.csv', :filename => "csv/toolfetch.csv")
+get "/csv/toolfetch" do
+	send_file('csv/toolfetch.csv', :filename => "csv/toolfetch.csv")
 end
 
-get "csv/mixed" do
-	send_file('/csv/mixed.csv', :filename => "csv/mixed.csv")
+get "/csv/mixed" do
+	send_file('csv/mixed.csv', :filename => "csv/mixed.csv")
 end
 
 #returns table of results from query 
@@ -105,6 +105,9 @@ def arrayhofequipment(query)
 		
 		if product
 			page = mechanize.click(product)
+
+			price = page.at(".item-price").text.strip
+			table = page.at("table")
 
 			if page.at(".chartPersonalization")
 
@@ -278,7 +281,7 @@ def arraytoolfetch(query)
 
 			product = page.at("li.b_algo h2 a")
 
-			if price
+			if product
 
 				page = mechanize.click(product)
 

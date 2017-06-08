@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	  <%= render :erb, :_header %>
+	  <%= erb(:_header) %>
 <body>
 <%= erb(:_navbar) %>
 <div class="container p-3">
@@ -47,7 +47,7 @@
 
 <div class="container">
 	<div class="row">
-		<a class="btn btn-primary btn-lg btn-block" href="/csv/mixed" role="button" download="HOFequipment">Download this table as a CSV</a>	
+		<a class="btn btn-primary btn-lg btn-block" href="/csv/mixed" role="button" download>Download this table as a CSV</a>	
 	</div>	
 </div>
 
