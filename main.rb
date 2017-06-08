@@ -99,6 +99,9 @@ get "/csv/toolfetch" do
 	send_file('csv/toolfetch.csv', :filename => "/csv/toolfetch.csv")
 end
 
+get "/csv/mixed" do
+	send_file('csv/mixed.csv', :filename => "/csv/mixed.csv")
+end
 
 #returns table of results from query 
 def arrayhofequipment(query)
@@ -360,6 +363,16 @@ def hofequipment(input)
 						mynum = row[-2]
 						mynum = mynum.gsub(/[()]/, "")
 						mynum = mynum.gsub(/[$]/, "")
+
+						open("csv/mixed.csv", "a") do |csv|
+							csv << "HOFequipment"
+							csv << ","
+							csv << input
+							csv << ","	
+							csv << mynum
+							csv << "\n"
+						end				
+
 						return mynum
 
 					end
@@ -369,16 +382,39 @@ def hofequipment(input)
 		elsif page.at(".item-price")
 				price = price.gsub(/[()]/, "")
 				price = price.gsub(/[$]/, "")
+
+				open("csv/mixed.csv", "a") do |csv|
+					csv << "HOFequipment"
+					csv << ","
+					csv << input
+					csv << ","	
+					csv << price
+					csv << "\n"
+				end	
+
 				return price
 		end
 
 	else
+		open("csv/mixed.csv", "a") do |csv|
+			csv << "HOFequipment"
+			csv << ","
+			csv << input
+			csv << ","	
+			csv << "$0.00"
+			csv << "\n"
+		end
+
 		return "0.00"
 	end
 end
 
 def industrialsafety(input)
 	url = "http://www.industrialsafety.com/searchresults.asp?Search=" + input + "&Submit="
+
+	open("csv/mixed.csv", "w") do |csv|
+		csv.truncate(0)				
+	end
 
 	mechanize = Mechanize.new
 
@@ -394,8 +430,17 @@ def industrialsafety(input)
 			clean_string = textInfo.gsub(/[()]/, "")
 			clean_string = clean_string.gsub(/[$]/, "")
 			clean_string.slice! "Our Price: "
-			return clean_string
+			
+			open("csv/mixed.csv", "a") do |csv|
+				csv << "Industrial Safety"
+				csv << ","
+				csv << input
+				csv << ","	
+				csv << clean_string
+				csv << "\n"
+			end
 
+			return clean_string
 		end
 
 	end
@@ -420,17 +465,58 @@ def toolfetch(input)
 
 			newprice = newprice.gsub(/[$]/, "")
 
+			open("csv/mixed.csv", "a") do |csv|
+				csv << "Toolfetch"
+				csv << ","
+				csv << input
+				csv << ","	
+				csv << newprice
+				csv << "\n"
+			end
+
+
 			return newprice
 
 		else
+
+			open("csv/mixed.csv", "a") do |csv|
+				csv << "Toolfetch"
+				csv << ","
+				csv << input
+				csv << ","	
+				csv << "0.00"
+				csv << "\n"
+			end
+
 			return "0.00"
 
 		end
 
 	else
+
+		open("csv/mixed.csv", "a") do |csv|
+			csv << "Toolfetch"
+			csv << ","
+			csv << input
+			csv << ","	
+			csv << "0.00"
+			csv << "\n"
+		end
+
+
 		return "0.00"
 
 	end
+end
+
+def mixed(input)
+	open("csv/hofequipment.csv", "w") do |csv|
+		csv.truncate(0)				
+	end
+
+	hofequipment(input)
+	industrialsafety(input)
+	toolfetch(input)
 end
 
 #returns lowest number
