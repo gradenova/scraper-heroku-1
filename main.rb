@@ -87,6 +87,24 @@ get "/csv/mixed" do
 	send_file('csv/mixed.csv', :filename => "csv/mixed.csv")
 end
 
+get "/test" do
+	erb :test
+end
+
+post "/test" do
+	
+	@hof = arrayindustrialsafety(params[:hof])
+	@industry = arrayhofequipment(params[:industry])
+	@tool = arraytoolfetch(params[:tool])
+
+	erb :test
+end
+
+
+def returnindustrialsafety(query)
+	return query
+end
+
 #returns table of results from query 
 def arrayhofequipment(query)
 	open("csv/hofequipment.csv", "w") do |csv|

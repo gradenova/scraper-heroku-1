@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	  <%= erb(:_header) %>
+<body>
+<%= erb(:_navbar) %>
+
+<style type="text/css">
+	input[type="checkbox"] {
+  transform:scale(1.5, 1.5);
+}
+</style>
+
+<div id="container" class="container">
+  <div class="row">
+    <form action="/test" method="POST" class="p-3">
+      
+      <input type="text" class="mb-3" /> <br>
+      	<div class="form-check">
+	      <label for="hofequipment" class="form-check-label">
+		      <input type="checkbox" class="form-check-input" value="hofequipment"  name="hof"/>
+		      	HOFequipment
+	      </label>
+		</div>
+
+      	<div class="form-check">
+	      <label for="IndustrialSafety" class="form-check-label">
+	      	<input type="checkbox" class="form-check-input" value="industrialsafety" name="industry"/>
+	      		IndustrialSafety
+	      </label>
+      	</div>
+      	
+      	<div class="form-check">
+	      <label for="Toolfetch" class="form-check-label">
+	      	<input type="checkbox" class="form-check-input" value="toolfetch"  name="tool"/>
+	      		Toolfetch
+	      </label>
+      	</div>
+  	
+  		<input type="submit" class="btn btn-primary" />
+    </form>
+  </div>
+</div>
+
+
+<%= erb(:_table) %>
+<div class="container">
+	<div class="row">
+		<a class="btn btn-primary btn-lg btn-block" href="/csv/industrialsafety" role="button" download="Industrial Safety">Download table to Excel</a>	
+	</div>	
+</div>
+
+
+<% if @hof %>
+	<h1><%=  %></h1>
+<% end %>
+
+<% if @industry %>
+	<h1><%=  %></h1>
+<% end %>
+
+<% if @tool %>
+	<h1><%=  %></h1>
+<% end %>
+
+</body>
+</html>
