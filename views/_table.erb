@@ -4,7 +4,7 @@
 			<td>Product Key</td>
 			<td>Price</td>
 		</thead>
-		<% if @returnedarray %>
+		<% if @hofarray or @industrialarray or @toolfetcharray %>
 			<% @returnedarray.each_with_index do |item, index| %>
 				<% if index % 2 == 0 %>
 				<tr>
