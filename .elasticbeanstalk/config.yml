@@ -2,6 +2,12 @@ branch-defaults:
   default:
     environment: sinatrapp-dev
     group_suffix: null
+  master:
+    environment: sinatrapp-dev
+environment-defaults:
+  sinatrapp-dev:
+    branch: null
+    repository: null
 global:
   application_name: fakeappforaws2
   branch: null
@@ -13,5 +19,5 @@ global:
   platform_version: null
   profile: eb-cli
   repository: null
-  sc: null
+  sc: git
   workspace_type: Application
