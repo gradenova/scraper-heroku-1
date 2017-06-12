@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
 	  <%= erb(:_header) %>
+	  <link href="<%= url('./styles/main.css') %>" rel="stylesheet" type="text/css" />
+
 <body>
 <%= erb(:_navbar) %>
 
-<style type="text/css">
-	input[type="checkbox"] {
-  transform:scale(1.5, 1.5);
-}
-</style>
 
 <div id="container" class="container">
   <div class="row">
