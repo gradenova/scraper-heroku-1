@@ -1,4 +1,8 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'sinatra'
+gem "sinatra"
+gem "activerecord"
+gem "sinatra-activerecord"
+gem "sqlite3"
+gem "sinatra-contrib"
 gem 'mechanize'
