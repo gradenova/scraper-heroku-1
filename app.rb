@@ -35,6 +35,10 @@ post "/search" do
 	erb :search
 end
 
+get "/schedule" do
+	erb :schedule
+end
+
 get "/csv/hofequipment" do
 	send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
 end

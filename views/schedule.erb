@@ -2,11 +2,23 @@
 <html>
 <head>
 	  <%= erb(:_header) %>
-<body>
+<body class="bg-faded">
 <%= erb(:_navbar) %>
 
-<div class="container">
-	
+<div class="container mt-5">
+	<div class="row">
+		<h1>Schedule Scraping</h1>
+	</div>
+	<div class="row">
+		<form>
+			<select name="productclass">
+			  <option value="hoppers">Hoppers</option>
+			  <option value="handtrucks">Handtrucks</option>
+			  <option value="dollies">Dollies</option>
+			</select>
+			<input type="submit" class="btn btn-md " />
+		</form>
+	</div>
 </div>
 
 </body>
