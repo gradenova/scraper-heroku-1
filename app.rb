@@ -1,7 +1,7 @@
 require "sinatra"
 require "mechanize"
 require "./models/webscrapers"
-
+require 'sinatra/cookies'
 
 get "/" do
 	erb :index
@@ -9,7 +9,12 @@ end
 
 
 get "/search" do
-	erb :search
+
+	if cookies[:loggedin] == true 
+		erb :search
+	else
+		redirect "/"
+	end
 end
 
 post "/search" do
@@ -36,12 +41,17 @@ post "/search" do
 end
 
 get "/schedule" do
-	erb :schedule
+	if cookies[:loggedin] == true 
+		erb :schedule
+	else
+		redirect "/"
+	end
 end
 
 get "/signup" do
 	erb :signup
 end
+
 
 get "/login" do
 	erb :login
@@ -49,17 +59,40 @@ end
 
 
 get "/csv/hofequipment" do
-	send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
+
+	if cookies[:loggedin] == true 
+		send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
+	else
+		redirect "/"
+	end
+
 end
 
 get "/csv/industrialsafety" do
-	send_file('csv/industrialsafety.csv', :filename => "csv/industrialsafety.csv")
+
+	if cookies[:loggedin] == true 
+		send_file('csv/industrialsafety.csv', :filename => "csv/industrialsafety.csv")
+	else
+		redirect "/"
+	end
+
 end
 
 get "/csv/toolfetch" do
-	send_file('csv/toolfetch.csv', :filename => "csv/toolfetch.csv")
+
+	if cookies[:loggedin] == true 
+		send_file('csv/toolfetch.csv', :filename => "csv/toolfetch.csv")
+	else
+		redirect "/"
+	end	
 end
 
 get "/csv/mixed" do
-	send_file('csv/mixed.csv', :filename => "csv/mixed.csv")
+
+	if cookies[:loggedin] == true 
+		send_file('csv/mixed.csv', :filename => "csv/mixed.csv")
+	else
+		redirect "/"
+	end	
+
 end
