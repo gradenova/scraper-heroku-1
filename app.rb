@@ -39,6 +39,15 @@ get "/schedule" do
 	erb :schedule
 end
 
+get "/signup" do
+	erb :signup
+end
+
+get "/login" do
+	erb :login
+end
+
+
 get "/csv/hofequipment" do
 	send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
 end

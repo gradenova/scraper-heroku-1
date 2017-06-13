@@ -1,6 +1,8 @@
 /*
  * Globals
  */
+/* custom */
+.nounderline{text-decoration: none}
 
   input[type="checkbox"] {
   transform:scale(1.5, 1.5);
@@ -162,3 +164,4 @@ body {
     width: 42rem;
   }
 }
+
