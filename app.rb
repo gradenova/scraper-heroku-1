@@ -19,17 +19,17 @@ post "/search" do
 	@industry = params[:industry]
 	@tool = params[:tool]
 
-	mytest = WebScrapers.new
+	myscraper = WebScrapers.new
 	if @hof == "hofequipment"
-		@hofarray = mytest.arrayhofequipment(query)
+		@hofarray = myscraper.arrayhofequipment(query)
 	end
 
 	if @industry == "industrialsafety"
-		@industrialarray = mytest.arrayindustrialsafety(query)
+		@industrialarray = myscraper.arrayindustrialsafety(query)
 	end
 
 	if @tool == "toolfetch"
-		@toolfetcharray = mytest.arraytoolfetch(query)
+		@toolfetcharray = myscraper.arraytoolfetch(query)
 	end	
 
 	erb :search
