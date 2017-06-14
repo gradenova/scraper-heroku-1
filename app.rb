@@ -59,7 +59,7 @@ post "/signup" do
 
 	if @signup.save
 		cookies[:loggedin] = "yes"
-		redirect '/schedule'
+		redirect "/search"
 	else
 		redirect "/signup"
 		@error = "Sorry, there was an error!"
@@ -78,9 +78,9 @@ post "/login" do
 
 	if loginform
 		cookies[:loggedin] = "yes" 
-		redirect "/schedule"
+		redirect "/search"
 	else
-		"no"
+		redirect "/login"
 	end
 
 end
