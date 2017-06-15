@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	  <%= erb(:_header) %>
+	  <link href="<%= url('./styles/input.css') %>" rel="stylesheet" type="text/css" />
 <body class="bg-faded">
 
 <%= erb(:_navbar) %>
@@ -11,35 +12,107 @@
 	    <form action="/search" method="POST" class="p-3">
 	  
 	  		<h3>Select Websites to Query</h3>
-	      	<div class="form-check">
-		      <label for="hofequipment" class="form-check-label">
-			      <input type="checkbox" class="form-check-input" value="hofequipment"  name="hof"/>
-			      	HOFequipment
-		      </label>
-			</div>
 
-	      	<div class="form-check">
-		      <label for="IndustrialSafety" class="form-check-label">
-		      	<input type="checkbox" class="form-check-input" value="industrialsafety" name="industry"/>
-		      		IndustrialSafety
-		      </label>
-	      	</div>
-	      	
-	      	<div class="form-check">
-		      <label for="Toolfetch" class="form-check-label">
-		      	<input type="checkbox" class="form-check-input" value="toolfetch"  name="tool"/>
-		      		Toolfetch
-		      </label>
+	  		<div class="form-inline">
+		      	<div class="form-check pr-3">
+			      <label for="hofequipment" class="form-check-label">
+				      <input type="checkbox" class="form-check-input" value="hofequipment"  name="hof"/>
+				      	HOFequipment
+			      </label>
+				</div>
+
+		      	<div class="form-check pr-3">
+			      <label for="IndustrialSafety" class="form-check-label">
+			      	<input type="checkbox" class="form-check-input" value="industrialsafety" name="industry"/>
+			      		IndustrialSafety
+			      </label>
+		      	</div>
+		      	
+		      	<div class="form-check pr-3">
+			      <label for="Toolfetch" class="form-check-label">
+			      	<input type="checkbox" class="form-check-input" value="toolfetch"  name="tool"/>
+			      		Toolfetch
+			      </label>
+		      	</div>
+
+		      	<div class="form-check pr-3">
+			      <label for="hofequipment" class="form-check-label">
+				      <input type="checkbox" class="form-check-input" value="hofequipment"  name="hof"/>
+				      	Webstaurant
+			      </label>
+				</div>
+
+		      	<div class="form-check pr-3">
+			      <label for="IndustrialSafety" class="form-check-label">
+			      	<input type="checkbox" class="form-check-input" value="industrialsafety" name="industry"/>
+			      		Zorin Material
+			      </label>
+		      	</div>
+		      	
+		      	<div class="form-check pr-3">
+			      <label for="Toolfetch" class="form-check-label">
+			      	<input type="checkbox" class="form-check-input" value="toolfetch"  name="tool"/>
+			      		Global Industrial
+			      </label>
+		      	</div>
+
+		      	<div class="form-check pr-3">
+			      <label for="hofequipment" class="form-check-label">
+				      <input type="checkbox" class="form-check-input" value="hofequipment"  name="hof"/>
+				      	Industrial Products
+			      </label>
+				</div>
+
+		      	<div class="form-check pr-3">
+			      <label for="IndustrialSafety" class="form-check-label">
+			      	<input type="checkbox" class="form-check-input" value="industrialsafety" name="industry"/>
+			      		Radwell
+			      </label>
+		      	</div>
+		      	
+		      	<div class="form-check pr-3">
+			      <label for="Toolfetch" class="form-check-label">
+			      	<input type="checkbox" class="form-check-input" value="toolfetch"  name="tool"/>
+			      		Digital Buyer
+			      </label>
+		      	</div>
 	      	</div>
 	  		
 			<%= erb(:_example) %>
 
 	      	<input type="text" class="mb-3" name="q"/>
+	  		
 	  		<input type="submit" class="btn btn-md btn-secondary" />
+
 	    </form>
   </div>
 </div>
 
+
+<div class="container">
+	<div class="row">
+		<form method="POST" action="/search">
+			<h3>Search Crap</h3>
+		
+			<select name="productclass">
+			  <option value="wireproduct">Wire product</option>
+			  <option value="lockers">Lockers</option>
+			  <option value="matting">Matting</option>
+			  <option value="mezzanine">Mezzanine</option>
+			  <option value="inplantoffice">In Plant Office</option>
+			  <option value="stretchwrapper">Stretch Wrapper</option>
+			</select>
+			
+			<input type="submit" class="btn btn-md mt-3 " />		
+		
+		</form>
+	</div>
+
+	<% if @returninformation %>
+		<%= @returninformation %>
+	<% end %>
+
+</div>
 
 
 <% if @hof %>

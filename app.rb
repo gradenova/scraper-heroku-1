@@ -26,6 +26,8 @@ post "/search" do
 	@industry = params[:industry]
 	@tool = params[:tool]
 
+	@productsthatihave = params[:productclass]
+
 	myscraper = WebScrapers.new
 	if @hof == "hofequipment"
 		@hofarray = myscraper.arrayhofequipment(query)
@@ -38,6 +40,34 @@ post "/search" do
 	if @tool == "toolfetch"
 		@toolfetcharray = myscraper.arraytoolfetch(query)
 	end	
+
+
+	productclass = Products.new
+	if @productsthatihave == "wireproduct"
+		
+		@returninformation = productclass.wireproduct
+
+	elsif @productsthatihave == "mezzanine"
+		
+		@returninformation = productclass.mezzanine
+
+	elsif @productsthatihave == "inplantoffice"
+		
+		@returninformation = productclass.inplantoffice
+
+	elsif @productsthatihave == "lockers"
+		
+		@returninformation = productclass.lockers
+
+	elsif @productsthatihave == "matting"
+		
+		@returninformation = productclass.matting
+
+	elsif @productsthatihave == "stretchwrapper"
+		
+		@returninformation = productclass.stretchwrapper
+
+	end
 
 	erb :search
 end
