@@ -37,9 +37,25 @@ post "/search" do
 		@industrialarray = myscraper.arrayindustrialsafety(query)
 	end
 
-	if @tool == "toolfetch"
+	if @digitalbuyer == "digitalbuyer"
 		@toolfetcharray = myscraper.arraytoolfetch(query)
 	end	
+
+	if @radwell == "radwell"
+		@toolfetcharray = myscraper.arraytoolfetch(query)
+	end	
+
+	if @industrialproducts == "toolfetch"
+		@toolfetcharray = myscraper.arraytoolfetch(query)
+	end	
+
+	if @globalindustrial == "toolfetch"
+		@toolfetcharray = myscraper.arraytoolfetch(query)
+	end	
+
+	if @Webstaurant == "toolfetch"
+		@toolfetcharray = myscraper.arraytoolfetch(query)
+	end				
 
 
 	productclass = Products.new
