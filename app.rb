@@ -25,6 +25,10 @@ post "/search" do
 	@hof = params[:hof]
 	@industry = params[:industry]
 	@tool = params[:tool]
+	@radwell = params[:radwell]
+	industrialproducts = params[:industrialproducts]
+	webstaurant = params[:webstaurant]
+	zorinmaterial = params[:zorinmaterial]
 
 	@productsthatihave = params[:productclass]
 
@@ -37,26 +41,33 @@ post "/search" do
 		@industrialarray = myscraper.arrayindustrialsafety(query)
 	end
 
-	if @digitalbuyer == "digitalbuyer"
+	if @tool == "toolfetch"
 		@toolfetcharray = myscraper.arraytoolfetch(query)
 	end	
 
 	if @radwell == "radwell"
-		@toolfetcharray = myscraper.arraytoolfetch(query)
+		@radwellarray = myscraper.radwell(query)
 	end	
 
-	if @industrialproducts == "toolfetch"
-		@toolfetcharray = myscraper.arraytoolfetch(query)
+	if @industrialproducts == "industrialproducts"
+		@industrialproductsarray = myscraper.industrialproducts(query)
 	end	
 
-	if @globalindustrial == "toolfetch"
-		@toolfetcharray = myscraper.arraytoolfetch(query)
+	if @globalindustrial == "globalindustrial"
+		@globalindustrialarray = myscraper.globalindustrial(query)
 	end	
 
-	if @Webstaurant == "toolfetch"
-		@toolfetcharray = myscraper.arraytoolfetch(query)
-	end				
+	if @webstaurant == "webstaurant"
+		@webstaurantarray = myscraper.webstaurantstore(query)
+	end		
 
+	if @zorinmaterial == "zorinmaterial"
+		@zorinmaterialarray = myscraper.zorinmaterial(query)
+	end	
+
+	if @digitalbuyer == "digitalbuyer"
+		@digitalbuyerarray = myscraper.digitalbuyer(query)
+	end		
 
 	productclass = Products.new
 	if @productsthatihave == "wireproduct"
