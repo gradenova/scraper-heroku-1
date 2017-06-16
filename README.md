@@ -6,7 +6,7 @@ Webscraper website built with mechanize and sinatra and deployed on amazon web s
 
 To get running on local machine, follow these steps:
 
-1. Download Ruby: Found [here]("https://rubyinstaller.org/")
+1. Download Ruby: Found [here](https://rubyinstaller.org/)
 
 2. Clone and Download Repository
 
