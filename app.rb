@@ -26,11 +26,11 @@ post "/search" do
 	@industry = params[:industry]
 	@tool = params[:tool]
 	@radwell = params[:radwell]
-	industrialproducts = params[:industrialproducts]
-	webstaurant = params[:webstaurant]
-	zorinmaterial = params[:zorinmaterial]
-
-	@productsthatihave = params[:productclass]
+	@industrialproducts = params[:industrialproducts]
+	@webstaurant = params[:webstaurant]
+	@zorinmaterial = params[:zorinmaterial]
+	@digitalbuyer = params[:digitalbuyer]
+	# @productsthatihave = params[:productclass]
 
 	myscraper = WebScrapers.new
 	if @hof == "hofequipment"
@@ -65,36 +65,37 @@ post "/search" do
 		@zorinmaterialarray = myscraper.zorinmaterial(query)
 	end	
 
-	if @digitalbuyer == "digitalbuyer"
-		@digitalbuyerarray = myscraper.digitalbuyer(query)
-	end		
+	# paused
+	# if @digitalbuyer == "digitalbuyer"
+	# 	@digitalbuyerarray = myscraper.digitalbuyer(query)
+	# end		
 
-	productclass = Products.new
-	if @productsthatihave == "wireproduct"
+	# productclass = Products.new
+	# if @productsthatihave == "wireproduct"
 		
-		@returninformation = productclass.wireproduct
+	# 	@returninformation = productclass.wireproduct
 
-	elsif @productsthatihave == "mezzanine"
+	# elsif @productsthatihave == "mezzanine"
 		
-		@returninformation = productclass.mezzanine
+	# 	@returninformation = productclass.mezzanine
 
-	elsif @productsthatihave == "inplantoffice"
+	# elsif @productsthatihave == "inplantoffice"
 		
-		@returninformation = productclass.inplantoffice
+	# 	@returninformation = productclass.inplantoffice
 
-	elsif @productsthatihave == "lockers"
+	# elsif @productsthatihave == "lockers"
 		
-		@returninformation = productclass.lockers
+	# 	@returninformation = productclass.lockers
 
-	elsif @productsthatihave == "matting"
+	# elsif @productsthatihave == "matting"
 		
-		@returninformation = productclass.matting
+	# 	@returninformation = productclass.matting
 
-	elsif @productsthatihave == "stretchwrapper"
+	# elsif @productsthatihave == "stretchwrapper"
 		
-		@returninformation = productclass.stretchwrapper
+	# 	@returninformation = productclass.stretchwrapper
 
-	end
+	# end
 
 	erb :search
 end

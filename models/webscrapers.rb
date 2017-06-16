@@ -276,10 +276,13 @@ class WebScrapers
 
 				if price
 					price = price.text.strip
-					# price = price.gsub(/[$]/, "")
+					price = price.gsub(/[$]/, "")
 					price = price.gsub(/[,]/, "")
-					open('example.csv', 'a') do |csv|
-						
+
+					foundprices.push(input)
+					foundprices.push(price)
+
+					open('csv/industrialproducts.csv', 'a') do |csv|
 						csv <<  "Industrial Products"				
 						csv << ","
 						csv << input
@@ -288,8 +291,11 @@ class WebScrapers
 						csv << "\n"
 					end
 				else
-					open('example.csv', 'a') do |csv|
-						
+
+					foundprices.push(input)
+					foundprices.push("0.00")
+
+					open('csv/industrialproducts.csv', 'a') do |csv|
 						csv <<  "Industrial Products"				
 						csv << ","				
 						csv << input
@@ -298,9 +304,24 @@ class WebScrapers
 						csv << "\n"
 					end
 				end
+			else
 
+					foundprices.push(input)
+					foundprices.push("0.00")
+
+					open('csv/industrialproducts.csv', 'a') do |csv|
+						
+						csv <<  "Industrial Products"				
+						csv << ","				
+						csv << input
+						csv << ","
+						csv << "$0.00"
+						csv << "\n"
+					end
 			end
 		end
+
+		return foundprices
 	end	
 
 	def zorinmaterial(query)
@@ -358,101 +379,133 @@ class WebScrapers
 	end
 
 	def webstaurantstore(query)
+		open("csv/webstaurantstore.csv", "w") do |csv|
+			csv.truncate(0)				
+		end	
+			foundprices = []
 
-		foundprices = []
+			query = query.gsub(/\s+/, '')	
 
-		query = query.gsub(/\s+/, '')	
+			myarray = query.split(",")
 
-		myarray = query.split(",")
+			myarray.each do |input|		
 
-		myarray.each do |input|		
+				mechanize = Mechanize.new
 
-			mechanize = Mechanize.new
+				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-			page = mechanize.get("https://www.webstaurantstore.com/")
-			
-			if page
-				search_form = page.form
-
-				search_form['searchval'] = input
-
-				page = search_form.submit
-
-				price = page.at("p.price").text.strip
-
+				page = mechanize.get("https://www.webstaurantstore.com/")
 				
-				open('csv/webstaurantstore.csv', 'a') do |csv|						
-					csv <<  "Webstaurant"
-					csv << ","
-					csv << input
-					csv << ","
-					csv << price
-					csv << "\n"
-				end
-			else
+				if page
+					search_form = page.form
 
-				open('csv/webstaurantstore.csv', 'a') do |csv|						
-					csv <<  "Webstaurant"
-					csv << ","
-					csv << "0.00"
-					csv << ","
-					csv << price
-					csv << "\n"
-				end			
+					search_form['searchval'] = input
+
+					page = search_form.submit
+
+					price = page.at("p.price").text.strip
+
+					
+					open('csv/webstaurantstore.csv', 'a') do |csv|						
+						csv <<  "Webstaurant"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << price
+						csv << "\n"
+					end
+				else
+
+					open('csv/webstaurantstore.csv', 'a') do |csv|						
+						csv <<  "Webstaurant"
+						csv << ","
+						csv << "0.00"
+						csv << ","
+						csv << price
+						csv << "\n"
+					end			
+				end
 			end
-		end
 	end
 
-	def digitalbuyer(query)
+	# put on hold temporarily
+	
+	# def digitalbuyer(query)
+	# 	open("csv/digitalbuyer.csv", "w") do |csv|
+	# 		csv.truncate(0)				
+	# 	end	
 
-		foundprices = []
+	# 	foundprices = []
 
-		query = query.gsub(/\s+/, '')	
+	# 	query = query.gsub(/\s+/, '')	
 
-		myarray = query.split(",")
+	# 	myarray = query.split(",")
 
-		myarray.each do |input|
+	# 	myarray.each do |input|
 
-			mechanize = Mechanize.new
+	# 		mechanize = Mechanize.new
 
-			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-			page = mechanize.get("http://www.digitalbuyer.com/")
+	# 		page = mechanize.get("https://www.digitalbuyer.com/")
 			
-			if page
-				search_form = page.form
+	# 		if page
+	# 			search_form = page.form
 
-				search_form['q'] = input
+	# 			search_form['q'] = input
 
-				page = search_form.submit
+	# 			page = search_form.submit
 
-				price = page.at("span.price").text.strip
+	# 			price = page.at("span.price").text.strip
 				
-				open('csv/digitalbuyer.csv', 'a') do |csv|						
-					csv <<  "Webstaurant"
-					csv << ","
-					csv << input
-					csv << ","
-					csv << price
-					csv << "\n"
-				end
-			else
+	# 			if price
 
-				open('csv/digitalbuyer.csv', 'a') do |csv|						
-					csv <<  "Webstaurant"
-					csv << ","
-					csv << input
-					csv << ","
-					csv << "0.00"
-					csv << "\n"
-				end			
-			end
-		end
-	end
+	# 				foundprices.push(input)
+	# 				foundprices.push(price)
+
+	# 				open('csv/digitalbuyer.csv', 'a') do |csv|						
+	# 					csv <<  "Digital Buyer"
+	# 					csv << ","
+	# 					csv << input
+	# 					csv << ","
+	# 					csv << price
+	# 					csv << "\n"
+	# 				end
+	# 			else
+
+	# 				foundprices.push(input)
+	# 				foundprices.push("0.00")
+
+	# 				open('csv/digitalbuyer.csv', 'a') do |csv|						
+	# 					csv <<  "Digital Buyer"
+	# 					csv << ","
+	# 					csv << input
+	# 					csv << ","
+	# 					csv << "0.00"
+	# 					csv << "\n"
+	# 				end
+	# 			end
+	# 		else
+
+	# 			foundprices.push(input)
+	# 			foundprices.push("0.00")
+
+	# 			open('csv/digitalbuyer.csv', 'a') do |csv|						
+	# 				csv <<  "Digital Buyer"
+	# 				csv << ","
+	# 				csv << input
+	# 				csv << ","
+	# 				csv << "0.00"
+	# 				csv << "\n"
+	# 			end			
+	# 		end
+	# 	end
+
+	# 	return foundprices
+	# end
 
 	def radwell(query)
+		open("csv/radwell.csv", "w") do |csv|
+			csv.truncate(0)				
+		end	
 
 		foundprices = []
 
@@ -477,6 +530,10 @@ class WebScrapers
 				price = page.at("span.searchPrLow.searchPr")
 
 				if price
+
+					foundprices.push(input)
+					foundprices.push(price)
+
 					open('csv/radwell.csv', 'a') do |csv|						
 						csv <<  "Webstaurant"
 						csv << ","
@@ -485,7 +542,12 @@ class WebScrapers
 						csv << price.text.strip
 						csv << "\n"
 					end
+				
 				else
+
+					foundprices.push(input)
+					foundprices.push("0.00")
+
 					open('csv/radwell.csv', 'a') do |csv|						
 						csv <<  "Webstaurant"
 						csv << ","
@@ -496,6 +558,9 @@ class WebScrapers
 					end						
 				end
 			else
+					
+				foundprices.push(input)
+				foundprices.push("0.00")
 
 				open('csv/radwell.csv', 'a') do |csv|						
 					csv <<  "Webstaurant"
@@ -505,9 +570,11 @@ class WebScrapers
 					csv << price
 					csv << "\n"
 				end			
-
 			end
 		end
+
+		return foundprices
+
 	end
 
 	def globalindustrial(query)

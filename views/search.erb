@@ -70,12 +70,12 @@
 			      </label>
 		      	</div>
 		      	
-		      	<div class="form-check pr-3">
+<!-- paused 		      	<div class="form-check pr-3">
 			      <label for="digitalbuyer" class="form-check-label">
 			      	<input type="checkbox" class="form-check-input" value="digitalbuyer"  name="digitalbuyer"/>
 			      		Digital Buyer
 			      </label>
-		      	</div>
+		      	</div> -->
 	      	</div>
 	  		
 			<%= erb(:_example) %>
@@ -88,7 +88,7 @@
   </div>
 </div>
 
-
+<!-- 
 <div class="container">
 	<div class="row">
 		<form method="POST" action="/search">
@@ -112,7 +112,7 @@
 		<%= @returninformation %>
 	<% end %>
 
-</div>
+</div> -->
 
 
 <% if @hof %>
@@ -173,40 +173,10 @@
 			<a class="btn btn-secondary btn-lg btn-block" href="/csv/industrialsafety" role="button" download="Industrial Safety">Download IndustrialSafety to Excel</a>	
 		</div>	
 	</div>
-
 </div>
 
 <% end %>
 
-<% if @radwellarray %>
-<div class="container mt-5">
-	<h1 class="mt-3 mb-3">Toolfetch</h1>
-
-	<table class="table table-striped table-hover">
-		<thead class="thead-inverse">
-			<td>Product Key</td>
-			<td>Price</td>
-		</thead>
-		<% if @toolfetcharray %>
-			<% @toolfetcharray.each_with_index do |item, index| %>
-				<% if index % 2 == 0 %>
-				<tr>
-					<td><%= item %></td>
-					<% elsif index % 2 == 1 %>
-					<td>$<%= item %></td>
-				</tr>				
-				<% end %>
-			<% end %>
-		<% end %>
-	</table>
-
-	<div class="container mb-3">
-		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/toolfetch" role="button" download="Toolfetch">Download Toolfetch to Excel</a>	
-		</div>	
-	</div>
-</div>
-<% end %>
 
 <% if @radwellarray %>
 <div class="container mt-5">
@@ -217,8 +187,8 @@
 			<td>Product Key</td>
 			<td>Price</td>
 		</thead>
-		<% if @toolfetcharray %>
-			<% @toolfetcharray.each_with_index do |item, index| %>
+		<% if @radwellarray %>
+			<% @radwellarray.each_with_index do |item, index| %>
 				<% if index % 2 == 0 %>
 				<tr>
 					<td><%= item %></td>
@@ -237,5 +207,67 @@
 	</div>
 </div>
 <% end %>
+
+<% if @industrialproductsarray %>
+<div class="container mt-5">
+	<h1 class="mt-3 mb-3">Industrial Products</h1>
+
+	<table class="table table-striped table-hover">
+		<thead class="thead-inverse">
+			<td>Product Key</td>
+			<td>Price</td>
+		</thead>
+		<% if @industrialproductsarray %>
+			<% @industrialproductsarray.each_with_index do |item, index| %>
+				<% if index % 2 == 0 %>
+				<tr>
+					<td><%= item %></td>
+					<% elsif index % 2 == 1 %>
+					<td>$<%= item %></td>
+				</tr>				
+				<% end %>
+			<% end %>
+		<% end %>
+	</table>
+
+	<div class="container mb-3">
+		<div class="row">
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/industrialproducts" role="button" download="Industrial Products">Download IndustrialProducts to Excel</a>	
+		</div>	
+	</div>
+</div>
+<% end %>
+
+<% if @digitalbuyerarray %>
+<div class="container mt-5">
+	<h1 class="mt-3 mb-3">Digital Buyer</h1>
+
+	<table class="table table-striped table-hover">
+		<thead class="thead-inverse">
+			<td>Product Key</td>
+			<td>Price</td>
+		</thead>
+		<% if @digitalbuyerarray %>
+			<% @digitalbuyerarray.each_with_index do |item, index| %>
+				<% if index % 2 == 0 %>
+				<tr>
+					<td><%= item %></td>
+					<% elsif index % 2 == 1 %>
+					<td>$<%= item %></td>
+				</tr>				
+				<% end %>
+			<% end %>
+		<% end %>
+	</table>
+
+	<div class="container mb-3">
+		<div class="row">
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/digitalbuyer" role="button" download="Digital Buyer">Download Digital Buyer to Excel</a>	
+		</div>	
+	</div>
+</div>
+<% end %>
+
+
 </body>
 </html>
