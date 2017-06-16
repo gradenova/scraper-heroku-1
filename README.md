@@ -42,3 +42,7 @@ The Products class needs to be separated out into its own file within models/
 # Todo
 
 Check out the "projects" tab on the top of the page to see what there is to do
+
+# Help
+
+Help and tutorials on Mechanize can be found [here](https://drive.google.com/open?id=0BwyUuWM32AHrZGJBZjdYUXFPczRzaHdRYkZUOEZRSm1Qckkw)
