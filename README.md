@@ -37,3 +37,8 @@ The Products class needs to be separated out into its own file within models/
 **views** - rendering the pages and showing data to users
 
 **app.rb** - responsible for the routes, transmitting information and needs to be refactored later
+
+
+# Todo
+
+Check out the "projects" tab on the top of the page to see what there is to do
