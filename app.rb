@@ -165,10 +165,59 @@ get "/csv/industrialsafety" do
 
 end
 
-get "/csv/toolfetch" do
+get "/csv/digitalbuyer" do
 
 	if cookies[:loggedin] == "yes"
-		send_file('csv/toolfetch.csv', :filename => "csv/toolfetch.csv")
+		send_file('csv/digitalbuyer.csv', :filename => "csv/digitalbuyer.csv")
+	else
+		redirect "/"
+	end	
+end
+
+get "/csv/globalindustrial" do
+
+	if cookies[:loggedin] == "yes"
+		send_file('csv/globalindustrial.csv', :filename => "csv/globalindustrial.csv")
+	else
+		redirect "/"
+	end	
+end
+
+
+get "/csv/industrialproducts" do
+
+	if cookies[:loggedin] == "yes"
+		send_file('csv/industrialproducts.csv', :filename => "csv/industrialproducts.csv")
+	else
+		redirect "/"
+	end	
+end
+
+
+get "/csv/radwell" do
+
+	if cookies[:loggedin] == "yes"
+		send_file('csv/radwell.csv', :filename => "csv/radwell.csv")
+	else
+		redirect "/"
+	end	
+end
+
+
+get "/csv/webstaurant" do
+
+	if cookies[:loggedin] == "yes"
+		send_file('csv/webstaurantstore.csv', :filename => "csv/webstaurantstore.csv")
+	else
+		redirect "/"
+	end	
+end
+
+
+get "/csv/zorinmaterial" do
+
+	if cookies[:loggedin] == "yes"
+		send_file('csv/zorinmaterial.csv', :filename => "csv/zorinmaterial.csv")
 	else
 		redirect "/"
 	end	
