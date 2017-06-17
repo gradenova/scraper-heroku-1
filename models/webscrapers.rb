@@ -17,6 +17,10 @@ class WebScrapers
 
 			mechanize = Mechanize.new
 
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+			mechanize.user_agent_alias = aliases.sample			
+
 			page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
 			
 			product = page.at('span.item-name a')
@@ -120,6 +124,10 @@ class WebScrapers
 
 			mechanize = Mechanize.new
 
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+			mechanize.user_agent_alias = aliases.sample			
+
 			page = mechanize.get(url)
 
 			if page
@@ -180,6 +188,10 @@ class WebScrapers
 			myarray.each do |input|
 
 			mechanize = Mechanize.new
+
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+			mechanize.user_agent_alias = aliases.sample			
 
 			url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
 				
@@ -261,6 +273,10 @@ class WebScrapers
 
 			mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
 
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+			mechanize.user_agent_alias = aliases.sample
+
 			url = "http://www.industrialproducts.com/"
 
 			page = mechanize.get(url)
@@ -341,6 +357,9 @@ class WebScrapers
 
 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+			mechanize.user_agent_alias = aliases.sample
 
 			page = mechanize.get("http://www.zorinmaterial.com/home/")
 			
@@ -423,6 +442,10 @@ class WebScrapers
 			myarray.each do |input|		
 
 				mechanize = Mechanize.new
+
+				aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+				mechanize.user_agent_alias = aliases.sample
 
 				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
@@ -576,6 +599,11 @@ class WebScrapers
 		myarray = query.split(",")
 
 		myarray.each do |input|
+
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+			mechanize.user_agent_alias = aliases.sample
+
 			mechanize = Mechanize.new
 
 			page = mechanize.get("http://www.radwell.com/en-US/")
@@ -653,6 +681,10 @@ class WebScrapers
 			myarray.each do |input|		
 
 			mechanize = Mechanize.new
+
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+			mechanize.user_agent_alias = aliases.sample			
 
 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
