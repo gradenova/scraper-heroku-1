@@ -355,18 +355,47 @@ class WebScrapers
 
 				page = mechanize.click(viewproduct)
 
-				price = page.at(".prices .price-current").text.strip
+				price = page.at(".prices .price-current")
 
-				open('csv/zorinmaterial.csv', 'a') do |csv|						
+
+				if price		
+
+					price = price.text.strip
+					price = price.gsub(/[$]/, "")
+					price = price.gsub(/[,]/, "")
+
+					open('csv/zorinmaterial.csv', 'a') do |csv|
+							csv <<  "Zorin Material"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << price
+							csv << "\n"
+					end
+
+					foundprices.push(input)
+					foundprices.push(price)				
+				else
+
+					foundprices.push(input)
+					foundprices.push("0.00")
+
+					open('csv/zorinmaterial.csv', 'a') do |csv|						
 						csv <<  "Zorin Material"
 						csv << ","
 						csv << input
 						csv << ","
-						csv << price
+						csv << "0.00"
 						csv << "\n"
+					end	
 				end
+
 			else
-				open('csv/zorinmaterial.csv', 'a') do |csv|						
+
+				foundprices.push(input)
+				foundprices.push("0.00")
+
+				open('csv/zorinmaterial.csv', 'a') do |csv|
 					csv <<  "Zorin Material"
 					csv << ","
 					csv << input
@@ -376,12 +405,15 @@ class WebScrapers
 				end	
 			end
 		end
+
+		return foundprices
 	end
 
 	def webstaurantstore(query)
 		open("csv/webstaurantstore.csv", "w") do |csv|
 			csv.truncate(0)				
 		end	
+			
 			foundprices = []
 
 			query = query.gsub(/\s+/, '')	
@@ -403,29 +435,59 @@ class WebScrapers
 
 					page = search_form.submit
 
-					price = page.at("p.price").text.strip
+					price = page.at("p.price")
 
+
+					if price
+
+						price = price.text.strip
+						price = price.gsub(/[$]/, "")
+						price = price.gsub(/[,]/, "")						
+
+						foundprices.push(input)
+						foundprices.push(price)
 					
+						open('csv/webstaurantstore.csv', 'a') do |csv|						
+							csv <<  "Webstaurant"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << price
+							csv << "\n"
+						end
+					else
+					
+						foundprices.push(input)
+						foundprices.push("0.00")
+
+						open('csv/webstaurantstore.csv', 'a') do |csv|						
+							csv <<  "Webstaurant"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << "0.00"
+							csv << "\n"
+						end
+					end
+
+				else
+
+					foundprices.push(input)
+					foundprices.push("0.00")
+
 					open('csv/webstaurantstore.csv', 'a') do |csv|						
 						csv <<  "Webstaurant"
 						csv << ","
 						csv << input
 						csv << ","
-						csv << price
-						csv << "\n"
-					end
-				else
-
-					open('csv/webstaurantstore.csv', 'a') do |csv|						
-						csv <<  "Webstaurant"
-						csv << ","
 						csv << "0.00"
-						csv << ","
-						csv << price
 						csv << "\n"
 					end			
 				end
 			end
+
+			return foundprices
+
 	end
 
 	# put on hold temporarily
@@ -578,6 +640,9 @@ class WebScrapers
 	end
 
 	def globalindustrial(query)
+		open("csv/globalindustrial.csv", "w") do |csv|
+			csv.truncate(0)				
+		end			
 
 		foundprices = []
 
@@ -600,30 +665,56 @@ class WebScrapers
 
 				page = search_form.submit
 
-				return puts page.at(".price").text.strip
+				price = page.at(".price")
 
-				open('csv/globalindustrial.csv', 'a') do |csv|						
-					csv <<  "Webstaurant"
+				if price
+
+					price = price.text.strip
+					price = price.gsub(/[$]/, "")
+					price = price.gsub(/[,]/, "")
+
+					foundprices.push(input)
+					foundprices.push(price)					
+
+					open('csv/globalindustrial.csv', 'a') do |csv|						
+						csv <<  "Global Industrial"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << price
+						csv << "\n"
+					end
+				else
+
+					foundprices.push(input)
+					foundprices.push("0.00")
+
+					open('csv/globalindustrial.csv', 'a') do |csv|						
+						csv <<  "Global Industrial"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << "0.00"
+						csv << "\n"
+					end	
+				end				
+			else
+
+				foundprices.push(input)
+				foundprices.push("0.00")
+
+				open('csv/globalindustrial.csv', 'a') do |csv|
+					csv <<  "Global Industrial"
 					csv << ","
 					csv << input
 					csv << ","
-					csv << price
-					csv << "\n"
-				end
-
-			else
-
-				open('csv/globalindustrial.csv', 'a') do |csv|						
-					csv <<  "Webstaurant"
-					csv << ","
 					csv << "0.00"
-					csv << ","
-					csv << price
 					csv << "\n"
 				end					
-
 			end
 		end
+
+		return foundprices
 	end
 
 end

@@ -22,14 +22,16 @@ end
 post "/search" do
 
 	query = params[:q]
+
 	@hof = params[:hof]
 	@industry = params[:industry]
 	@tool = params[:tool]
 	@radwell = params[:radwell]
 	@industrialproducts = params[:industrialproducts]
 	@webstaurant = params[:webstaurant]
-	@zorinmaterial = params[:zorinmaterial]
+	@zorinmaterial = params[:zorin]
 	@digitalbuyer = params[:digitalbuyer]
+	@globalindustrial = params[:globalindustrial]
 	# @productsthatihave = params[:productclass]
 
 	myscraper = WebScrapers.new
