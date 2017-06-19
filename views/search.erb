@@ -10,7 +10,7 @@
   <div class="row">
 
 	    <form action="/search" method="POST" class="p-3">
-	  
+
 	  		<h3>Select Websites to Query</h3>
 
 	  		<div class="form-inline">
@@ -27,7 +27,7 @@
 			      		IndustrialSafety
 			      </label>
 		      	</div>
-		      	
+
 		      	<div class="form-check pr-3">
 			      <label for="Toolfetch" class="form-check-label">
 			      	<input type="checkbox" class="form-check-input" value="toolfetch"  name="tool"/>
@@ -48,7 +48,7 @@
 			      		Zorin Material
 			      </label>
 		      	</div>
-		      	
+
 		      	<div class="form-check pr-3">
 			      <label for="GlobalIndustrial" class="form-check-label">
 			      	<input type="checkbox" class="form-check-input" value="globalindustrial"  name="globalindustrial"/>
@@ -69,7 +69,7 @@
 			      		Radwell
 			      </label>
 		      	</div>
-		      	
+
 <!-- paused 		      	<div class="form-check pr-3">
 			      <label for="digitalbuyer" class="form-check-label">
 			      	<input type="checkbox" class="form-check-input" value="digitalbuyer"  name="digitalbuyer"/>
@@ -77,42 +77,17 @@
 			      </label>
 		      	</div> -->
 	      	</div>
-	  		
+
 			<%= erb(:_example) %>
 
 	      	<input type="text" class="mb-3" name="q"/>
-	  		
+
 	  		<input type="submit" class="btn btn-md btn-secondary" />
 
 	    </form>
   </div>
 </div>
 
-<!-- 
-<div class="container">
-	<div class="row">
-		<form method="POST" action="/search">
-			<h3>Search Crap</h3>
-		
-			<select name="productclass">
-			  <option value="wireproduct">Wire product</option>
-			  <option value="lockers">Lockers</option>
-			  <option value="matting">Matting</option>
-			  <option value="mezzanine">Mezzanine</option>
-			  <option value="inplantoffice">In Plant Office</option>
-			  <option value="stretchwrapper">Stretch Wrapper</option>
-			</select>
-			
-			<input type="submit" class="btn btn-md mt-3 " />		
-		
-		</form>
-	</div>
-
-	<% if @returninformation %>
-		<%= @returninformation %>
-	<% end %>
-
-</div> -->
 
 
 <% if @hof %>
@@ -130,7 +105,7 @@
 					<td><%= item %></td>
 					<% elsif index % 2 == 1 %>
 					<td>$<%= item %></td>
-				</tr>				
+				</tr>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -138,8 +113,8 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/hofequipment" role="button" download="HOFequipment">Download HOFequipment to Excel</a>	
-		</div>	
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/hofequipment" role="button" download="HOFequipment">Download HOFequipment to Excel</a>
+		</div>
 	</div>
 </div>
 
@@ -162,7 +137,7 @@
 					<td><%= item %></td>
 					<% elsif index % 2 == 1 %>
 					<td>$<%= item %></td>
-				</tr>				
+				</tr>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -170,8 +145,8 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/industrialsafety" role="button" download="Industrial Safety">Download IndustrialSafety to Excel</a>	
-		</div>	
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/industrialsafety" role="button" download="Industrial Safety">Download IndustrialSafety to Excel</a>
+		</div>
 	</div>
 </div>
 
@@ -194,7 +169,7 @@
 					<td><%= item %></td>
 					<% elsif index % 2 == 1 %>
 					<td>$<%= item %></td>
-				</tr>				
+				</tr>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -202,8 +177,8 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/radwellarray" role="button" download="Toolfetch">Download Radwell to Excel</a>	
-		</div>	
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/radwellarray" role="button" download="Toolfetch">Download Radwell to Excel</a>
+		</div>
 	</div>
 </div>
 <% end %>
@@ -224,7 +199,7 @@
 					<td><%= item %></td>
 					<% elsif index % 2 == 1 %>
 					<td>$<%= item %></td>
-				</tr>				
+				</tr>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -232,8 +207,8 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/industrialproducts" role="button" download="Industrial Products">Download IndustrialProducts to Excel</a>	
-		</div>	
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/industrialproducts" role="button" download="Industrial Products">Download IndustrialProducts to Excel</a>
+		</div>
 	</div>
 </div>
 <% end %>
@@ -254,7 +229,7 @@
 					<td><%= item %></td>
 					<% elsif index % 2 == 1 %>
 					<td>$<%= item %></td>
-				</tr>				
+				</tr>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -262,8 +237,8 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/digitalbuyer" role="button" download="Digital Buyer">Download Digital Buyer to Excel</a>	
-		</div>	
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/digitalbuyer" role="button" download="Digital Buyer">Download Digital Buyer to Excel</a>
+		</div>
 	</div>
 </div>
 <% end %>
@@ -284,7 +259,7 @@
 					<td><%= item %></td>
 					<% elsif index % 2 == 1 %>
 					<td>$<%= item %></td>
-				</tr>				
+				</tr>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -292,8 +267,8 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/zorinmaterial" role="button" download="Zorin Material">Download Zorin Material to Excel</a>	
-		</div>	
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/zorinmaterial" role="button" download="Zorin Material">Download Zorin Material to Excel</a>
+		</div>
 	</div>
 </div>
 <% end %>
@@ -314,7 +289,7 @@
 					<td><%= item %></td>
 					<% elsif index % 2 == 1 %>
 					<td>$<%= item %></td>
-				</tr>				
+				</tr>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -322,8 +297,8 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/webstaurant" role="button" download="Zorin Material">Download Webstaurant to Excel</a>	
-		</div>	
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/webstaurant" role="button" download="Zorin Material">Download Webstaurant to Excel</a>
+		</div>
 	</div>
 </div>
 <% end %>
@@ -344,7 +319,7 @@
 					<td><%= item %></td>
 					<% elsif index % 2 == 1 %>
 					<td>$<%= item %></td>
-				</tr>				
+				</tr>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -352,8 +327,8 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/globalindustrial" role="button" download="Zorin Material">Download Global Industrial to Excel</a>	
-		</div>	
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/globalindustrial" role="button" download="Zorin Material">Download Global Industrial to Excel</a>
+		</div>
 	</div>
 </div>
 <% end %>

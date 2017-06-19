@@ -35,8 +35,9 @@ post "/search" do
 	# @productsthatihave = params[:productclass]
 
 	myscraper = WebScrapers.new
+
 	if @hof == "hofequipment"
-		@hofarray = myscraper.arrayhofequipment(query)
+		@hofarray = myscraper.arrayindustrialsafety(query)
 	end
 
 	if @industry == "industrialsafety"
@@ -45,56 +46,56 @@ post "/search" do
 
 	if @tool == "toolfetch"
 		@toolfetcharray = myscraper.arraytoolfetch(query)
-	end	
+	end
 
 	if @radwell == "radwell"
 		@radwellarray = myscraper.radwell(query)
-	end	
+	end
 
 	if @industrialproducts == "industrialproducts"
 		@industrialproductsarray = myscraper.industrialproducts(query)
-	end	
+	end
 
 	if @globalindustrial == "globalindustrial"
 		@globalindustrialarray = myscraper.globalindustrial(query)
-	end	
+	end
 
 	if @webstaurant == "webstaurant"
 		@webstaurantarray = myscraper.webstaurantstore(query)
-	end		
+	end
 
 	if @zorinmaterial == "zorinmaterial"
 		@zorinmaterialarray = myscraper.zorinmaterial(query)
-	end	
+	end
 
 	# paused
 	# if @digitalbuyer == "digitalbuyer"
 	# 	@digitalbuyerarray = myscraper.digitalbuyer(query)
-	# end		
+	# end
 
 	# productclass = Products.new
 	# if @productsthatihave == "wireproduct"
-		
+
 	# 	@returninformation = productclass.wireproduct
 
 	# elsif @productsthatihave == "mezzanine"
-		
+
 	# 	@returninformation = productclass.mezzanine
 
 	# elsif @productsthatihave == "inplantoffice"
-		
+
 	# 	@returninformation = productclass.inplantoffice
 
 	# elsif @productsthatihave == "lockers"
-		
+
 	# 	@returninformation = productclass.lockers
 
 	# elsif @productsthatihave == "matting"
-		
+
 	# 	@returninformation = productclass.matting
 
 	# elsif @productsthatihave == "stretchwrapper"
-		
+
 	# 	@returninformation = productclass.stretchwrapper
 
 	# end
@@ -103,7 +104,7 @@ post "/search" do
 end
 
 get "/schedule" do
-	if cookies[:loggedin] == "yes" 
+	if cookies[:loggedin] == "yes"
 		erb :schedule
 	else
 		redirect "/"
@@ -137,7 +138,7 @@ post "/login" do
 	loginform = Login.find_by(name: params[:name], password: params[:password])
 
 	if loginform
-		cookies[:loggedin] = "yes" 
+		cookies[:loggedin] = "yes"
 		redirect "/search"
 	else
 		redirect "/login"
@@ -171,7 +172,7 @@ get "/csv/digitalbuyer" do
 		send_file('csv/digitalbuyer.csv', :filename => "csv/digitalbuyer.csv")
 	else
 		redirect "/"
-	end	
+	end
 end
 
 get "/csv/globalindustrial" do
@@ -180,7 +181,7 @@ get "/csv/globalindustrial" do
 		send_file('csv/globalindustrial.csv', :filename => "csv/globalindustrial.csv")
 	else
 		redirect "/"
-	end	
+	end
 end
 
 
@@ -190,7 +191,7 @@ get "/csv/industrialproducts" do
 		send_file('csv/industrialproducts.csv', :filename => "csv/industrialproducts.csv")
 	else
 		redirect "/"
-	end	
+	end
 end
 
 
@@ -200,7 +201,7 @@ get "/csv/radwell" do
 		send_file('csv/radwell.csv', :filename => "csv/radwell.csv")
 	else
 		redirect "/"
-	end	
+	end
 end
 
 
@@ -210,7 +211,7 @@ get "/csv/webstaurant" do
 		send_file('csv/webstaurantstore.csv', :filename => "csv/webstaurantstore.csv")
 	else
 		redirect "/"
-	end	
+	end
 end
 
 
@@ -220,7 +221,7 @@ get "/csv/zorinmaterial" do
 		send_file('csv/zorinmaterial.csv', :filename => "csv/zorinmaterial.csv")
 	else
 		redirect "/"
-	end	
+	end
 end
 
 get "/csv/mixed" do
@@ -229,6 +230,6 @@ get "/csv/mixed" do
 		send_file('csv/mixed.csv', :filename => "csv/mixed.csv")
 	else
 		redirect "/"
-	end	
+	end
 
 end
