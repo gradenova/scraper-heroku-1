@@ -6,8 +6,7 @@ require "mechanize"
 class WebScrapers
 
 	def formatPrice(price)
-		price = price.text.strip
-		return price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
+		return price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
 	end
 
 	def truncateCSV(name)
@@ -21,11 +20,15 @@ class WebScrapers
 	end
 
 	def arrayhofequipment(query)
-		truncateCSV("hofequipment")
+		open("csv/hofequipment.csv", "w") do |csv|
+			csv.truncate(0)
+		end
 
-		myarray = cleanQuery(query)
+		query = query.gsub(/\s+/, '')
 
 		foundprices = []
+
+		myarray = query.split(",")
 
 		myarray.each do |input|
 
@@ -38,7 +41,7 @@ class WebScrapers
 			if product
 				page = mechanize.click(product)
 
-				price = page.at(".item-price")
+				price = page.at(".item-price").text.strip
 				table = page.at("table")
 
 				if page.at(".chartPersonalization")
@@ -50,43 +53,45 @@ class WebScrapers
 					table_data.each do |row|
 						row.each do |x|
 							if x == input
-								newprice = formatPrice(price)
+								price = row[-2]
+								price = price.gsub(/[()]/, "")
+								price = price.gsub(/[$]/, "")
+								price = price.gsub(/[,]/, "")
 								foundprices.push(input)
-								foundprices.push("desperate test 1")
+								foundprices.push(price)
+
 
 								open("csv/hofequipment.csv", "a") do |csv|
 									csv << "HOFequipment"
 									csv << ","
 									csv << input
 									csv << ","
-									csv << newprice
+									csv << price
 									csv << "\n"
 
-								end #ends csv loop
-
-							end #ends if == input
-
-						end #ends row.each
-
-					end #ends table_data.each
+								end
+							end
+						end
+					end
 
 				elsif page.at(".item-price")
-						newprice = formatPrice(price)
+						price = price.gsub(/[()]/, "")
+						price = price.gsub(/[$]/, "")
+						price = price.gsub(/[,]/, "")
 						foundprices.push(input)
-						foundprices.push("desperate test 2")
+						foundprices.push(price)
 
 						open("csv/hofequipment.csv", "a") do |csv|
 							csv << "HOFequipment"
 							csv << ","
 							csv << input
 							csv << ","
-							csv << newprice
+							csv << price
 							csv << "\n"
-						end #ends csv
+						end
 				else
-					foundprices.push("desperate test 3")
+					foundprices.push(input)
 					foundprices.push("0.00")
-
 					open("csv/hofequipment.csv", "a") do |csv|
 						csv << "HOFequipment"
 						csv << ","
@@ -94,14 +99,13 @@ class WebScrapers
 						csv << ","
 						csv << "0.00"
 						csv << "\n"
-					end #ends csv
+					end
 
-				end #ends if.pageat(chartpersonalization)
+				end
 
 			else
-				foundprices.push("desperate test 4")
 				foundprices.push(input)
-
+				foundprices.push("0.00")
 				open("csv/hofequipment.csv", "a") do |csv|
 					csv << "HOFequipment"
 					csv << ","
@@ -109,11 +113,9 @@ class WebScrapers
 					csv << ","
 					csv << "0.00"
 					csv << "\n"
-				end #ends csv
-
-			end #ends if product
-
-		end #ends my array
+				end
+			end
+		end
 
 		return foundprices
 	end
@@ -266,7 +268,6 @@ class WebScrapers
 
 		return foundprices
 	end
-
 
 	def industrialproducts(query)
 		open("csv/industrialproducts.csv", "w") do |csv|

@@ -153,6 +153,36 @@
 <% end %>
 
 
+<% if @Toolfetch %>
+<div class="container mt-5">
+	<h1 class="mt-3 mb-3">Toolfetch</h1>
+
+	<table class="table table-striped table-hover">
+		<thead class="thead-inverse">
+			<td>Product Key</td>
+			<td>Price</td>
+		</thead>
+		<% if @toolfetcharray %>
+			<% @toolfetcharray.each_with_index do |item, index| %>
+				<% if index % 2 == 0 %>
+				<tr>
+					<td><%= item %></td>
+					<% elsif index % 2 == 1 %>
+					<td>$<%= item %></td>
+				</tr>
+				<% end %>
+			<% end %>
+		<% end %>
+	</table>
+
+	<div class="container mb-3">
+		<div class="row">
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/toolfetch" role="button" download="Toolfetch">Download Toolfetch to Excel</a>
+		</div>
+	</div>
+</div>
+<% end %>
+
 <% if @radwellarray %>
 <div class="container mt-5">
 	<h1 class="mt-3 mb-3">Radwell</h1>
@@ -177,7 +207,7 @@
 
 	<div class="container mb-3">
 		<div class="row">
-			<a class="btn btn-secondary btn-lg btn-block" href="/csv/radwellarray" role="button" download="Toolfetch">Download Radwell to Excel</a>
+			<a class="btn btn-secondary btn-lg btn-block" href="/csv/radwellarray" role="button" download="Radwell">Download Radwell to Excel</a>
 		</div>
 	</div>
 </div>

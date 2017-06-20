@@ -37,7 +37,7 @@ post "/search" do
 	myscraper = WebScrapers.new
 
 	if @hof == "hofequipment"
-		@hofarray = myscraper.arrayindustrialsafety(query)
+		@hofarray = myscraper.arrayhofequipment(query)
 	end
 
 	if @industry == "industrialsafety"
