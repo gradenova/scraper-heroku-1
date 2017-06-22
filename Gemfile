@@ -3,6 +3,6 @@ source "https://rubygems.org"
 gem "sinatra"
 gem "activerecord"
 gem "sinatra-activerecord"
-gem "sqlite3"
+gem "pg"
 gem "sinatra-contrib"
 gem 'mechanize'

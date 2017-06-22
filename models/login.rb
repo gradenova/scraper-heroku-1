@@ -1,2 +1,2 @@
-class Login < ActiveRecord::Base
+class Model < ActiveRecord::Base
 end

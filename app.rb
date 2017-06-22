@@ -1,9 +1,9 @@
 require "sinatra"
 require "mechanize"
-require "./models/webscrapers"
 require 'sinatra/activerecord'
-require "./models/login"
-require "sinatra/cookies"
+require "sinatra/cookies" #cookies! yummy
+require "./models/login" #database login
+require "./models/webscrapers" #webscraper models
 
 get "/" do
 	erb :index
