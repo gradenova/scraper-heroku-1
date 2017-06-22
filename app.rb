@@ -11,12 +11,7 @@ end
 
 
 get "/search" do
-
-	if cookies[:loggedin] == "yes"
 		erb :search
-	else
-		redirect "/"
-	end
 end
 
 post "/search" do
@@ -104,11 +99,9 @@ post "/search" do
 end
 
 get "/schedule" do
-	if cookies[:loggedin] == "yes"
+
 		erb :schedule
-	else
-		redirect "/"
-	end
+
 end
 
 get "/signup" do
@@ -116,15 +109,15 @@ get "/signup" do
 end
 
 post "/signup" do
-	@signup = Login.new(params[:model])
+	#@signup = Login.new(params[:model])
 
-	if @signup.save
-		cookies[:loggedin] = "yes"
-		redirect "/search"
-	else
-		redirect "/signup"
-		@error = "Sorry, there was an error!"
-	end
+	# if @signup.save
+	# 	cookies[:loggedin] = "yes"
+	# 	redirect "/search"
+	# else
+	# 	redirect "/signup"
+	# 	@error = "Sorry, there was an error!"
+	# end
 
 end
 
@@ -135,101 +128,75 @@ end
 
 post "/login" do
 
-	loginform = Login.find_by(name: params[:name], password: params[:password])
+	#loginform = Login.find_by(name: params[:name], password: params[:password])
 
-	if loginform
-		cookies[:loggedin] = "yes"
-		redirect "/search"
-	else
-		redirect "/login"
-	end
+	#if loginform
+		#cookies[:loggedin] = "yes"
+	# 	redirect "/search"
+	# else
+	# 	redirect "/login"
+	# end
 
 end
 
 get "/csv/hofequipment" do
 
-	if cookies[:loggedin] == "yes"
+
 		send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
-	else
-		redirect "/"
-	end
+
 
 end
 
 get "/csv/industrialsafety" do
 
-	if cookies[:loggedin] == "yes"
 		send_file('csv/industrialsafety.csv', :filename => "csv/industrialsafety.csv")
-	else
-		redirect "/"
-	end
+
 
 end
 
 get "/csv/digitalbuyer" do
 
-	if cookies[:loggedin] == "yes"
 		send_file('csv/digitalbuyer.csv', :filename => "csv/digitalbuyer.csv")
-	else
-		redirect "/"
-	end
+
 end
 
 get "/csv/globalindustrial" do
 
-	if cookies[:loggedin] == "yes"
 		send_file('csv/globalindustrial.csv', :filename => "csv/globalindustrial.csv")
-	else
-		redirect "/"
-	end
+
 end
 
 
 get "/csv/industrialproducts" do
 
-	if cookies[:loggedin] == "yes"
 		send_file('csv/industrialproducts.csv', :filename => "csv/industrialproducts.csv")
-	else
-		redirect "/"
-	end
+
 end
 
 
 get "/csv/radwell" do
 
-	if cookies[:loggedin] == "yes"
 		send_file('csv/radwell.csv', :filename => "csv/radwell.csv")
-	else
-		redirect "/"
-	end
+
 end
 
 
 get "/csv/webstaurant" do
 
-	if cookies[:loggedin] == "yes"
 		send_file('csv/webstaurantstore.csv', :filename => "csv/webstaurantstore.csv")
-	else
-		redirect "/"
-	end
+
 end
 
 
 get "/csv/zorinmaterial" do
 
-	if cookies[:loggedin] == "yes"
 		send_file('csv/zorinmaterial.csv', :filename => "csv/zorinmaterial.csv")
-	else
-		redirect "/"
-	end
+
 end
 
 get "/csv/mixed" do
 
-	if cookies[:loggedin] == "yes"
 		send_file('csv/mixed.csv', :filename => "csv/mixed.csv")
-	else
-		redirect "/"
-	end
+
 
 end
