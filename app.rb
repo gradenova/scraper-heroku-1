@@ -3,6 +3,7 @@ require "mechanize"
 require 'sinatra/activerecord'
 require "sinatra/cookies" #cookies! yummy
 require "./models/login" #database login
+require "./models/products" #webscraper models
 require "./models/webscrapers" #webscraper models
 
 get "/" do
@@ -27,7 +28,7 @@ post "/search" do
 	@zorinmaterial = params[:zorin]
 	@digitalbuyer = params[:digitalbuyer]
 	@globalindustrial = params[:globalindustrial]
-	# @productsthatihave = params[:productclass]
+	@productsthatihave = params[:productclass]
 
 	myscraper = WebScrapers.new
 
@@ -63,37 +64,51 @@ post "/search" do
 		@zorinmaterialarray = myscraper.zorinmaterial(query)
 	end
 
-	# paused
-	# if @digitalbuyer == "digitalbuyer"
-	# 	@digitalbuyerarray = myscraper.digitalbuyer(query)
-	# end
+	if @digitalbuyer == "digitalbuyer"
+		@digitalbuyerarray = myscraper.digitalbuyer(query)
+	end
 
-	# productclass = Products.new
-	# if @productsthatihave == "wireproduct"
+	productclass = Products.new
+	if @productsthatihave == "wireproduct"
 
-	# 	@returninformation = productclass.wireproduct
+		@returninformation = productclass.wireproduct
 
-	# elsif @productsthatihave == "mezzanine"
+	elsif @productsthatihave == "mezzanine"
 
-	# 	@returninformation = productclass.mezzanine
+		@returninformation = productclass.mezzanine
 
-	# elsif @productsthatihave == "inplantoffice"
+	elsif @productsthatihave == "inplantoffice"
 
-	# 	@returninformation = productclass.inplantoffice
+		@returninformation = productclass.inplantoffice
 
-	# elsif @productsthatihave == "lockers"
+	elsif @productsthatihave == "lockers"
 
-	# 	@returninformation = productclass.lockers
+		@returninformation = productclass.lockers
 
-	# elsif @productsthatihave == "matting"
+	elsif @productsthatihave == "matting"
 
-	# 	@returninformation = productclass.matting
+		@returninformation = productclass.matting
 
-	# elsif @productsthatihave == "stretchwrapper"
+	elsif @productsthatihave == "stretchwrapper"
 
-	# 	@returninformation = productclass.stretchwrapper
+		@returninformation = productclass.stretchwrapper
 
-	# end
+	elsif @productsthatihave == "workbenches"
+
+		@returninformation = productclass.workbenches
+
+	elsif @productsthatihave == "shelving"
+
+		@returninformation = productclass.shelving
+
+	elsif @productsthatihave == "conveyors"
+
+		@returninformation = productclass.conveyors
+
+	elsif @productsthatihave == "seating"
+
+		@returninformation = productclass.seating
+	end
 
 	erb :search
 end

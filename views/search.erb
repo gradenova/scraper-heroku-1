@@ -69,13 +69,6 @@
 			      		Radwell
 			      </label>
 		      	</div>
-
-<!-- paused 		      	<div class="form-check pr-3">
-			      <label for="digitalbuyer" class="form-check-label">
-			      	<input type="checkbox" class="form-check-input" value="digitalbuyer"  name="digitalbuyer"/>
-			      		Digital Buyer
-			      </label>
-		      	</div> -->
 	      	</div>
 
 			<%= erb(:_example) %>
@@ -86,6 +79,34 @@
 
 	    </form>
   </div>
+</div>
+<div class="container">
+	<div class="row">
+		<form method="POST" action="/search">
+			<h3>Vestil</h3>
+
+			<select name="productclass">
+			  <option value="wireproduct">Wire product</option>
+			  <option value="lockers">Lockers</option>
+			  <option value="matting">Matting</option>
+			  <option value="mezzanine">Mezzanine</option>
+			  <option value="inplantoffice">In Plant Office</option>
+			  <option value="stretchwrapper">Stretch Wrapper</option>
+			  <option value="workbenches">Work Benches</option>
+			  <option value="shelving">Shelving</option>
+			  <option value="conveyors">Conveyors</option>
+			  <option value="seating">Seating</option>
+			</select>
+
+			<input type="submit" class="btn btn-md mt-3 " />
+
+		</form>
+	</div>
+
+	<% if @returninformation %>
+		<%= @returninformation %>
+	<% end %>
+
 </div>
 
 
