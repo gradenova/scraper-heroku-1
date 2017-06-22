@@ -5,90 +5,90 @@ require "mechanize"
 
 class WebScrapers
 
-	def formatPrice(price)
-		return price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
-	end
-
-	def truncateCSV(name)
-		open("csv/#{name}.csv", "w") do |csv|
-			csv.truncate(0)
-		end
-	end
-
-	def cleanQuery(myquery)
-		return myarray = myquery.gsub(/\s+/, '').split(",")
-	end
-
 	def arrayhofequipment(query)
-		open("csv/hofequipment.csv", "w") do |csv|
-			csv.truncate(0)
-		end
+			open("csv/hofequipment.csv", "w") do |csv|
+				csv.truncate(0)
+			end
 
-		query = query.gsub(/\s+/, '')
+			query = query.gsub(/\s+/, '')
 
-		foundprices = []
+			foundprices = []
 
-		myarray = query.split(",")
+			myarray = query.split(",")
 
-		myarray.each do |input|
+			myarray.each do |input|
 
-			mechanize = Mechanize.new
+				mechanize = Mechanize.new
 
-			page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
+				page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
 
-			product = page.at('span.item-name a')
+				product = page.at('span.item-name a')
 
-			if product
-				page = mechanize.click(product)
+				if product
+					page = mechanize.click(product)
 
-				price = page.at(".item-price").text.strip
-				table = page.at("table")
+					price = page.at(".item-price").text.strip
+					table = page.at("table")
 
-				if page.at(".chartPersonalization")
+					if page.at(".chartPersonalization")
 
-					table_data = table.search('tr').map do |row|
-						row.search('th, td').map { |cell| cell.text.strip }
-					end
+						table_data = table.search('tr').map do |row|
+							row.search('th, td').map { |cell| cell.text.strip }
+						end
 
-					table_data.each do |row|
-						row.each do |x|
-							if x == input
-								price = row[-2]
-								price = price.gsub(/[()]/, "")
-								price = price.gsub(/[$]/, "")
-								price = price.gsub(/[,]/, "")
-								foundprices.push(input)
-								foundprices.push(price)
+						table_data.each do |row|
+							row.each do |x|
+								if x == input
+									price = row[-2]
+									price = price.gsub(/[()]/, "")
+									price = price.gsub(/[$]/, "")
+									price = price.gsub(/[,]/, "")
+									foundprices.push(input)
+									foundprices.push(price)
 
 
-								open("csv/hofequipment.csv", "a") do |csv|
-									csv << "HOFequipment"
-									csv << ","
-									csv << input
-									csv << ","
-									csv << price
-									csv << "\n"
+									open("csv/hofequipment.csv", "a") do |csv|
+										csv << "HOFequipment"
+										csv << ","
+										csv << input
+										csv << ","
+										csv << price
+										csv << "\n"
 
+									end
 								end
 							end
 						end
-					end
 
-				elsif page.at(".item-price")
-						price = price.gsub(/[()]/, "")
-						price = price.gsub(/[$]/, "")
-						price = price.gsub(/[,]/, "")
+					elsif page.at(".item-price")
+							price = price.gsub(/[()]/, "")
+							price = price.gsub(/[$]/, "")
+							price = price.gsub(/[,]/, "")
+							foundprices.push(input)
+							foundprices.push(price)
+
+							open("csv/hofequipment.csv", "a") do |csv|
+								csv << "HOFequipment"
+								csv << ","
+								csv << input
+								csv << ","
+								csv << price
+								csv << "\n"
+							end
+					else
 						foundprices.push(input)
-						foundprices.push(price)
-
+						foundprices.push("0.00")
 						open("csv/hofequipment.csv", "a") do |csv|
 							csv << "HOFequipment"
 							csv << ","
 							csv << input
 							csv << ","
-							csv << price
+							csv << "0.00"
 							csv << "\n"
 						end
+
+					end
+
 				else
 					foundprices.push(input)
 					foundprices.push("0.00")
@@ -100,24 +100,10 @@ class WebScrapers
 						csv << "0.00"
 						csv << "\n"
 					end
-
-				end
-
-			else
-				foundprices.push(input)
-				foundprices.push("0.00")
-				open("csv/hofequipment.csv", "a") do |csv|
-					csv << "HOFequipment"
-					csv << ","
-					csv << input
-					csv << ","
-					csv << "0.00"
-					csv << "\n"
 				end
 			end
-		end
 
-		return foundprices
+			return foundprices
 	end
 
 	def arrayindustrialsafety(query)
@@ -139,7 +125,7 @@ class WebScrapers
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-			mechanize.user_agent_alias = aliases.sample
+
 
 			page = mechanize.get(url)
 
@@ -204,7 +190,7 @@ class WebScrapers
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-			mechanize.user_agent_alias = aliases.sample
+
 
 			url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
 
@@ -286,7 +272,7 @@ class WebScrapers
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-			mechanize.user_agent_alias = aliases.sample
+
 
 			url = "http://www.industrialproducts.com/"
 
@@ -370,7 +356,7 @@ class WebScrapers
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-			mechanize.user_agent_alias = aliases.sample
+
 
 			page = mechanize.get("http://www.zorinmaterial.com/home/")
 
@@ -456,7 +442,7 @@ class WebScrapers
 
 				aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-				mechanize.user_agent_alias = aliases.sample
+
 
 				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
@@ -521,7 +507,6 @@ class WebScrapers
 			end
 
 			return foundprices
-
 	end
 
 	def radwell(query)
@@ -539,7 +524,7 @@ class WebScrapers
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-			mechanize.user_agent_alias = aliases.sample
+
 
 			mechanize = Mechanize.new
 
@@ -601,7 +586,6 @@ class WebScrapers
 		end
 
 		return foundprices
-
 	end
 
 	def globalindustrial(query)
@@ -621,7 +605,7 @@ class WebScrapers
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-			mechanize.user_agent_alias = aliases.sample
+
 
 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
