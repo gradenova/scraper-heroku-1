@@ -1,5 +1,6 @@
 require "sinatra"
 require "mechanize"
+require "sucker_punch"
 require 'sinatra/activerecord'
 require "sinatra/cookies" #cookies! yummy
 require "./models/login" #database login
@@ -10,9 +11,8 @@ get "/" do
 	erb :index
 end
 
-
 get "/search" do
-		erb :search
+	erb :search
 end
 
 post "/search" do
@@ -30,42 +30,37 @@ post "/search" do
 	@globalindustrial = params[:globalindustrial]
 	@productsthatihave = params[:productclass]
 
-	myscraper = WebScrapers.new
-
 	if @hof == "hofequipment"
-		@hofarray = myscraper.arrayhofequipment(query)
+		@hofarray = HOFequipment.perform_async(query)
 	end
 
+
 	if @industry == "industrialsafety"
-		@industrialarray = myscraper.arrayindustrialsafety(query)
+		@industrialarray = Industrialsafety.perform_async(query)
 	end
 
 	if @tool == "toolfetch"
-		@toolfetcharray = myscraper.arraytoolfetch(query)
+		@toolfetcharray = Toolfetch.perform_async(query)
 	end
 
 	if @radwell == "radwell"
-		@radwellarray = myscraper.radwell(query)
+		@radwellarray = Radwell.perform_async(query)
 	end
 
 	if @industrialproducts == "industrialproducts"
-		@industrialproductsarray = myscraper.industrialproducts(query)
+		@industrialproductsarray = Industrialproducts.perform_async(query)
 	end
 
 	if @globalindustrial == "globalindustrial"
-		@globalindustrialarray = myscraper.globalindustrial(query)
+		@globalindustrialarray = globalindustrial.perform_async(query)
 	end
 
 	if @webstaurant == "webstaurant"
-		@webstaurantarray = myscraper.webstaurantstore(query)
+		@webstaurantarray = Webstaurantstore.perform_async(query)
 	end
 
 	if @zorinmaterial == "zorinmaterial"
-		@zorinmaterialarray = myscraper.zorinmaterial(query)
-	end
-
-	if @digitalbuyer == "digitalbuyer"
-		@digitalbuyerarray = myscraper.digitalbuyer(query)
+		@zorinmaterialarray = Zorinmaterial.perform_async(query)
 	end
 
 	productclass = Products.new
@@ -114,9 +109,7 @@ post "/search" do
 end
 
 get "/schedule" do
-
 		erb :schedule
-
 end
 
 get "/signup" do
@@ -135,7 +128,6 @@ post "/signup" do
 	# end
 
 end
-
 
 get "/login" do
 	erb :login
@@ -181,13 +173,11 @@ get "/csv/globalindustrial" do
 
 end
 
-
 get "/csv/industrialproducts" do
 
 		send_file('csv/industrialproducts.csv', :filename => "csv/industrialproducts.csv")
 
 end
-
 
 get "/csv/radwell" do
 
@@ -195,13 +185,11 @@ get "/csv/radwell" do
 
 end
 
-
 get "/csv/webstaurant" do
 
 		send_file('csv/webstaurantstore.csv', :filename => "csv/webstaurantstore.csv")
 
 end
-
 
 get "/csv/zorinmaterial" do
 

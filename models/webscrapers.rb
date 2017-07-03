@@ -1,121 +1,134 @@
-#all the webscrapers that are retrieve information
-
+require "sucker_punch"
 require "sinatra"
 require "mechanize"
 
-class WebScrapers
 
-	def arrayhofequipment(query)
-			open("csv/hofequipment.csv", "w") do |csv|
-				csv.truncate(0)
-			end
+class HOFequipment
+	include SuckerPunch::Job
 
-			query = query.gsub(/\s+/, '')
-
-			foundprices = []
-
-			myarray = query.split(",")
-
-			myarray.each do |input|
-
-				mechanize = Mechanize.new
-
-				page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
-
-				product = page.at('span.item-name a')
-
-				if product
-					page = mechanize.click(product)
-
-					price = page.at(".item-price").text.strip
-					table = page.at("table")
-
-					if page.at(".chartPersonalization")
-
-						table_data = table.search('tr').map do |row|
-							row.search('th, td').map { |cell| cell.text.strip }
-						end
-
-						table_data.each do |row|
-							row.each do |x|
-								if x == input
-									price = row[-2]
-									price = price.gsub(/[()]/, "")
-									price = price.gsub(/[$]/, "")
-									price = price.gsub(/[,]/, "")
-									foundprices.push(input)
-									foundprices.push(price)
-
-
-									open("csv/hofequipment.csv", "a") do |csv|
-										csv << "HOFequipment"
-										csv << ","
-										csv << input
-										csv << ","
-										csv << price
-										csv << "\n"
-
-									end
-								end
-							end
-						end
-
-					elsif page.at(".item-price")
-							price = price.gsub(/[()]/, "")
-							price = price.gsub(/[$]/, "")
-							price = price.gsub(/[,]/, "")
-							foundprices.push(input)
-							foundprices.push(price)
-
-							open("csv/hofequipment.csv", "a") do |csv|
-								csv << "HOFequipment"
-								csv << ","
-								csv << input
-								csv << ","
-								csv << price
-								csv << "\n"
-							end
-					else
-						foundprices.push(input)
-						foundprices.push("0.00")
-						open("csv/hofequipment.csv", "a") do |csv|
-							csv << "HOFequipment"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << "0.00"
-							csv << "\n"
-						end
-
-					end
-
-				else
-					foundprices.push(input)
-					foundprices.push("0.00")
-					open("csv/hofequipment.csv", "a") do |csv|
-						csv << "HOFequipment"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
-					end
-				end
-			end
-
-			return foundprices
+	def perform(event)
+		arrayhofequipment(event)
 	end
 
-	def arrayindustrialsafety(query)
+	def arrayhofequipment(event)
+            open("hofequipment.csv", "w") do |csv|
+                csv.truncate(0)
+            end
+
+            event = event.gsub(/\s+/, '')
+
+            foundprices = []
+
+            myarray = event.split(",")
+
+            myarray.each do |input|
+
+                mechanize = Mechanize.new
+
+                page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
+
+                product = page.at('span.item-name a')
+
+                if product
+                    page = mechanize.click(product)
+
+                    price = page.at(".item-price").text.strip
+                    table = page.at("table")
+
+                    if page.at(".chartPersonalization")
+
+                        table_data = table.search('tr').map do |row|
+                            row.search('th, td').map { |cell| cell.text.strip }
+                        end
+
+                        table_data.each do |row|
+                            row.each do |x|
+                                if x == input
+                                    price = row[-2]
+                                    price = price.gsub(/[()]/, "")
+                                    price = price.gsub(/[$]/, "")
+                                    price = price.gsub(/[,]/, "")
+                                    foundprices.push(input)
+                                    foundprices.push(price)
+
+
+                                    open("hofequipment.csv", "a") do |csv|
+                                        csv << "HOFequipment"
+                                        csv << ","
+                                        csv << input
+                                        csv << ","
+                                        csv << price
+                                        csv << "\n"
+
+                                    end
+                                end
+                            end
+                        end
+
+                    elsif page.at(".item-price")
+                            price = price.gsub(/[()]/, "")
+                            price = price.gsub(/[$]/, "")
+                            price = price.gsub(/[,]/, "")
+                            foundprices.push(input)
+                            foundprices.push(price)
+
+                            open("hofequipment.csv", "a") do |csv|
+                                csv << "HOFequipment"
+                                csv << ","
+                                csv << input
+                                csv << ","
+                                csv << price
+                                csv << "\n"
+                            end
+                    else
+                        foundprices.push(input)
+                        foundprices.push("0.00")
+                        open("hofequipment.csv", "a") do |csv|
+                            csv << "HOFequipment"
+                            csv << ","
+                            csv << input
+                            csv << ","
+                            csv << "0.00"
+                            csv << "\n"
+                        end
+
+                    end
+
+                else
+                    foundprices.push(input)
+                    foundprices.push("0.00")
+                    open("hofequipment.csv", "a") do |csv|
+                        csv << "HOFequipment"
+                        csv << ","
+                        csv << input
+                        csv << ","
+                        csv << "0.00"
+                        csv << "\n"
+                    end
+                end
+            end
+
+            return foundprices
+    end
+end
+
+class Industrialsafety
+	include SuckerPunch::Job
+
+    def perform(event)
+        arrayindustrialsafety(event)
+    end
+
+	def arrayindustrialsafety(event)
 		open("csv/industrialsafety.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
-		query = query.gsub(/\s+/, '')
+		event = event.gsub(/\s+/, '')
 
 		foundprices = []
 
-		myarray = query.split(",")
+		myarray = event.split(",")
 
 		myarray.each do |input|
 
@@ -125,22 +138,13 @@ class WebScrapers
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-
-
 			page = mechanize.get(url)
 
 			if page
 
 				product = page.at(".pricecolor")
 
-				# product_code = page.at(".v-product .colors_productname").text
-
-				# product_code = product_code.slice input
-
-
-				# if product_code == input
 					if product
-
 						price = product.text.strip
 						price = price.gsub(/[()]/, "")
 						price = price.gsub(/[$]/, "")
@@ -172,25 +176,31 @@ class WebScrapers
 
 		return foundprices
 	end
+end
 
-	def arraytoolfetch(query)
+class Toolfetch
+	include SuckerPunch::Job
+
+    def perform(event)
+        arraytoolfetch(event)
+    end
+
+	def arraytoolfetch(event)
 		open("csv/toolfetch.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
 		foundprices = []
 
-		query = query.gsub(/\s+/, '')
+		event = event.gsub(/\s+/, '')
 
-		myarray = query.split(",")
+		myarray = event.split(",")
 
-			myarray.each do |input|
+		myarray.each do |input|
 
 			mechanize = Mechanize.new
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
-
 
 			url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
 
@@ -220,7 +230,6 @@ class WebScrapers
 						csv << price
 						csv << "\n"
 					end
-
 				else
 					foundprices.push(input)
 					foundprices.push("0.00")
@@ -235,7 +244,6 @@ class WebScrapers
 					end
 
 				end
-
 			else
 				foundprices.push(input)
 				foundprices.push("0.00")
@@ -254,99 +262,25 @@ class WebScrapers
 
 		return foundprices
 	end
+end
 
-	def industrialproducts(query)
-		open("csv/industrialproducts.csv", "w") do |csv|
-			csv.truncate(0)
-		end
+class Zorinmaterial
+	include SuckerPunch::Job
 
-		foundprices = []
+    def perform(event)
+        zorinmaterial(event)
+    end
 
-		query = query.gsub(/\s+/, '')
-
-		myarray = query.split(",")
-
-		myarray.each do |input|
-
-			mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
-
-			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
-
-
-			url = "http://www.industrialproducts.com/"
-
-			page = mechanize.get(url)
-
-			if page
-				search_form = page.form
-
-				search_form['q'] = input
-
-				page = search_form.submit
-
-				price = page.at(".price")
-
-				if price
-					price = price.text.strip
-					price = price.gsub(/[$]/, "")
-					price = price.gsub(/[,]/, "")
-
-					foundprices.push(input)
-					foundprices.push(price)
-
-					open('csv/industrialproducts.csv', 'a') do |csv|
-						csv <<  "Industrial Products"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << price
-						csv << "\n"
-					end
-				else
-
-					foundprices.push(input)
-					foundprices.push("0.00")
-
-					open('csv/industrialproducts.csv', 'a') do |csv|
-						csv <<  "Industrial Products"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "$0.00"
-						csv << "\n"
-					end
-				end
-			else
-
-					foundprices.push(input)
-					foundprices.push("0.00")
-
-					open('csv/industrialproducts.csv', 'a') do |csv|
-
-						csv <<  "Industrial Products"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "$0.00"
-						csv << "\n"
-					end
-			end
-		end
-
-		return foundprices
-	end
-
-	def zorinmaterial(query)
+	def arrayzorinmaterial(event)
 		open("csv/zorinmaterial.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
 		foundprices = []
 
-		query = query.gsub(/\s+/, '')
+		event = event.gsub(/\s+/, '')
 
-		myarray = query.split(",")
+		myarray = event.split(",")
 
 		myarray.each do |input|
 
@@ -424,17 +358,25 @@ class WebScrapers
 
 		return foundprices
 	end
+end
 
-	def webstaurantstore(query)
+class Webstaurantstore
+	include SuckerPunch::Job
+
+    def perform(event)
+        webstaurantstore(event)
+    end
+
+	def arraywebstaurantstore(event)
 		open("csv/webstaurantstore.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
 			foundprices = []
 
-			query = query.gsub(/\s+/, '')
+			event = event.gsub(/\s+/, '')
 
-			myarray = query.split(",")
+			myarray = event.split(",")
 
 			myarray.each do |input|
 
@@ -508,8 +450,106 @@ class WebScrapers
 
 			return foundprices
 	end
+end
 
-	def radwell(query)
+class Industrialproducts
+	include SuckerPunch::Job
+
+    def perform(event)
+        industrialproducts(event)
+    end
+
+	def arrayindustrialproducts(event)
+		open("csv/industrialproducts.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+		foundprices = []
+
+		event = event.gsub(/\s+/, '')
+
+		myarray = event.split(",")
+
+		myarray.each do |input|
+
+			mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
+
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+
+
+			url = "http://www.industrialproducts.com/"
+
+			page = mechanize.get(url)
+
+			if page
+				search_form = page.form
+
+				search_form['q'] = input
+
+				page = search_form.submit
+
+				price = page.at(".price")
+
+				if price
+					price = price.text.strip
+					price = price.gsub(/[$]/, "")
+					price = price.gsub(/[,]/, "")
+
+					foundprices.push(input)
+					foundprices.push(price)
+
+					open('csv/industrialproducts.csv', 'a') do |csv|
+						csv <<  "Industrial Products"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << price
+						csv << "\n"
+					end
+				else
+
+					foundprices.push(input)
+					foundprices.push("0.00")
+
+					open('csv/industrialproducts.csv', 'a') do |csv|
+						csv <<  "Industrial Products"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << "$0.00"
+						csv << "\n"
+					end
+				end
+			else
+
+					foundprices.push(input)
+					foundprices.push("0.00")
+
+					open('csv/industrialproducts.csv', 'a') do |csv|
+
+						csv <<  "Industrial Products"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << "$0.00"
+						csv << "\n"
+					end
+			end
+		end
+
+		return foundprices
+	end
+end
+
+class Radwell
+	include SuckerPunch::Job
+
+    def perform(query)
+        arrayradwell(query)
+    end
+
+	def arrayradwell(query)
 		open("csv/radwell.csv", "w") do |csv|
 			csv.truncate(0)
 		end
@@ -522,15 +562,9 @@ class WebScrapers
 
 		myarray.each do |input|
 
-			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
-
-
 			mechanize = Mechanize.new
 
 			page = mechanize.get("http://www.radwell.com/en-US/")
-
-
 
 			if page
 				search_form = page.form
@@ -547,7 +581,7 @@ class WebScrapers
 					foundprices.push(price)
 
 					open('csv/radwell.csv', 'a') do |csv|
-						csv <<  "Webstaurant"
+						csv <<  "Radwell"
 						csv << ","
 						csv << input
 						csv << ","
@@ -561,7 +595,7 @@ class WebScrapers
 					foundprices.push("0.00")
 
 					open('csv/radwell.csv', 'a') do |csv|
-						csv <<  "Webstaurant"
+						csv <<  "Radwell"
 						csv << ","
 						csv << input
 						csv << ","
@@ -575,7 +609,7 @@ class WebScrapers
 				foundprices.push("0.00")
 
 				open('csv/radwell.csv', 'a') do |csv|
-					csv <<  "Webstaurant"
+					csv <<  "Radwell"
 					csv << ","
 					csv << "0.00"
 					csv << ","
@@ -587,55 +621,77 @@ class WebScrapers
 
 		return foundprices
 	end
+end
+
+class GlobalIndustrial
+	include SuckerPunch::Job
+
+    def perform(query)
+        globalindustrial(query)
+    end
 
 	def globalindustrial(query)
-		open("csv/globalindustrial.csv", "w") do |csv|
-			csv.truncate(0)
-		end
+			open("csv/globalindustrial.csv", "w") do |csv|
+				csv.truncate(0)
+			end
 
-		foundprices = []
+			foundprices = []
 
-		query = query.gsub(/\s+/, '')
+			query = query.gsub(/\s+/, '')
 
-		myarray = query.split(",")
+			myarray = query.split(",")
 
-			myarray.each do |input|
+				myarray.each do |input|
 
-			mechanize = Mechanize.new
+				mechanize = Mechanize.new
 
-			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+				aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
 
 
-			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-			page = mechanize.get("http://www.globalindustrial.com/")
+				page = mechanize.get("http://www.globalindustrial.com/")
 
-			if page
-				search_form = page.form_with(id: 'searchForm')
+				if page
+					search_form = page.form_with(id: 'searchForm')
 
-				search_form['q'] = input
+					search_form['q'] = input
 
-				page = search_form.submit
+					page = search_form.submit
 
-				price = page.at(".price")
+					price = page.at(".price")
 
-				if price
+					if price
 
-					price = price.text.strip
-					price = price.gsub(/[$]/, "")
-					price = price.gsub(/[,]/, "")
+						price = price.text.strip
+						price = price.gsub(/[$]/, "")
+						price = price.gsub(/[,]/, "")
 
-					foundprices.push(input)
-					foundprices.push(price)
+						foundprices.push(input)
+						foundprices.push(price)
 
-					open('csv/globalindustrial.csv', 'a') do |csv|
-						csv <<  "Global Industrial"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << price
-						csv << "\n"
+						open('csv/globalindustrial.csv', 'a') do |csv|
+							csv <<  "Global Industrial"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << price
+							csv << "\n"
+						end
+					else
+
+						foundprices.push(input)
+						foundprices.push("0.00")
+
+						open('csv/globalindustrial.csv', 'a') do |csv|
+							csv <<  "Global Industrial"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << "0.00"
+							csv << "\n"
+						end
 					end
 				else
 
@@ -651,23 +707,8 @@ class WebScrapers
 						csv << "\n"
 					end
 				end
-			else
-
-				foundprices.push(input)
-				foundprices.push("0.00")
-
-				open('csv/globalindustrial.csv', 'a') do |csv|
-					csv <<  "Global Industrial"
-					csv << ","
-					csv << input
-					csv << ","
-					csv << "0.00"
-					csv << "\n"
-				end
 			end
+
+			return foundprices
 		end
-
-		return foundprices
-	end
-
 end
