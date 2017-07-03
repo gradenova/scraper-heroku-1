@@ -2,7 +2,6 @@ require "sucker_punch"
 require "sinatra"
 require "mechanize"
 
-
 class HOFequipment
 	include SuckerPunch::Job
 
@@ -11,9 +10,9 @@ class HOFequipment
 	end
 
 	def arrayhofequipment(event)
-            open("hofequipment.csv", "w") do |csv|
-                csv.truncate(0)
-            end
+		open("csv/hofequipment.csv", "w") do |csv|
+            csv.truncate(0)
+        end
 
             event = event.gsub(/\s+/, '')
 
@@ -52,14 +51,13 @@ class HOFequipment
                                     foundprices.push(price)
 
 
-                                    open("hofequipment.csv", "a") do |csv|
+                                    open("csv/hofequipment.csv", "a") do |csv|
                                         csv << "HOFequipment"
                                         csv << ","
                                         csv << input
                                         csv << ","
                                         csv << price
                                         csv << "\n"
-
                                     end
                                 end
                             end
@@ -72,7 +70,7 @@ class HOFequipment
                             foundprices.push(input)
                             foundprices.push(price)
 
-                            open("hofequipment.csv", "a") do |csv|
+                            open("csv/hofequipment.csv", "a") do |csv|
                                 csv << "HOFequipment"
                                 csv << ","
                                 csv << input
@@ -83,7 +81,7 @@ class HOFequipment
                     else
                         foundprices.push(input)
                         foundprices.push("0.00")
-                        open("hofequipment.csv", "a") do |csv|
+                        open("csv/hofequipment.csv", "a") do |csv|
                             csv << "HOFequipment"
                             csv << ","
                             csv << input
@@ -97,7 +95,7 @@ class HOFequipment
                 else
                     foundprices.push(input)
                     foundprices.push("0.00")
-                    open("hofequipment.csv", "a") do |csv|
+                    open("csv/hofequipment.csv", "a") do |csv|
                         csv << "HOFequipment"
                         csv << ","
                         csv << input
@@ -108,7 +106,7 @@ class HOFequipment
                 end
             end
 
-            return foundprices
+        return foundprices
     end
 end
 
