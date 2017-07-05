@@ -1,147 +1,58 @@
-require "sinatra"
-require "mechanize"
-require "sucker_punch"
-require 'sinatra/activerecord'
-require "sinatra/cookies" #cookies! yummy
-require "./models/login" #database login
-require "./models/products" #webscraper models
-require "./models/webscrapers" #webscraper models
+require 'mechanize'
+require 'sucker_punch'
+require 'sinatra'
+require './models/webscrapers'
+
 
 get "/" do
 	erb :index
 end
 
 get "/search" do
-	erb :search
+    erb :search
 end
 
 post "/search" do
+    @query = params[:query]
 
-	@query = params[:q]
-
-	@hof = params[:hof]
-	@industry = params[:industry]
-	@tool = params[:tool]
-	@radwell = params[:radwell]
+	@hofequipment = params[:hofequipment]
+	@industrialsafety = params[:industrialsafety]
 	@industrialproducts = params[:industrialproducts]
+	@zorinmaterial = params[:zorinmaterial]
 	@webstaurant = params[:webstaurant]
-	@zorinmaterial = params[:zorin]
-	@digitalbuyer = params[:digitalbuyer]
+	@radwell = params[:radwell]
 	@globalindustrial = params[:globalindustrial]
-	@productsthatihave = params[:productclass]
+	@toolfetch = params[:toolfetch]
 
-	if @hof == "hofequipment"
-		HOFequipment.perform_async(@query)
+	if @hofequipment == "hofequipment"
+    	HOFequipment.perform_async(@query)
 	end
 
-	if @industry == "industrialsafety"
-		Industrialsafety.perform_async(@query)
-	end
-
-	if @tool == "toolfetch"
-		@toolfetcharray = Toolfetch.perform_async(@query)
-	end
-
-	if @radwell == "radwell"
-		@radwellarray = Radwell.perform_async(@query)
+	if @industrialsafety == "industrialsafety"
+    	Industrialsafety.perform_async(@query)
 	end
 
 	if @industrialproducts == "industrialproducts"
-		@industrialproductsarray = Industrialproducts.perform_async(@query)
+    	Industrialproducts.perform_async(@query)
 	end
 
-	if @globalindustrial == "globalindustrial"
-		@globalindustrialarray = Globalindustrial.perform_async(@query)
+	if @toolfetch == "toolfetch"
+    	Toolfetch.perform_async(@query)
 	end
 
 	if @webstaurant == "webstaurant"
-		@webstaurantarray = Webstaurantstore.perform_async(@query)
+    	Webstaurantstore.perform_async(@query)
 	end
 
-	if @zorinmaterial == "zorinmaterial"
-		@zorinmaterialarray = Zorinmaterial.perform_async(@query)
+	if @radwell == "radwell"
+    	Radwell.perform_async(@query)
 	end
 
-	# productclass = Products.new
-	# if @productsthatihave == "wireproduct"
-	#
-	# 	@returninformation = productclass.wireproduct
-	#
-	# elsif @productsthatihave == "mezzanine"
-	#
-	# 	@returninformation = productclass.mezzanine
-	#
-	# elsif @productsthatihave == "inplantoffice"
-	#
-	# 	@returninformation = productclass.inplantoffice
-	#
-	# elsif @productsthatihave == "lockers"
-	#
-	# 	@returninformation = productclass.lockers
-	#
-	# elsif @productsthatihave == "matting"
-	#
-	# 	@returninformation = productclass.matting
-	#
-	# elsif @productsthatihave == "stretchwrapper"
-	#
-	# 	@returninformation = productclass.stretchwrapper
-	#
-	# elsif @productsthatihave == "workbenches"
-	#
-	# 	@returninformation = productclass.workbenches
-	#
-	# elsif @productsthatihave == "shelving"
-	#
-	# 	@returninformation = productclass.shelving
-	#
-	# elsif @productsthatihave == "conveyors"
-	#
-	# 	@returninformation = productclass.conveyors
-	#
-	# elsif @productsthatihave == "seating"
-	#
-	# 	@returninformation = productclass.seating
-	# end
+	if @globalindustrial == "globalindustrial"
+    	GlobalIndustrial.perform_async(@query)
+	end
 
-end
-
-get "/schedule" do
-		erb :schedule
-end
-
-get "/signup" do
-	erb :signup
-end
-
-post "/signup" do
-	#@signup = Login.new(params[:model])
-
-	# if @signup.save
-	# 	cookies[:loggedin] = "yes"
-	# 	redirect "/search"
-	# else
-	# 	redirect "/signup"
-	# 	@error = "Sorry, there was an error!"
-	# end
-
-end
-
-get "/login" do
-	erb :login
-end
-
-post "/login" do
-
-	#loginform = Login.find_by(name: params[:name], password: params[:password])
-
-	#if loginform
-		#cookies[:loggedin] = "yes"
-	# 	redirect "/search"
-	# else
-	# 	redirect "/login"
-	# end
-
+	erb :search
 end
 
 get "/csv/hofequipment" do

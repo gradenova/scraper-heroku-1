@@ -362,7 +362,7 @@ class Webstaurantstore
 	include SuckerPunch::Job
 
     def perform(event)
-        webstaurantstore(event)
+        arraywebstaurantstore(event)
     end
 
 	def arraywebstaurantstore(event)
@@ -454,7 +454,7 @@ class Industrialproducts
 	include SuckerPunch::Job
 
     def perform(event)
-        industrialproducts(event)
+        arrayindustrialproducts(event)
     end
 
 	def arrayindustrialproducts(event)
