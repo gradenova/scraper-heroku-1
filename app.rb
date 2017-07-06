@@ -11,7 +11,9 @@ end
 get "/search" do
     erb :search
 end
-
+get '/products' do
+  erb :products
+end
 post "/search" do
     @query = params[:query]
 

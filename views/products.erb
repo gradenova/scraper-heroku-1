@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	  <%= erb(:_header) %>
+	  <link href="<%= url('./styles/input.css') %>" rel="stylesheet" type="text/css" />
+<body class="bg-faded">
+
+<%= erb(:_navbar) %>
+
+	<div id="container" class="container mt-5">
+  		<div class="row">
+  			<div class="controls">
+  				<form action="/products" method="POST">
+  					<select>
+  						<option>Vestil</option>
+  						<option>Dutro</option>
+  						<option>Lyon</option>
+  						<option>Wesco</option>
+  						<option>ValleyCraft</option>
+  						<option>LewisBins</option>
+  						<option>Quantum</option>
+  						<option>Equipto</option>
+  						<option>IAC</option>
+  						<option>Royal</option>
+  						<option>Bluff</option>
+  						<option>Metro</option>
+  						<option>Tennsco</option>
+  						<option>Morse</option>
+  						<option>Durham</option>
+  						<option>Presto</option>
+  						<option>MecoOmaha</option>
+  						<option>Eagle</option>
+  						<option>Jesco</option>
+  					</select>
+  				</form>
+  			</div>
+		</div>
+	</div>
+</body>
+</html>
