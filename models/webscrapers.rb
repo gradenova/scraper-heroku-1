@@ -710,3 +710,83 @@ class GlobalIndustrial
 			return foundprices
 		end
 end
+
+class Guardian
+    include SuckerPunch::Job
+
+	def perform(event)
+		guardiancatalog(event)
+	end
+
+    def guardiancatalog(event)
+        #opens and destroys any prices in guardiancatalog
+		 open("csv/guardiancatalog.csv", "w") do |csv|
+             csv.truncate(0)
+         end
+            event = event.gsub(/\s+/, '')
+            myarray = event.split(",")
+            foundprices = []
+
+            myarray.each do |input|
+
+                mechanize = Mechanize.new
+
+                #grabs website
+                page = mechanize.get("http://www.guardiancatalog.com/default.asp")
+
+                #grabs first form on website, inputs model number and submits
+                search_form = page.form
+                search_form['Search'] = input
+				page = search_form.submit
+
+                #grabs url of first product, clicks and grabs price
+				url = page.at("a.productnamecolor")
+
+                if url
+                    page = mechanize.click(url)
+                    price = page.at(".product_saleprice span")
+
+                    if price
+                        price = price.text.strip
+                        price = price.gsub(/[()]/, "")
+                        price = price.gsub(/[$]/, "")
+                        price = price.gsub(/[,]/, "")
+                        foundprices.push(input)
+                        foundprices.push(price)
+
+
+                        open("csv/guardiancatalog.csv", "a") do |csv|
+                            csv << "Guardian Catalog"
+                            csv << ","
+                            csv << input
+                            csv << ","
+                            csv << price
+                            csv << "\n"
+                        end
+                    else
+
+                        open("csv/guardiancatalog.csv", "a") do |csv|
+                            csv << "Guardian Catalog"
+                            csv << ","
+                            csv << input
+                            csv << ","
+                            csv << "0.00"
+                            csv << "\n"
+                        end
+
+                    end
+                else
+
+                    open("csv/guardiancatalog.csv", "a") do |csv|
+                        csv << "Guardian Catalog"
+                        csv << ","
+                        csv << input
+                        csv << ","
+                        csv << "0.00"
+                        csv << "\n"
+                    end
+
+                end
+            end
+    end
+end
