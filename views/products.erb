@@ -9,30 +9,128 @@
 	<div id="container" class="container mt-5">
   		<div class="row">
   			<div class="controls">
+				<h1>Model Number</h1>
   				<form action="/products" method="POST">
-  					<select>
-  						<option>Vestil</option>
-  						<option>Dutro</option>
-  						<option>Lyon</option>
-  						<option>Wesco</option>
-  						<option>ValleyCraft</option>
-  						<option>LewisBins</option>
-  						<option>Quantum</option>
-  						<option>Equipto</option>
-  						<option>IAC</option>
-  						<option>Royal</option>
-  						<option>Bluff</option>
-  						<option>Metro</option>
-  						<option>Tennsco</option>
-  						<option>Morse</option>
-  						<option>Durham</option>
-  						<option>Presto</option>
-  						<option>MecoOmaha</option>
-  						<option>Eagle</option>
-  						<option>Jesco</option>
+  					<select name="submission">
+						<option name="vestil" value="vestil">Vestil</option>
+						<option name="dutro" value="dutro">Dutro</option>
+						<option name="lyon" value="lyon">Lyon</option>
+						<option name="wesco" value="wesco">Wesco</option>
+						<option name="valleycraft" value="valleycraft">ValleyCraft</option>
+						<option name="lewisbins" value="lewisbins">LewisBins</option>
+						<option name="quantum" value="quantum">Quantum</option>
+						<option name="equipto" value="equipto">Equipto</option>
+						<option name="iac" value="iac">IAC</option>
+						<option name="royal" value="royal">Royal</option>
+						<option name="bluff" value="bluff">Bluff</option>
+						<option name="metro" value="metro">Metro</option>
+						<option name="tennsco" value="tennsco">Tennsco</option>
+						<option name="morse" value="morse">Morse</option>
+						<option name="durham" value="durham">Durham</option>
+						<option name="presto" value="presto">Presto</option>
+						<option name="mecoomaha" value="mecoomaha">MecoOmaha</option>
+						<option name="eagle" value="eagle">Eagle</option>
+						<option name="jesco" value="jesco">Jesco</option>
+						<option name="harpertrucks" value="harpertrucks">HarperTrucks</option>
+						<option name="aignerindex" value="aignerindex">AignerIndex</option>
+						<option name="jarke" value="jarke">Jarke</option>
+						<option name="genie" value="genie">Genie</option>
+						<option name="roach" value="roach">Roach</option>
+						<option name="wearwell" value="wearwell">Wearwell</option>
+						<option name="bishamon" value="bishamon">Bishamon</option>
+						<option name="wesley" value="wesley">Wesley</option>
+						<option name="ballymore" value="ballymore">BallyMore</option>
+						<option name="ladder" value="ladder">Ladder</option>
+						<option name="chasedoors" value="chasedoors">ChaseDoors</option>
+						<option name="nordock" value="nordock">Nordock</option>
+						<option name="pacific" value="pacific">Pacific</option>
+						<option name="other" value="other">Other</option>
+						<option name="akrofloormats" value="akrofloormats">AkroFloorMats</option>
+						<option name="notrax" value="notrax">NoTrax</option>
+						<option name="triplediamond" value="triplediamond">TripleDiamond</option>
+						<option name="scotlandrack" value="scotlandrack">ScotlandRack</option>
+						<option name="clearway" value="clearway">Clearway</option>
+						<option name="marsair" value="marsair">MarsAir</option>
+						<option name="benchpro" value="benchpro">BenchPro</option>
+						<option name="flexmaterialhandling" value="flexmaterialhandling">FlexMaterialHandling</option>
+						<option name="southworth" value="southworth">Southworth</option>
+						<option name="hamiltoncasters" value="hamiltoncasters">HamiltonCasters</option>
+						<option name="kubinec" value="kubinec">Kubinec</option>
+						<option name="reelcraft" value="reelcraft">Reelcraft</option>
+						<option name="durashelf" value="durashelf">Durashelf</option>
+						<option name="orbis" value="orbis">Orbis</option>
+						<option name="flexangle" value="flexangle">FlexAngle</option>
+						<option name="advancetabco" value="advancetabco">AdvanceTabco</option>
+						<option name="biofit" value="biofit">BioFit</option>
+						<option name="handy" value="handy">Handy</option>
+						<option name="infrapak" value="infrapak">InfraPak</option>
+						<option name="trilitemars" value="trilitemars">TriLiteMars</option>
+						<option name="forearmforklift" value="forearmforklift">ForearmForklift</option>
+						<option name="pioneer" value="pioneer">Pioneer</option>
+						<option name="bestconveyors" value="bestconveyors">BestConveyors</option>
+						<option name="stackbin" value="stackbin">Stackbin</option>
+						<option name="lakeside" value="lakeside">Lakeside</option>
+						<option name="littlegiant" value="littlegiant">LittleGiant</option>
+						<option name="spanco" value="spanco">Spanco</option>
+						<option name="jet" value="jet">Jet</option>
+						<option name="hillmanrollers" value="hillmanrollers">HillmanRollers</option>
+						<option name="newlondon" value="newlondon">NewLondon</option>
+						<option name="rollaway" value="rollaway">RollAway</option>
+						<option name="borroughs" value="borroughs">Borroughs</option>
+						<option name="illinoisengineered" value="illinoisengineered">IllinoisEngineered</option>
+						<option name="interthor" value="interthor">Interthor</option>
+						<option name="topperindustrial" value="topperindustrial">TopperIndustrial</option>
+						<option name="mfg" value="mfg">MFG</option>
+						<option name="meese" value="meese">Meese</option>
+						<option name="bayhead" value="bayhead">Bayhead</option>
+						<option name="autoquip" value="autoquip">AutoQuip</option>
+						<option name="raymond" value="raymond">Raymond</option>
+						<option name="mallard" value="mallard">Mallard</option>
+						<option name="huskyrack" value="huskyrack">HuskyRack</option>
+						<option name="quikpik" value="quikpik">QuikPik</option>
+						<option name="rivetier" value="rivetier">RiveTier</option>
+						<option name="luxor" value="luxor">Luxor</option>
+						<option name="copperloy" value="copperloy">CopperLoy</option>
+						<option name="fairbanks" value="fairbanks">Fairbanks</option>
+						<option name="akromills" value="akromills">AkroMills</option>
+						<option name="coxreels" value="coxreels">Coxreels</option>
+						<option name="pucel" value="pucel">Pucel</option>
+						<option name="nashville" value="nashville">Nashville</option>
+						<option name="hwilson" value="hwilson">HWilson</option>
+						<option name="wisconsin" value="wisconsin">Wisconsin</option>
+						<option name="bevco" value="bevco">Bevco</option>
+						<option name="mobile" value="mobile">Mobile</option>
+						<option name="rousseau" value="rousseau">Rousseau</option>
+						<option name="pollard" value="pollard">Pollard</option>
+						<option name="safco" value="safco">Safco</option>
+						<option name="midstates" value="midstates">MidStates</option>
+						<option name="singerssafety" value="singerssafety">SingerSafety</option>
+						<option name="goff" value="goff">Goff</option>
+						<option name="triton" value="triton">Triton</option>
+						<option name="thern" value="thern">Thern</option>
+						<option name="budgit" value="budgit">Budgit</option>
+						<option name="coffing" value="coffing">Coffing</option>
+						<option name="cm" value="cm">CM</option>
+						<option name="omtec" value="omtec">Omtec</option>
+						<option name="ezlift" value="ezlift">Ezlift</option>
+						<option name="tractek" value="tractek">Tractel</option>
+						<option name="bradleycorp" value="bradleycorp">BradleyCorp</option>
+						<option name="cotterman" value="cotterman">Cotterman</option>
+						<option name="hallowell" value="hallowell">Hallowell</option>
+						<option name="louisvilleladder" value="louisvilleladder">LouisvilleLadder</option>
+						<option name="nutting" value="nutting">Nutting</option>
+						<option name="sandusky" value="sandusky">Sandusky</option>
+						<option name="carefreetire" value="carefreetire">CarefreeTire</option>
   					</select>
+					<input type="submit">
   				</form>
   			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="col">
+			<p><%= @information %></p>
 		</div>
 	</div>
 </body>
