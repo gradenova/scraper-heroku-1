@@ -711,6 +711,7 @@ class GlobalIndustrial
 		end
 end
 
+#newly added classes
 class Guardian
     include SuckerPunch::Job
 
@@ -787,6 +788,154 @@ class Guardian
                     end
 
                 end
+            end
+    end
+end
+
+class Bizchair
+    include SuckerPunch::Job
+
+    def perform(event)
+        bizchair(event)
+    end
+
+    def bizchair(event)
+        #opens and destroys any prices in guardiancatalog
+		open("csv/bizchair.csv", "w") do |csv|
+          csv.truncate(0)
+        end
+            event = event.gsub(/\s+/, '')
+            myarray = event.split(",")
+            foundprices = []
+
+            myarray.each do |input|
+
+                mechanize = Mechanize.new
+
+                #grabs website
+                page = mechanize.get("http://www.bizchair.com/")
+
+
+                search_form = page.form
+
+                search_form["w"] = input
+
+                page = search_form.submit
+
+                if page
+
+                    price = page.at(".sale-price").text.strip
+
+                    if price
+
+                        price = price.gsub("$", "")
+						price.slice! "Your Price:"
+
+                        open("csv/bizchair.csv", "a") do |csv|
+                            csv << "Bizchair,"
+                            csv << price
+                            csv << ","
+                            csv << input
+                            csv << "\n"
+                        end
+
+                    else
+
+	                    open("csv/bizchair.csv", "a") do |csv|
+	                        csv << "Bizchair,"
+	                        csv << "0.00"
+	                        csv << ","
+	                        csv << input
+	                        csv << "\n"
+	                    end
+
+                    end
+                else
+
+	                open("csv/bizchair.csv", "a") do |csv|
+	                    csv << "Bizchair,"
+	                    csv << "0.00"
+	                    csv << ","
+	                    csv << input
+	                    csv << "\n"
+	                end
+
+                end
+
+            end
+    end
+end
+
+class Bizchair
+    include SuckerPunch::Job
+
+    def perform(event)
+        bizchair(event)
+    end
+
+    def bizchair(event)
+        #opens and destroys any prices in guardiancatalog
+		open("csv/bizchair.csv", "w") do |csv|
+          csv.truncate(0)
+        end
+            event = event.gsub(/\s+/, '')
+            myarray = event.split(",")
+            foundprices = []
+
+            myarray.each do |input|
+
+                mechanize = Mechanize.new
+
+                #grabs website
+                page = mechanize.get("http://www.bizchair.com/")
+
+
+                search_form = page.form
+
+                search_form["w"] = input
+
+                page = search_form.submit
+
+                if page
+
+                    price = page.at(".sale-price").text.strip
+
+                    if price
+
+                        price = price.gsub("$", "")
+						price.slice! "Your Price:"
+
+                        open("csv/bizchair.csv", "a") do |csv|
+                            csv << "Bizchair,"
+                            csv << price
+                            csv << ","
+                            csv << input
+                            csv << "\n"
+                        end
+
+                    else
+
+	                    open("csv/bizchair.csv", "a") do |csv|
+	                        csv << "Bizchair,"
+	                        csv << "0.00"
+	                        csv << ","
+	                        csv << input
+	                        csv << "\n"
+	                    end
+
+                    end
+                else
+
+	                open("csv/bizchair.csv", "a") do |csv|
+	                    csv << "Bizchair,"
+	                    csv << "0.00"
+	                    csv << ","
+	                    csv << input
+	                    csv << "\n"
+	                end
+
+                end
+
             end
     end
 end
