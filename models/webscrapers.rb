@@ -866,17 +866,17 @@ class Bizchair
     end
 end
 
-class Bizchair
+class OpenTip
     include SuckerPunch::Job
 
     def perform(event)
-        bizchair(event)
+        opentip(event)
     end
 
-    def bizchair(event)
+    def opentip(event)
         #opens and destroys any prices in guardiancatalog
-		open("csv/bizchair.csv", "w") do |csv|
-          csv.truncate(0)
+		open("csv/opentip.csv", "w") do |csv|
+         csv.truncate(0)
         end
             event = event.gsub(/\s+/, '')
             myarray = event.split(",")
@@ -887,26 +887,27 @@ class Bizchair
                 mechanize = Mechanize.new
 
                 #grabs website
-                page = mechanize.get("http://www.bizchair.com/")
+                page = mechanize.get("http://www.opentip.com/search.php")
 
 
                 search_form = page.form
 
-                search_form["w"] = input
+                search_form["keywords"] = input
 
                 page = search_form.submit
 
                 if page
 
-                    price = page.at(".sale-price").text.strip
+                    price = page.at(".products_price").text.strip
 
                     if price
+
 
                         price = price.gsub("$", "")
 						price.slice! "Your Price:"
 
-                        open("csv/bizchair.csv", "a") do |csv|
-                            csv << "Bizchair,"
+                        open("csv/opentip.csv", "a") do |csv|
+                            csv << "OpenTip,"
                             csv << price
                             csv << ","
                             csv << input
@@ -915,8 +916,8 @@ class Bizchair
 
                     else
 
-	                    open("csv/bizchair.csv", "a") do |csv|
-	                        csv << "Bizchair,"
+	                    open("csv/opentip.csv", "a") do |csv|
+	                        csv << "OpenTip,"
 	                        csv << "0.00"
 	                        csv << ","
 	                        csv << input
@@ -926,12 +927,91 @@ class Bizchair
                     end
                 else
 
-	                open("csv/bizchair.csv", "a") do |csv|
-	                    csv << "Bizchair,"
+	                open("csv/opentip.csv", "a") do |csv|
+	                    csv << "OpenTip,"
 	                    csv << "0.00"
 	                    csv << ","
 	                    csv << input
 	                    csv << "\n"
+	                end
+
+                end
+
+            end
+    end
+end
+
+#not working - website makes ajax requests
+class Kimco
+    include SuckerPunch::Job
+
+    def perform(event)
+        kimco(event)
+    end
+
+    def kimco(event)
+        #opens and destroys any prices in guardiancatalog
+		open("kimco.csv", "w") do |csv|
+         csv.truncate(0)
+        end
+
+            event = event.gsub(/\s+/, '')
+            myarray = event.split(",")
+            foundprices = []
+
+            myarray.each do |input|
+
+                mechanize = Mechanize.new
+
+                mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                #grabs website
+                page = mechanize.get("https://gokimco.com/")
+
+                search_form = page.form
+
+                search_form["q"] = input
+
+                page = search_form.submit
+
+                if page
+					sleep(2)
+                    price = page.at(".price")
+
+                    if price
+
+                        price = price.text.strip
+                        price = price.gsub("$", "")
+
+                        open("kimco.csv", "a") do |csv|
+                            csv << "Kimco,"
+                            csv << price
+                            csv << ","
+                            csv << input
+                            csv << "\n"
+
+                        end
+
+                    else
+
+	                    open("kimco.csv", "a") do |csv|
+	                        csv << "Kimco,"
+	                        csv << "0.00"
+	                        csv << ","
+	                        csv << input
+	                        csv << "\n"
+
+	                    end
+
+                    end
+                else
+
+	                open("kimco.csv", "a") do |csv|
+	                    csv << "Kimco,"
+	                    csv << "0.00"
+	                    csv << ","
+	                    csv << input
+	                    csv << "\n"
+
 	                end
 
                 end
