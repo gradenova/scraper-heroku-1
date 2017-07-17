@@ -80,6 +80,20 @@
   </div>
 </div>
 
+<div class="container">
+	<div class="row">
+		<h3>Calculate Time Till Finished</h3>
+	</div>
+	<div class="row pt-3">
+		<form>
+			<input type="text" id="myvalue">
+			<input type="submit" id="submission">
+		</form>
+
+		<p class="info"></p>
+	</div>
+</div>
+
 <% if @hofequipment %>
 <div class="container">
 	<h1 class="mt-3 mb-3">HOFequipment</h1>
@@ -180,3 +194,35 @@
 
 </body>
 </html>
+<script type="text/javascript">
+	var getInfo = document.getElementById("submission").addEventListener("click", function(e){
+
+		e.preventDefault();
+
+		var myLength = document.getElementById("myvalue").value;
+
+		myLength = myLength.split(",");
+
+		var sum = 0;
+
+			for(var i = 0; i < myLength.length; i++){
+				sum += Math.round((Math.random() * 3) + 1, 2);
+			}
+
+			lengthOfTime(sum)
+
+		document.getElementById("myvalue").value = "";
+
+	});
+
+
+
+	function lengthOfTime(sum){
+		if(sum > 60){
+			//console.log(sum/60, 3);
+			document.getElementsByClassName("info")[0].innerHTML = "About " + Math.round(sum/60, 2) + " minutes to finish";
+		} else {
+			document.getElementsByClassName("info")[0].innerHTML = "About " + sum + " seconds to finish";
+		}
+	}
+</script>
