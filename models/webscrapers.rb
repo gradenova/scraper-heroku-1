@@ -26,6 +26,8 @@ class HOFequipment
 
                 page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
 
+				sleep(rand(0..3))
+
                 product = page.at('span.item-name a')
 
                 if product
@@ -138,6 +140,8 @@ class Industrialsafety
 
 			page = mechanize.get(url)
 
+			sleep(rand(0..3))
+
 			if page
 
 				product = page.at(".pricecolor")
@@ -203,6 +207,8 @@ class Toolfetch
 			url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
 
 			page = mechanize.get(url)
+
+			sleep(rand(0..3))
 
 			if page
 
@@ -287,8 +293,6 @@ class Zorinmaterial
 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
-
 
 			page = mechanize.get("http://www.zorinmaterial.com/home/")
 
