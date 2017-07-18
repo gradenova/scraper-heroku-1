@@ -1,5 +1,4 @@
 require "sucker_punch"
-require "sinatra"
 require "mechanize"
 
 class HOFequipment
@@ -11,105 +10,92 @@ class HOFequipment
 
 	def arrayhofequipment(event)
 		open("csv/hofequipment.csv", "w") do |csv|
-            csv.truncate(0)
-        end
+	        csv.truncate(0)
+	    end
 
-            event = event.gsub(/\s+/, '')
+	    myQuery = event.split(",")
 
-            foundprices = []
+	    mechanize = Mechanize.new
 
-            myarray = event.split(",")
+	    event = event.gsub(/\s+/, '')
 
-            myarray.each do |input|
+	    foundprices = []
 
-                mechanize = Mechanize.new
+	    myQuery.each do |individualItem|
+	        page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + individualItem)
 
-                page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + input)
+			sleep(rand(0..3))
 
-				sleep(rand(0..3))
+	        productLink = page.search(".grid__item a.thumb")
 
-                product = page.at('span.item-name a')
+	        productLink.each do |thisLink|
+	            if !(thisLink.at(".photoClass")["title"].include? individualItem + "-")
+	                    page = mechanize.click(thisLink)
 
-                if product
-                    page = mechanize.click(product)
+	                    price = page.at(".item-price").text.strip
+	                    table = page.at("table")
 
-                    price = page.at(".item-price").text.strip
-                    table = page.at("table")
+	                    if page.at(".chartPersonalization")
 
-                    if page.at(".chartPersonalization")
+	                        table_data = table.search('tr').map do |row|
+	                            row.search('th, td').map { |cell| cell.text.strip }
+	                        end
 
-                        table_data = table.search('tr').map do |row|
-                            row.search('th, td').map { |cell| cell.text.strip }
-                        end
-
-                        table_data.each do |row|
-                            row.each do |x|
-                                if x == input
-                                    price = row[-2]
-                                    price = price.gsub(/[()]/, "")
-                                    price = price.gsub(/[$]/, "")
-                                    price = price.gsub(/[,]/, "")
-                                    foundprices.push(input)
-                                    foundprices.push(price)
+	                        table_data.each do |row|
+	                            row.each do |x|
+	                                if x == individualItem
+	                                    price = row[-2]
+	                                    price = price.gsub(/[()]/, "")
+	                                    price = price.gsub(/[$]/, "")
+	                                    price = price.gsub(/[,]/, "")
+	                                    foundprices.push(individualItem)
+	                                    foundprices.push(price)
 
 
-                                    open("csv/hofequipment.csv", "a") do |csv|
-                                        csv << "HOFequipment"
-                                        csv << ","
-                                        csv << input
-                                        csv << ","
-                                        csv << price
-                                        csv << "\n"
-                                    end
-                                end
-                            end
-                        end
+	                                    open("csv/hofequipment.csv", "a") do |csv|
+	                                        csv << "HOFequipment"
+	                                        csv << ","
+	                                        csv << individualItem
+	                                        csv << ","
+	                                        csv << price
+	                                        csv << "\n"
+	                                    end
+	                                end
+	                            end
+	                        end
+	                    elsif page.at(".item-price")
+	                            price = price.gsub(/[()]/, "")
+	                            price = price.gsub(/[$]/, "")
+	                            price = price.gsub(/[,]/, "")
+	                            foundprices.push(individualItem)
+	                            foundprices.push(price)
 
-                    elsif page.at(".item-price")
-                            price = price.gsub(/[()]/, "")
-                            price = price.gsub(/[$]/, "")
-                            price = price.gsub(/[,]/, "")
-                            foundprices.push(input)
-                            foundprices.push(price)
+	                            open("csv/hofequipment.csv", "a") do |csv|
+	                                csv << "HOFequipment"
+	                                csv << ","
+	                                csv << individualItem
+	                                csv << ","
+	                                csv << price
+	                                csv << "\n"
+	                            end
+	                    else
+	                        foundprices.push(individualItem)
+	                        foundprices.push("0.00")
+	                        open("csv/hofequipment.csv", "a") do |csv|
+	                            csv << "HOFequipment"
+	                            csv << ","
+	                            csv << individualItem
+	                            csv << ","
+	                            csv << "0.00"
+	                            csv << "\n"
+	                        end
 
-                            open("csv/hofequipment.csv", "a") do |csv|
-                                csv << "HOFequipment"
-                                csv << ","
-                                csv << input
-                                csv << ","
-                                csv << price
-                                csv << "\n"
-                            end
-                    else
-                        foundprices.push(input)
-                        foundprices.push("0.00")
-                        open("csv/hofequipment.csv", "a") do |csv|
-                            csv << "HOFequipment"
-                            csv << ","
-                            csv << input
-                            csv << ","
-                            csv << "0.00"
-                            csv << "\n"
-                        end
-
-                    end
-
-                else
-                    foundprices.push(input)
-                    foundprices.push("0.00")
-                    open("csv/hofequipment.csv", "a") do |csv|
-                        csv << "HOFequipment"
-                        csv << ","
-                        csv << input
-                        csv << ","
-                        csv << "0.00"
-                        csv << "\n"
-                    end
-                end
-            end
-
-        return foundprices
-    end
+	                    end
+		            end
+		        end
+		    end
+	    	return foundprices
+		end
 end
 
 class Industrialsafety
@@ -120,7 +106,7 @@ class Industrialsafety
     end
 
 	def arrayindustrialsafety(event)
-		open("csv/industrialsafety.csv", "w") do |csv|
+		open("industrialsafety.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
@@ -144,18 +130,23 @@ class Industrialsafety
 
 			if page
 
-				product = page.at(".pricecolor")
+				product = page.search(".v-product")
 
-					if product
-						price = product.text.strip
+                product.each do |individualProduct|
+					if !(individualProduct.at("a.v-product__img")["title"].include? input + "-")
+
+                        price = individualProduct.at("div.product_productprice").text
+
+                        #('a'..'z').to_a ensure perfect match
 						price = price.gsub(/[()]/, "")
 						price = price.gsub(/[$]/, "")
 						price = price.gsub(/[,]/, "")
 						price.slice! "Our Price: "
+
 						foundprices.push(input)
 						foundprices.push(price)
 
-						open("csv/industrialsafety.csv", "a") do |csv|
+						open("industrialsafety.csv", "a") do |csv|
 							csv << "Industrial Safety"
 							csv << ","
 							csv << input
@@ -163,16 +154,18 @@ class Industrialsafety
 							csv << price
 							csv << "\n"
 						end
-					else
-						open("csv/industrialsafety.csv", "a") do |csv|
-							csv << "Industrial Safety"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << "0.00"
-							csv << "\n"
-						end
+
 					end
+                end
+			else
+				open("industrialsafety.csv", "a") do |csv|
+					csv << "Industrial Safety"
+					csv << ","
+					csv << input
+					csv << ","
+					csv << "0.00"
+					csv << "\n"
+				end
 			end
 		end
 

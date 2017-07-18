@@ -74,7 +74,7 @@
 			<%= erb(:_example) %>
 			<textarea name="query" rows="8" cols="80"></textarea>
 			<br />
-	  		<input type="submit" class="btn btn-md btn-secondary" />
+	  		<input type="submit" class="btn btn-md btn-secondary" id="checkitout" />
 
 	    </form>
   </div>
@@ -195,7 +195,7 @@
 </body>
 </html>
 <script type="text/javascript">
-	var getInfo = document.getElementById("submission").addEventListener("click", function(e){
+	var getInfo = document.getElementById("checkitout").addEventListener("click", function(e){
 
 		e.preventDefault();
 
