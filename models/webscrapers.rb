@@ -267,63 +267,35 @@ class Zorinmaterial
 			if page
 				search_form = page.form
 
-				search_form['search'] = input
+				search_form['searchstring'] = input
 
 				page = search_form.submit
 
-				viewproduct = page.at("a.le-button")
+				viewproduct = page.search(".products-list .product-item .body .title a:nth-last-child(1)")
 
-				page = mechanize.click(viewproduct)
+				viewproduct.each do |x|
+					if !(x.to_s.include? input + "-")
+						page = mechanize.click(x)
+						price = page.at(".price-current").text.strip
+						price = price.gsub(/[$]/, "")
+						price = price.gsub(/[,]/, "")
 
-				price = page.at(".prices .price-current")
+						foundprices.push(input)
+						foundprices.push(price)
 
-
-				if price
-
-					price = price.text.strip
-					price = price.gsub(/[$]/, "")
-					price = price.gsub(/[,]/, "")
-
-					open('csv/zorinmaterial.csv', 'a') do |csv|
-							csv <<  "Zorin Material"
+						open('csv/zorinmaterial.csv', 'a') do |csv|
+							csv <<  "Zorinmaterial"
 							csv << ","
 							csv << input
 							csv << ","
 							csv << price
 							csv << "\n"
-					end
-
-					foundprices.push(input)
-					foundprices.push(price)
-				else
-
-					foundprices.push(input)
-					foundprices.push("0.00")
-
-					open('csv/zorinmaterial.csv', 'a') do |csv|
-						csv <<  "Zorin Material"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
+						end
 					end
 				end
 
-			else
-
-				foundprices.push(input)
-				foundprices.push("0.00")
-
-				open('csv/zorinmaterial.csv', 'a') do |csv|
-					csv <<  "Zorin Material"
-					csv << ","
-					csv << input
-					csv << ","
-					csv << "0.00"
-					csv << "\n"
-				end
 			end
+
 		end
 
 		return foundprices
