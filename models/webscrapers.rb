@@ -181,7 +181,7 @@ class Toolfetch
     end
 
 	def arraytoolfetch(event)
-		open("csv/toolfetch.csv", "w") do |csv|
+		open("toolfetch.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
@@ -205,55 +205,30 @@ class Toolfetch
 
 			if page
 
-				product = page.at("li.b_algo h2 a")
+				product = page.links
 
-				if product
+				product.each do |x|
+					if (x.to_s.include? input)
+						page = mechanize.click(x)
 
-					page = mechanize.click(product)
+						price = page.at(".price").text.strip
 
-					price = page.at("span.price").text.strip
+						price = price.gsub(/[$]/, "")
+						price = price.gsub(/[,]/, "")
 
-					price = price.gsub(/[$]/, "")
-					price = price.gsub(/[,]/, "")
+						foundprices.push(input)
+						foundprices.push(price)
 
-					foundprices.push(input)
-					foundprices.push(price)
-
-					open("csv/toolfetch.csv", "a") do |csv|
-						csv << "Toolfetch"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << price
-						csv << "\n"
+						open("toolfetch.csv", "a") do |csv|
+							csv << "Toolfetch"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << price
+							csv << "\n"
+						end
 					end
-				else
-					foundprices.push(input)
-					foundprices.push("0.00")
-
-					open("csv/toolfetch.csv", "a") do |csv|
-						csv << "Toolfetch"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
-					end
-
 				end
-			else
-				foundprices.push(input)
-				foundprices.push("0.00")
-
-				open("csv/toolfetch.csv", "a") do |csv|
-					csv << "Toolfetch"
-					csv << ","
-					csv << input
-					csv << ","
-					csv << "0.00"
-					csv << "\n"
-				end
-
 			end
 		end
 
