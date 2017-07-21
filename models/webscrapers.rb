@@ -236,6 +236,7 @@ class Toolfetch
 	end
 end
 
+#not connected
 class Zorinmaterial
 	include SuckerPunch::Job
 
@@ -263,6 +264,8 @@ class Zorinmaterial
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
 			page = mechanize.get("http://www.zorinmaterial.com/home/")
+
+			sleep(rand(0..3))
 
 			if page
 				search_form = page.form
@@ -302,6 +305,7 @@ class Zorinmaterial
 	end
 end
 
+#having difficulty - not completed
 class Webstaurantstore
 	include SuckerPunch::Job
 
@@ -394,6 +398,7 @@ class Webstaurantstore
 	end
 end
 
+#website responds with weird search return occasionally
 class Industrialproducts
 	include SuckerPunch::Job
 
@@ -419,10 +424,11 @@ class Industrialproducts
 			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
 
-
 			url = "http://www.industrialproducts.com/"
 
 			page = mechanize.get(url)
+
+			sleep(rand(0..3))
 
 			if page
 				search_form = page.form
@@ -431,53 +437,37 @@ class Industrialproducts
 
 				page = search_form.submit
 
-				price = page.at(".price")
+				pageLinks = page.search(".products-grid .product-image")
 
-				if price
-					price = price.text.strip
-					price = price.gsub(/[$]/, "")
-					price = price.gsub(/[,]/, "")
+				pageLinks.each do |link|
+					page = mechanize.click(link)
 
-					foundprices.push(input)
-					foundprices.push(price)
+					table = page.search(".data-table tbody tr td a")
 
-					open('csv/industrialproducts.csv', 'a') do |csv|
-						csv <<  "Industrial Products"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << price
-						csv << "\n"
+					table.each do |x|
+						if !(x.text.include? input + "-") && (x.text.include? input)
+							page = mechanize.click(x)
+							price = page.at("span.map").text
+
+							price = price.gsub(/[$]/, "")
+							price = price.gsub(/[,]/, "")
+
+
+							open("csv/industrialproducts.csv", "a") do |csv|
+								csv << "Industrial Products"
+								csv << ","
+								csv << input
+								csv << ","
+								csv << price
+								csv << "\n"
+							end
+
+						end
 					end
-				else
 
-					foundprices.push(input)
-					foundprices.push("0.00")
-
-					open('csv/industrialproducts.csv', 'a') do |csv|
-						csv <<  "Industrial Products"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "$0.00"
-						csv << "\n"
-					end
 				end
-			else
-
-					foundprices.push(input)
-					foundprices.push("0.00")
-
-					open('csv/industrialproducts.csv', 'a') do |csv|
-
-						csv <<  "Industrial Products"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "$0.00"
-						csv << "\n"
-					end
 			end
+
 		end
 
 		return foundprices
