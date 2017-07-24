@@ -574,69 +574,47 @@ class GlobalIndustrial
 
 				myarray.each do |input|
 
-				mechanize = Mechanize.new
+					mechanize = Mechanize.new
 
-				aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+					aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
-				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+					mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-				page = mechanize.get("http://www.globalindustrial.com/")
+					page = mechanize.get("http://www.globalindustrial.com/")
 
-				if page
-					search_form = page.form_with(id: 'searchForm')
+					if page
+						search_form = page.form_with(id: 'searchForm')
 
-					search_form['q'] = input
+						search_form['q'] = input
 
-					page = search_form.submit
+						page = search_form.submit
 
-					price = page.at(".price")
+						price = page.search(".info .title a")
 
-					if price
+						price.each do |x|
+							page = mechanize.click(x)
 
-						price = price.text.strip
-						price = price.gsub(/[$]/, "")
-						price = price.gsub(/[,]/, "")
+							tableElement = page.search(".prodSpec ul ul li span:nth-child(2)")
+							price = page.at("span[@itemprop='price']")
+							tableElement.each do |x|
 
-						foundprices.push(input)
-						foundprices.push(price)
+								if x.text.strip == input
+									price = price.text.strip.gsub(/\,/, '')
 
-						open('csv/globalindustrial.csv', 'a') do |csv|
-							csv <<  "Global Industrial"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << price
-							csv << "\n"
-						end
-					else
+									open("csv/globalindustrial.csv", "a") do |csv|
+										csv << "Global Industrial,"
+										csv << x.text.strip
+										csv << ","
+										csv << price
+										csv << "\n"
+									end
 
-						foundprices.push(input)
-						foundprices.push("0.00")
-
-						open('csv/globalindustrial.csv', 'a') do |csv|
-							csv <<  "Global Industrial"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << "0.00"
-							csv << "\n"
+								end
+							end
 						end
 					end
-				else
 
-					foundprices.push(input)
-					foundprices.push("0.00")
-
-					open('csv/globalindustrial.csv', 'a') do |csv|
-						csv <<  "Global Industrial"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
-					end
 				end
-			end
 
 			return foundprices
 		end
@@ -723,80 +701,6 @@ class Guardian
     end
 end
 
-class Bizchair
-    include SuckerPunch::Job
-
-    def perform(event)
-        bizchair(event)
-    end
-
-    def bizchair(event)
-        #opens and destroys any prices in guardiancatalog
-		open("csv/bizchair.csv", "w") do |csv|
-          csv.truncate(0)
-        end
-            event = event.gsub(/\s+/, '')
-            myarray = event.split(",")
-            foundprices = []
-
-            myarray.each do |input|
-
-                mechanize = Mechanize.new
-
-                #grabs website
-                page = mechanize.get("http://www.bizchair.com/")
-
-
-                search_form = page.form
-
-                search_form["w"] = input
-
-                page = search_form.submit
-
-                if page
-
-                    price = page.at(".sale-price").text.strip
-
-                    if price
-
-                        price = price.gsub("$", "")
-						price.slice! "Your Price:"
-
-                        open("csv/bizchair.csv", "a") do |csv|
-                            csv << "Bizchair,"
-                            csv << price
-                            csv << ","
-                            csv << input
-                            csv << "\n"
-                        end
-
-                    else
-
-	                    open("csv/bizchair.csv", "a") do |csv|
-	                        csv << "Bizchair,"
-	                        csv << "0.00"
-	                        csv << ","
-	                        csv << input
-	                        csv << "\n"
-	                    end
-
-                    end
-                else
-
-	                open("csv/bizchair.csv", "a") do |csv|
-	                    csv << "Bizchair,"
-	                    csv << "0.00"
-	                    csv << ","
-	                    csv << input
-	                    csv << "\n"
-	                end
-
-                end
-
-            end
-    end
-end
-
 class OpenTip
     include SuckerPunch::Job
 
@@ -860,6 +764,81 @@ class OpenTip
 
 	                open("csv/opentip.csv", "a") do |csv|
 	                    csv << "OpenTip,"
+	                    csv << "0.00"
+	                    csv << ","
+	                    csv << input
+	                    csv << "\n"
+	                end
+
+                end
+
+            end
+    end
+end
+
+#delayed
+class Bizchair
+    include SuckerPunch::Job
+
+    def perform(event)
+        bizchair(event)
+    end
+
+    def bizchair(event)
+        #opens and destroys any prices in guardiancatalog
+		open("csv/bizchair.csv", "w") do |csv|
+          csv.truncate(0)
+        end
+            event = event.gsub(/\s+/, '')
+            myarray = event.split(",")
+            foundprices = []
+
+            myarray.each do |input|
+
+                mechanize = Mechanize.new
+
+                #grabs website
+                page = mechanize.get("http://www.bizchair.com/")
+
+
+                search_form = page.form
+
+                search_form["w"] = input
+
+                page = search_form.submit
+
+                if page
+
+                    price = page.at(".sale-price").text.strip
+
+                    if price
+
+                        price = price.gsub("$", "")
+						price.slice! "Your Price:"
+
+                        open("csv/bizchair.csv", "a") do |csv|
+                            csv << "Bizchair,"
+                            csv << price
+                            csv << ","
+                            csv << input
+                            csv << "\n"
+                        end
+
+                    else
+
+	                    open("csv/bizchair.csv", "a") do |csv|
+	                        csv << "Bizchair,"
+	                        csv << "0.00"
+	                        csv << ","
+	                        csv << input
+	                        csv << "\n"
+	                    end
+
+                    end
+                else
+
+	                open("csv/bizchair.csv", "a") do |csv|
+	                    csv << "Bizchair,"
 	                    csv << "0.00"
 	                    csv << ","
 	                    csv << input
