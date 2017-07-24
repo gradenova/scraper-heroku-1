@@ -492,7 +492,7 @@ class OpenTip
 								csv << ","
 								csv << modelNumber
 								csv << ","
-								csv << x.at(".usedNewPrice").text.strip
+								csv << x.at(".usedNewPrice").text.strip.gsub(/[,]/, "").gsub(/[$]/, "")
 								csv << "\n"
 							end
 

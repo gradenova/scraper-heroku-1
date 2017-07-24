@@ -93,6 +93,10 @@ get "/csv/industrialproducts" do
 		send_file('csv/industrialproducts.csv', :filename => "csv/industrialproducts.csv")
 end
 
+get "/csv/opentip" do
+		send_file('csv/opentip.csv', :filename => "csv/opentip.csv")
+end
+
 get "/csv/radwell" do
 		send_file('csv/radwell.csv', :filename => "csv/radwell.csv")
 end
