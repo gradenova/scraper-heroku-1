@@ -26,6 +26,7 @@ post "/search" do
 	@globalindustrial = params[:globalindustrial]
 	@toolfetch = params[:toolfetch]
 	@zorinmaterial = params[:zorinmaterial]
+	@opentip = params[:opentip]
 
 	if @hofequipment == "hofequipment"
     	HOFequipment.perform_async(@query)
@@ -59,6 +60,9 @@ post "/search" do
     	GlobalIndustrial.perform_async(@query)
 	end
 
+	if @opentip == "opentip"
+		OpenTip.perform_async(@query)
+	end
 
 
 	erb :search

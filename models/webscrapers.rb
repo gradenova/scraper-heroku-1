@@ -304,7 +304,8 @@ class Zorinmaterial
 	end
 end
 
-#website responds with weird search return occasionally eg => q=WP-4848-84B-FF
+#website responds with weird search return occasionally
+# eg query => q=WP-4848-84B-FF
 class Industrialproducts
 	include SuckerPunch::Job
 
@@ -380,7 +381,290 @@ class Industrialproducts
 	end
 end
 
+class GlobalIndustrial
+	include SuckerPunch::Job
+
+    def perform(query)
+        globalindustrial(query)
+    end
+
+	def globalindustrial(query)
+			open("csv/globalindustrial.csv", "w") do |csv|
+				csv.truncate(0)
+			end
+
+			foundprices = []
+
+			query = query.gsub(/\s+/, '')
+
+			myarray = query.split(",")
+
+				myarray.each do |input|
+
+					mechanize = Mechanize.new
+
+					aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+					mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+					page = mechanize.get("http://www.globalindustrial.com/")
+
+					if page
+						search_form = page.form_with(id: 'searchForm')
+
+						search_form['q'] = input
+
+						page = search_form.submit
+
+						price = page.search(".info .title a")
+
+						price.each do |x|
+							page = mechanize.click(x)
+
+							tableElement = page.search(".prodSpec ul ul li span:nth-child(2)")
+							price = page.at("span[@itemprop='price']")
+							tableElement.each do |x|
+
+								if x.text.strip == input
+									price = price.text.strip.gsub(/\,/, '')
+
+									open("csv/globalindustrial.csv", "a") do |csv|
+										csv << "Global Industrial,"
+										csv << x.text.strip
+										csv << ","
+										csv << price
+										csv << "\n"
+									end
+
+								end
+							end
+						end
+					end
+
+				end
+
+			return foundprices
+		end
+end
+
+class OpenTip
+    include SuckerPunch::Job
+
+    def perform(event)
+        opentip(event)
+    end
+
+    def opentip(event)
+        #opens and destroys any prices in guardiancatalog
+		open("csv/opentip.csv", "w") do |csv|
+         csv.truncate(0)
+        end
+
+            event = event.gsub(/\s+/, '')
+            myarray = event.split(",")
+            foundprices = []
+
+            myarray.each do |input|
+
+                mechanize = Mechanize.new
+
+                #grabs website
+                page = mechanize.get("http://www.opentip.com/search.php")
+
+				sleep(rand(0.5..3))
+
+                search_form = page.form
+
+                search_form["keywords"] = input
+
+                page = search_form.submit
+
+                if page
+
+                    product = page.search(".data")
+					product.each do |x|
+						modelNumber = x.at(".products_sku").text.strip.gsub("SKU: ETI-", "")
+
+						if modelNumber == input
+
+							open("csv/opentip.csv", "a") do |csv|
+								csv << "OpenTip"
+								csv << ","
+								csv << modelNumber
+								csv << ","
+								csv << x.at(".usedNewPrice").text.strip
+								csv << "\n"
+							end
+
+						end
+					end
+				end
+            end
+    end
+end
+
+#################################### not working
+
 #having difficulty - not completed
+class Radwell
+	include SuckerPunch::Job
+
+    def perform(query)
+        arrayradwell(query)
+    end
+
+	def arrayradwell(query)
+		open("csv/radwell.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+		foundprices = []
+
+		query = query.gsub(/\s+/, '')
+
+		myarray = query.split(",")
+
+		myarray.each do |input|
+
+			mechanize = Mechanize.new
+
+			page = mechanize.get("http://www.radwell.com/en-US/")
+
+			if page
+				search_form = page.form
+
+				search_form['q'] = input
+
+				page = search_form.submit
+
+				price = page.at("span.searchPrLow.searchPr")
+
+				if price
+
+					foundprices.push(input)
+					foundprices.push(price)
+
+					open('csv/radwell.csv', 'a') do |csv|
+						csv <<  "Radwell"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << price.text.strip
+						csv << "\n"
+					end
+
+				else
+
+					foundprices.push(input)
+					foundprices.push("0.00")
+
+					open('csv/radwell.csv', 'a') do |csv|
+						csv <<  "Radwell"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << "0.00"
+						csv << "\n"
+					end
+				end
+			else
+
+				foundprices.push(input)
+				foundprices.push("0.00")
+
+				open('csv/radwell.csv', 'a') do |csv|
+					csv <<  "Radwell"
+					csv << ","
+					csv << "0.00"
+					csv << ","
+					csv << price
+					csv << "\n"
+				end
+			end
+		end
+
+		return foundprices
+	end
+end
+class Guardian
+    include SuckerPunch::Job
+
+	def perform(event)
+		guardiancatalog(event)
+	end
+
+    def guardiancatalog(event)
+        #opens and destroys any prices in guardiancatalog
+		 open("csv/guardiancatalog.csv", "w") do |csv|
+             csv.truncate(0)
+         end
+            event = event.gsub(/\s+/, '')
+            myarray = event.split(",")
+            foundprices = []
+
+            myarray.each do |input|
+
+                mechanize = Mechanize.new
+
+                #grabs website
+                page = mechanize.get("http://www.guardiancatalog.com/default.asp")
+
+                #grabs first form on website, inputs model number and submits
+                search_form = page.form
+                search_form['Search'] = input
+				page = search_form.submit
+
+                #grabs url of first product, clicks and grabs price
+				url = page.at("a.productnamecolor")
+
+                if url
+                    page = mechanize.click(url)
+                    price = page.at(".product_saleprice span")
+
+                    if price
+                        price = price.text.strip
+                        price = price.gsub(/[()]/, "")
+                        price = price.gsub(/[$]/, "")
+                        price = price.gsub(/[,]/, "")
+                        foundprices.push(input)
+                        foundprices.push(price)
+
+
+                        open("csv/guardiancatalog.csv", "a") do |csv|
+                            csv << "Guardian Catalog"
+                            csv << ","
+                            csv << input
+                            csv << ","
+                            csv << price
+                            csv << "\n"
+                        end
+                    else
+
+                        open("csv/guardiancatalog.csv", "a") do |csv|
+                            csv << "Guardian Catalog"
+                            csv << ","
+                            csv << input
+                            csv << ","
+                            csv << "0.00"
+                            csv << "\n"
+                        end
+
+                    end
+                else
+
+                    open("csv/guardiancatalog.csv", "a") do |csv|
+                        csv << "Guardian Catalog"
+                        csv << ","
+                        csv << input
+                        csv << ","
+                        csv << "0.00"
+                        csv << "\n"
+                    end
+
+                end
+            end
+    end
+end
 class Webstaurantstore
 	include SuckerPunch::Job
 
@@ -472,310 +756,6 @@ class Webstaurantstore
 			return foundprices
 	end
 end
-
-class Radwell
-	include SuckerPunch::Job
-
-    def perform(query)
-        arrayradwell(query)
-    end
-
-	def arrayradwell(query)
-		open("csv/radwell.csv", "w") do |csv|
-			csv.truncate(0)
-		end
-
-		foundprices = []
-
-		query = query.gsub(/\s+/, '')
-
-		myarray = query.split(",")
-
-		myarray.each do |input|
-
-			mechanize = Mechanize.new
-
-			page = mechanize.get("http://www.radwell.com/en-US/")
-
-			if page
-				search_form = page.form
-
-				search_form['q'] = input
-
-				page = search_form.submit
-
-				price = page.at("span.searchPrLow.searchPr")
-
-				if price
-
-					foundprices.push(input)
-					foundprices.push(price)
-
-					open('csv/radwell.csv', 'a') do |csv|
-						csv <<  "Radwell"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << price.text.strip
-						csv << "\n"
-					end
-
-				else
-
-					foundprices.push(input)
-					foundprices.push("0.00")
-
-					open('csv/radwell.csv', 'a') do |csv|
-						csv <<  "Radwell"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
-					end
-				end
-			else
-
-				foundprices.push(input)
-				foundprices.push("0.00")
-
-				open('csv/radwell.csv', 'a') do |csv|
-					csv <<  "Radwell"
-					csv << ","
-					csv << "0.00"
-					csv << ","
-					csv << price
-					csv << "\n"
-				end
-			end
-		end
-
-		return foundprices
-	end
-end
-
-class GlobalIndustrial
-	include SuckerPunch::Job
-
-    def perform(query)
-        globalindustrial(query)
-    end
-
-	def globalindustrial(query)
-			open("csv/globalindustrial.csv", "w") do |csv|
-				csv.truncate(0)
-			end
-
-			foundprices = []
-
-			query = query.gsub(/\s+/, '')
-
-			myarray = query.split(",")
-
-				myarray.each do |input|
-
-					mechanize = Mechanize.new
-
-					aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
-					mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-					page = mechanize.get("http://www.globalindustrial.com/")
-
-					if page
-						search_form = page.form_with(id: 'searchForm')
-
-						search_form['q'] = input
-
-						page = search_form.submit
-
-						price = page.search(".info .title a")
-
-						price.each do |x|
-							page = mechanize.click(x)
-
-							tableElement = page.search(".prodSpec ul ul li span:nth-child(2)")
-							price = page.at("span[@itemprop='price']")
-							tableElement.each do |x|
-
-								if x.text.strip == input
-									price = price.text.strip.gsub(/\,/, '')
-
-									open("csv/globalindustrial.csv", "a") do |csv|
-										csv << "Global Industrial,"
-										csv << x.text.strip
-										csv << ","
-										csv << price
-										csv << "\n"
-									end
-
-								end
-							end
-						end
-					end
-
-				end
-
-			return foundprices
-		end
-end
-
-#newly added classes
-class Guardian
-    include SuckerPunch::Job
-
-	def perform(event)
-		guardiancatalog(event)
-	end
-
-    def guardiancatalog(event)
-        #opens and destroys any prices in guardiancatalog
-		 open("csv/guardiancatalog.csv", "w") do |csv|
-             csv.truncate(0)
-         end
-            event = event.gsub(/\s+/, '')
-            myarray = event.split(",")
-            foundprices = []
-
-            myarray.each do |input|
-
-                mechanize = Mechanize.new
-
-                #grabs website
-                page = mechanize.get("http://www.guardiancatalog.com/default.asp")
-
-                #grabs first form on website, inputs model number and submits
-                search_form = page.form
-                search_form['Search'] = input
-				page = search_form.submit
-
-                #grabs url of first product, clicks and grabs price
-				url = page.at("a.productnamecolor")
-
-                if url
-                    page = mechanize.click(url)
-                    price = page.at(".product_saleprice span")
-
-                    if price
-                        price = price.text.strip
-                        price = price.gsub(/[()]/, "")
-                        price = price.gsub(/[$]/, "")
-                        price = price.gsub(/[,]/, "")
-                        foundprices.push(input)
-                        foundprices.push(price)
-
-
-                        open("csv/guardiancatalog.csv", "a") do |csv|
-                            csv << "Guardian Catalog"
-                            csv << ","
-                            csv << input
-                            csv << ","
-                            csv << price
-                            csv << "\n"
-                        end
-                    else
-
-                        open("csv/guardiancatalog.csv", "a") do |csv|
-                            csv << "Guardian Catalog"
-                            csv << ","
-                            csv << input
-                            csv << ","
-                            csv << "0.00"
-                            csv << "\n"
-                        end
-
-                    end
-                else
-
-                    open("csv/guardiancatalog.csv", "a") do |csv|
-                        csv << "Guardian Catalog"
-                        csv << ","
-                        csv << input
-                        csv << ","
-                        csv << "0.00"
-                        csv << "\n"
-                    end
-
-                end
-            end
-    end
-end
-
-class OpenTip
-    include SuckerPunch::Job
-
-    def perform(event)
-        opentip(event)
-    end
-
-    def opentip(event)
-        #opens and destroys any prices in guardiancatalog
-		open("csv/opentip.csv", "w") do |csv|
-         csv.truncate(0)
-        end
-            event = event.gsub(/\s+/, '')
-            myarray = event.split(",")
-            foundprices = []
-
-            myarray.each do |input|
-
-                mechanize = Mechanize.new
-
-                #grabs website
-                page = mechanize.get("http://www.opentip.com/search.php")
-
-
-                search_form = page.form
-
-                search_form["keywords"] = input
-
-                page = search_form.submit
-
-                if page
-
-                    price = page.at(".products_price").text.strip
-
-                    if price
-
-
-                        price = price.gsub("$", "")
-						price.slice! "Your Price:"
-
-                        open("csv/opentip.csv", "a") do |csv|
-                            csv << "OpenTip,"
-                            csv << price
-                            csv << ","
-                            csv << input
-                            csv << "\n"
-                        end
-
-                    else
-
-	                    open("csv/opentip.csv", "a") do |csv|
-	                        csv << "OpenTip,"
-	                        csv << "0.00"
-	                        csv << ","
-	                        csv << input
-	                        csv << "\n"
-	                    end
-
-                    end
-                else
-
-	                open("csv/opentip.csv", "a") do |csv|
-	                    csv << "OpenTip,"
-	                    csv << "0.00"
-	                    csv << ","
-	                    csv << input
-	                    csv << "\n"
-	                end
-
-                end
-
-            end
-    end
-end
-
 #delayed
 class Bizchair
     include SuckerPunch::Job
