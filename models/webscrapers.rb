@@ -106,7 +106,7 @@ class Industrialsafety
     end
 
 	def arrayindustrialsafety(event)
-		open("industrialsafety.csv", "w") do |csv|
+		open("csv/industrialsafety.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
