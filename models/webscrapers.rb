@@ -326,9 +326,7 @@ class Industrialproducts
 
 		myarray.each do |input|
 
-			mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
-
-			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+			mechanize = Mechanize.new
 
 
 			url = "http://www.industrialproducts.com/"
