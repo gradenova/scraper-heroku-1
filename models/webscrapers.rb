@@ -146,7 +146,7 @@ class Industrialsafety
 						foundprices.push(input)
 						foundprices.push(price)
 
-						open("industrialsafety.csv", "a") do |csv|
+						open("csv/industrialsafety.csv", "a") do |csv|
 							csv << "Industrial Safety"
 							csv << ","
 							csv << input
@@ -158,7 +158,7 @@ class Industrialsafety
 					end
                 end
 			else
-				open("industrialsafety.csv", "a") do |csv|
+				open("csv/industrialsafety.csv", "a") do |csv|
 					csv << "Industrial Safety"
 					csv << ","
 					csv << input
@@ -219,7 +219,7 @@ class Toolfetch
 						foundprices.push(input)
 						foundprices.push(price)
 
-						open("toolfetch.csv", "a") do |csv|
+						open("csv/toolfetch.csv", "a") do |csv|
 							csv << "Toolfetch"
 							csv << ","
 							csv << input
@@ -236,12 +236,11 @@ class Toolfetch
 	end
 end
 
-#not connected
 class Zorinmaterial
 	include SuckerPunch::Job
 
     def perform(event)
-        zorinmaterial(event)
+        arrayzorinmaterial(event)
     end
 
 	def arrayzorinmaterial(event)
@@ -297,6 +296,82 @@ class Zorinmaterial
 					end
 				end
 
+			end
+
+		end
+
+		return foundprices
+	end
+end
+
+#website responds with weird search return occasionally eg => q=WP-4848-84B-FF
+class Industrialproducts
+	include SuckerPunch::Job
+
+    def perform(event)
+        arrayindustrialproducts(event)
+    end
+
+	def arrayindustrialproducts(event)
+		open("csv/industrialproducts.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+		foundprices = []
+
+		event = event.gsub(/\s+/, '')
+
+		myarray = event.split(",")
+
+		myarray.each do |input|
+
+			mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
+
+			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
+
+
+			url = "http://www.industrialproducts.com/"
+
+			page = mechanize.get(url)
+
+			sleep(rand(0..3))
+
+			if page
+				search_form = page.form
+
+				search_form['q'] = input
+
+				page = search_form.submit
+
+				pageLinks = page.search(".products-grid .product-image")
+
+				pageLinks.each do |link|
+					page = mechanize.click(link)
+
+					table = page.search(".data-table tbody tr td a")
+
+					table.each do |x|
+						if !(x.text.include? input + "-") && (x.text.include? input)
+							page = mechanize.click(x)
+							price = page.at("span.map").text
+
+							price = price.gsub(/[$]/, "")
+							price = price.gsub(/[,]/, "")
+
+
+							open("csv/industrialproducts.csv", "a") do |csv|
+								csv << "Industrial Products"
+								csv << ","
+								csv << input
+								csv << ","
+								csv << price
+								csv << "\n"
+							end
+
+						end
+					end
+
+				end
 			end
 
 		end
@@ -395,82 +470,6 @@ class Webstaurantstore
 			end
 
 			return foundprices
-	end
-end
-
-#website responds with weird search return occasionally
-class Industrialproducts
-	include SuckerPunch::Job
-
-    def perform(event)
-        arrayindustrialproducts(event)
-    end
-
-	def arrayindustrialproducts(event)
-		open("csv/industrialproducts.csv", "w") do |csv|
-			csv.truncate(0)
-		end
-
-		foundprices = []
-
-		event = event.gsub(/\s+/, '')
-
-		myarray = event.split(",")
-
-		myarray.each do |input|
-
-			mechanize = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
-
-			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
-
-			url = "http://www.industrialproducts.com/"
-
-			page = mechanize.get(url)
-
-			sleep(rand(0..3))
-
-			if page
-				search_form = page.form
-
-				search_form['q'] = input
-
-				page = search_form.submit
-
-				pageLinks = page.search(".products-grid .product-image")
-
-				pageLinks.each do |link|
-					page = mechanize.click(link)
-
-					table = page.search(".data-table tbody tr td a")
-
-					table.each do |x|
-						if !(x.text.include? input + "-") && (x.text.include? input)
-							page = mechanize.click(x)
-							price = page.at("span.map").text
-
-							price = price.gsub(/[$]/, "")
-							price = price.gsub(/[,]/, "")
-
-
-							open("csv/industrialproducts.csv", "a") do |csv|
-								csv << "Industrial Products"
-								csv << ","
-								csv << input
-								csv << ","
-								csv << price
-								csv << "\n"
-							end
-
-						end
-					end
-
-				end
-			end
-
-		end
-
-		return foundprices
 	end
 end
 
@@ -578,8 +577,6 @@ class GlobalIndustrial
 				mechanize = Mechanize.new
 
 				aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
-
 
 				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 

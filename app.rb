@@ -25,6 +25,7 @@ post "/search" do
 	@radwell = params[:radwell]
 	@globalindustrial = params[:globalindustrial]
 	@toolfetch = params[:toolfetch]
+	@zorinmaterial = params[:zorinmaterial]
 
 	if @hofequipment == "hofequipment"
     	HOFequipment.perform_async(@query)
@@ -32,6 +33,10 @@ post "/search" do
 
 	if @industrialsafety == "industrialsafety"
     	Industrialsafety.perform_async(@query)
+	end
+
+	if @zorinmaterial == "zorinmaterial"
+		Zorinmaterial.perform_async(@query)
 	end
 
 	if @industrialproducts == "industrialproducts"
@@ -53,6 +58,8 @@ post "/search" do
 	if @globalindustrial == "globalindustrial"
     	GlobalIndustrial.perform_async(@query)
 	end
+
+
 
 	erb :search
 end
