@@ -135,26 +135,29 @@ class Industrialsafety
                 product.each do |individualProduct|
 					if !(individualProduct.at("a.v-product__img")["title"].include? input + "-")
 
-                        price = individualProduct.at("div.product_productprice").text
+						array = individualProduct.at("a.v-product__img")["title"].split(" ")
 
-                        #('a'..'z').to_a ensure perfect match
-						price = price.gsub(/[()]/, "")
-						price = price.gsub(/[$]/, "")
-						price = price.gsub(/[,]/, "")
-						price.slice! "Our Price: "
+						array.each do |x|
 
-						foundprices.push(input)
-						foundprices.push(price)
 
-						open("csv/industrialsafety.csv", "a") do |csv|
-							csv << "Industrial Safety"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << price
-							csv << "\n"
+							if x == input
+		                        price = individualProduct.at("div.product_productprice").text
+
+		                        #('a'..'z').to_a ensure perfect match
+								price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
+								price.slice! "Our Price: "
+
+								open("csv/industrialsafety.csv", "a") do |csv|
+									csv << "Industrial Safety"
+									csv << ","
+									csv << input
+									csv << ","
+									csv << price
+									csv << "\n"
+								end
+							end
+
 						end
-
 					end
                 end
 			else
@@ -304,81 +307,6 @@ class Zorinmaterial
 	end
 end
 
-#website responds with weird search return occasionally
-# eg query => q=WP-4848-84B-FF
-class Industrialproducts
-	include SuckerPunch::Job
-
-    def perform(event)
-        arrayindustrialproducts(event)
-    end
-
-	def arrayindustrialproducts(event)
-		open("csv/industrialproducts.csv", "w") do |csv|
-			csv.truncate(0)
-		end
-
-		foundprices = []
-
-		event = event.gsub(/\s+/, '')
-
-		myarray = event.split(",")
-
-		myarray.each do |input|
-
-			mechanize = Mechanize.new
-
-
-			url = "http://www.industrialproducts.com/"
-
-			page = mechanize.get(url)
-
-			sleep(rand(0..3))
-
-			if page
-				search_form = page.form
-
-				search_form['q'] = input
-
-				page = search_form.submit
-
-				pageLinks = page.search(".products-grid .product-image")
-
-				pageLinks.each do |link|
-					page = mechanize.click(link)
-
-					table = page.search(".data-table tbody tr td a")
-
-					table.each do |x|
-						if !(x.text.include? input + "-") && (x.text.include? input)
-							page = mechanize.click(x)
-							price = page.at("span.map").text
-
-							price = price.gsub(/[$]/, "")
-							price = price.gsub(/[,]/, "")
-
-
-							open("csv/industrialproducts.csv", "a") do |csv|
-								csv << "Industrial Products"
-								csv << ","
-								csv << input
-								csv << ","
-								csv << price
-								csv << "\n"
-							end
-
-						end
-					end
-
-				end
-			end
-
-		end
-
-		return foundprices
-	end
-end
-
 class GlobalIndustrial
 	include SuckerPunch::Job
 
@@ -501,6 +429,77 @@ class OpenTip
     end
 end
 
+#website responds with weird search return occasionally
+# eg query => q=WP-4848-84B-FF
+class Industrialproducts
+	include SuckerPunch::Job
+
+    def perform(event)
+        arrayindustrialproducts(event)
+    end
+
+	def arrayindustrialproducts(event)
+		open("csv/industrialproducts.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+		foundprices = []
+
+		event = event.gsub(/\s+/, '')
+
+		myarray = event.split(",")
+
+		myarray.each do |input|
+
+			mechanize = Mechanize.new
+
+
+			url = "http://www.industrialproducts.com/"
+
+			page = mechanize.get(url)
+
+			sleep(rand(0..3))
+
+			if page
+				search_form = page.form
+
+				search_form['q'] = input
+
+				page = search_form.submit
+
+				pageLinks = page.search(".products-grid .product-image")
+
+				pageLinks.each do |link|
+					page = mechanize.click(link)
+
+					table = page.search(".data-table tbody tr td a")
+
+					table.each do |x|
+						if !(x.text.include? input + "-") && (x.text.include? input)
+							page = mechanize.click(x)
+							price = page.at("span.map").text
+
+							price = price.gsub(/[$]/, "")
+							price = price.gsub(/[,]/, "")
+
+
+							open("csv/industrialproducts.csv", "a") do |csv|
+								csv << "Industrial Products"
+								csv << ","
+								csv << input
+								csv << ","
+								csv << price
+								csv << "\n"
+							end
+
+						end
+					end
+				end
+			end
+		end
+		return foundprices
+	end
+end
 #################################### not working
 
 #having difficulty - not completed
@@ -584,6 +583,7 @@ class Radwell
 		return foundprices
 	end
 end
+
 class Guardian
     include SuckerPunch::Job
 
@@ -663,6 +663,7 @@ class Guardian
             end
     end
 end
+
 class Webstaurantstore
 	include SuckerPunch::Job
 
