@@ -446,19 +446,17 @@ class Industrialproducts
 		foundprices = []
 
 		event = event.gsub(/\s+/, '')
-
 		myarray = event.split(",")
 
 		myarray.each do |input|
 
 			mechanize = Mechanize.new
 
-
 			url = "http://www.industrialproducts.com/"
 
 			page = mechanize.get(url)
 
-			sleep(rand(0..3))
+			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 			if page
 				search_form = page.form
@@ -500,6 +498,7 @@ class Industrialproducts
 		return foundprices
 	end
 end
+
 #################################### not working
 
 #having difficulty - not completed
