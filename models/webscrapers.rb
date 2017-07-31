@@ -24,12 +24,23 @@ class HOFequipment
 	    myQuery.each do |individualItem|
 	        page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + individualItem)
 
+
 			sleep(rand(0..3))
 
 	        productLink = page.search(".grid__item a.thumb")
 
-	        productLink.each do |thisLink|
-	            if !(thisLink.at(".photoClass")["title"].include? individualItem + "-")
+			if productLink.empty?
+				open("csv/hofequipment.csv", "a") do |csv|
+					csv << "HOFequipment"
+					csv << ","
+					csv << individualItem
+					csv << ","
+					csv << "0.00"
+					csv << "\n"
+				end
+			else
+	        	productLink.each do |thisLink|
+	            	if !(thisLink.at(".photoClass")["title"].include? individualItem + "-")
 	                    page = mechanize.click(thisLink)
 
 	                    price = page.at(".item-price").text.strip
@@ -78,24 +89,13 @@ class HOFequipment
 	                                csv << price
 	                                csv << "\n"
 	                            end
-	                    else
-	                        foundprices.push(individualItem)
-	                        foundprices.push("0.00")
-	                        open("csv/hofequipment.csv", "a") do |csv|
-	                            csv << "HOFequipment"
-	                            csv << ","
-	                            csv << individualItem
-	                            csv << ","
-	                            csv << "0.00"
-	                            csv << "\n"
-	                        end
-
 	                    end
 		            end
 		        end
-		    end
-	    	return foundprices
+			end
 		end
+    	return foundprices
+	end
 end
 
 class Industrialsafety
