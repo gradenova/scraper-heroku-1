@@ -416,8 +416,6 @@ class Industrialproducts
 			csv.truncate(0)
 		end
 
-		foundprices = []
-
 		event = event.gsub(/\s+/, '')
 		myarray = event.split(",")
 
@@ -429,14 +427,15 @@ class Industrialproducts
 
 			page = mechanize.get(url)
 
-			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
 			if page
-				search_form = page.form_with(class: 'searchautocomplete')
+				search_form = page.form
+
 
 				search_form['q'] = input
 
 				page = search_form.submit
+
+				puts page.uri
 
 				pageLinks = page.search(".products-grid .product-image")
 
@@ -450,9 +449,7 @@ class Industrialproducts
 							page = mechanize.click(x)
 							price = page.at("span.map").text
 
-							price = price.gsub(/[$]/, "")
-							price = price.gsub(/[,]/, "")
-
+							price = price.gsub(/[$]/, "").gsub(/[,]/, "")
 
 							open("csv/industrialproducts.csv", "a") do |csv|
 								csv << "Industrial Products"
@@ -462,16 +459,13 @@ class Industrialproducts
 								csv << price
 								csv << "\n"
 							end
-
 						end
 					end
 				end
 			end
 		end
-		return foundprices
 	end
 end
-
 #################################### not working
 
 #having difficulty - not completed
