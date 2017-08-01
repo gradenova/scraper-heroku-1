@@ -13,22 +13,21 @@ class HOFequipment
 	        csv.truncate(0)
 	    end
 
-	    myQuery = event.split(",")
 
 	    mechanize = Mechanize.new
 
+	    myQuery = event.split(",")
 	    event = event.gsub(/\s+/, '')
-
-	    foundprices = []
 
 	    myQuery.each do |individualItem|
 	        page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + individualItem)
 
-
+			#need to better throttle requests
 			sleep(rand(0..3))
 
 	        productLink = page.search(".grid__item a.thumb")
 
+			#if there are no products returned
 			if productLink.empty?
 				open("csv/hofequipment.csv", "a") do |csv|
 					csv << "HOFequipment"
@@ -54,6 +53,7 @@ class HOFequipment
 						#checks to see if the information is in a table
 	                    if page.at(".chartPersonalization")
 
+							#table_data is an array with every individual cell as an item
 	                        table_data = table.search('tr').map do |row|
 	                            row.search('th, td').map { |cell| cell.text.strip }
 	                        end
@@ -61,12 +61,11 @@ class HOFequipment
 	                        table_data.each do |row|
 	                            row.each do |x|
 	                                if x == individualItem
+										#grabs price, row[-2] = price
 	                                    price = row[-2]
-	                                    price = price.gsub(/[()]/, "")
-	                                    price = price.gsub(/[$]/, "")
-	                                    price = price.gsub(/[,]/, "")
-	                                    foundprices.push(individualItem)
-	                                    foundprices.push(price)
+
+										#clean up price, and takes away commas, parentetheses, dollar sign
+	                                    price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
 
 
 	                                    open("csv/hofequipment.csv", "a") do |csv|
@@ -77,32 +76,29 @@ class HOFequipment
 	                                        csv << price
 	                                        csv << "\n"
 	                                    end
+
 	                                end
 	                            end
 	                        end
 
 						#if not in a table, it grabs the price
 	                    elsif page.at(".item-price")
-	                            price = price.gsub(/[()]/, "")
-	                            price = price.gsub(/[$]/, "")
-	                            price = price.gsub(/[,]/, "")
-	                            foundprices.push(individualItem)
-	                            foundprices.push(price)
+							#clean up price, and takes away commas, parentetheses, dollar sign
+                            price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
 
-	                            open("csv/hofequipment.csv", "a") do |csv|
-	                                csv << "HOFequipment"
-	                                csv << ","
-	                                csv << individualItem
-	                                csv << ","
-	                                csv << price
-	                                csv << "\n"
-	                            end
+                            open("csv/hofequipment.csv", "a") do |csv|
+                                csv << "HOFequipment"
+                                csv << ","
+                                csv << individualItem
+                                csv << ","
+                                csv << price
+                                csv << "\n"
+                            end
 	                    end
 		            end
 		        end
 			end
 		end
-    	return foundprices
 	end
 end
 
@@ -120,8 +116,6 @@ class Industrialsafety
 
 		event = event.gsub(/\s+/, '')
 
-		foundprices = []
-
 		myarray = event.split(",")
 
 		myarray.each do |input|
@@ -130,10 +124,9 @@ class Industrialsafety
 
 			mechanize = Mechanize.new
 
-			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
 			page = mechanize.get(url)
 
+			#do better
 			sleep(rand(0..3))
 
 			if page
@@ -146,7 +139,6 @@ class Industrialsafety
 						array = individualProduct.at("a.v-product__img")["title"].split(" ")
 
 						array.each do |x|
-
 
 							if x == input
 		                        price = individualProduct.at("div.product_productprice").text
@@ -196,8 +188,6 @@ class Toolfetch
 			csv.truncate(0)
 		end
 
-		foundprices = []
-
 		event = event.gsub(/\s+/, '')
 
 		myarray = event.split(",")
@@ -205,8 +195,6 @@ class Toolfetch
 		myarray.each do |input|
 
 			mechanize = Mechanize.new
-
-			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
 			url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
 
@@ -224,11 +212,8 @@ class Toolfetch
 
 						price = page.at(".price").text.strip
 
-						price = price.gsub(/[$]/, "")
-						price = price.gsub(/[,]/, "")
+						price = price.gsub(/[$]/, "").gsub(/[,]/, "")
 
-						foundprices.push(input)
-						foundprices.push(price)
 
 						open("csv/toolfetch.csv", "a") do |csv|
 							csv << "Toolfetch"
@@ -242,7 +227,6 @@ class Toolfetch
 				end
 			end
 		end
-
 		return foundprices
 	end
 end
@@ -259,8 +243,6 @@ class Zorinmaterial
 			csv.truncate(0)
 		end
 
-		foundprices = []
-
 		event = event.gsub(/\s+/, '')
 
 		myarray = event.split(",")
@@ -270,8 +252,6 @@ class Zorinmaterial
 			mechanize = Mechanize.new
 
 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-			aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
 
 			page = mechanize.get("http://www.zorinmaterial.com/home/")
 
@@ -290,11 +270,8 @@ class Zorinmaterial
 					if !(x.to_s.include? input + "-")
 						page = mechanize.click(x)
 						price = page.at(".price-current").text.strip
-						price = price.gsub(/[$]/, "")
-						price = price.gsub(/[,]/, "")
+						price = price.gsub(/[$]/, "").gsub(/[,]/, "")
 
-						foundprices.push(input)
-						foundprices.push(price)
 
 						open('csv/zorinmaterial.csv', 'a') do |csv|
 							csv <<  "Zorinmaterial"
@@ -306,11 +283,8 @@ class Zorinmaterial
 						end
 					end
 				end
-
 			end
-
 		end
-
 		return foundprices
 	end
 end
@@ -326,8 +300,6 @@ class GlobalIndustrial
 		open("csv/globalindustrial.csv", "w") do |csv|
 			csv.truncate(0)
 		end
-
-		foundprices = []
 
 		query = query.gsub(/\s+/, '')
 
@@ -367,14 +339,11 @@ class GlobalIndustrial
 									csv << newprice
 									csv << "\n"
 								end
-
 							end
 						end
 					end
 				end
-
 			end
-
 		return foundprices
 	end
 end
@@ -394,7 +363,6 @@ class OpenTip
 
             event = event.gsub(/\s+/, '')
             myarray = event.split(",")
-            foundprices = []
 
             myarray.each do |input|
 
@@ -427,7 +395,6 @@ class OpenTip
 								csv << x.at(".usedNewPrice").text.strip.gsub(/[,]/, "").gsub(/[$]/, "")
 								csv << "\n"
 							end
-
 						end
 					end
 				end
@@ -465,7 +432,7 @@ class Industrialproducts
 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 			if page
-				search_form = page.form
+				search_form = page.form_with(class: 'searchautocomplete')
 
 				search_form['q'] = input
 
