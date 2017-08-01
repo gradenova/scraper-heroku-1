@@ -22,6 +22,7 @@ class HOFequipment
 	    myQuery.each do |individualItem|
 	        page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + individualItem)
 
+			puts "hofequipment has been gotten"
 			#need to better throttle requests
 			sleep(rand(0..3))
 
@@ -419,6 +420,8 @@ class Industrialproducts
 		event = event.gsub(/\s+/, '')
 		myarray = event.split(",")
 
+		puts "array has been split"
+
 		myarray.each do |input|
 
 			mechanize = Mechanize.new
@@ -426,6 +429,8 @@ class Industrialproducts
 			url = "http://www.industrialproducts.com/"
 
 			page = mechanize.get(url)
+
+			puts "url has been grabbed"
 
 			if page
 				search_form = page.form
