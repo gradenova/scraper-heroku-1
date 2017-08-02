@@ -425,10 +425,9 @@ class Industrialproducts
 
 		myarray.each do |input|
 
-			mechanize = Mechanize.new { |agent|
-                    agent.user_agent_alias = 'Windows Chrome'
-				  	agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-					}
+		mechanize =	Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE};
+
+		mechanize.user_agent_alias = "Windows Chrome"
 
 			mechanize.request_headers
 
