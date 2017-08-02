@@ -172,8 +172,6 @@ class Industrialsafety
 				end
 			end
 		end
-
-		return foundprices
 	end
 end
 
@@ -307,44 +305,43 @@ class GlobalIndustrial
 
 		myarray.each do |input|
 
-				mechanize = Mechanize.new
+			mechanize = Mechanize.new
 
-				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-				page = mechanize.get("http://www.globalindustrial.com/")
+			page = mechanize.get("http://www.globalindustrial.com/")
 
-				if page
-					search_form = page.form_with(id: 'searchForm')
+			if page
+				search_form = page.form_with(id: 'searchForm')
 
-					search_form['q'] = input
+				search_form['q'] = input
 
-					page = search_form.submit
+				page = search_form.submit
 
-					price = page.search(".info .title a")
+				price = page.search(".info .title a")
 
-					price.each do |link|
-						page = mechanize.click(link)
+				price.each do |link|
+					page = mechanize.click(link)
 
-						tableElement = page.search(".prodSpec ul ul li span:nth-child(2)")
-						newprice = page.at("span[@itemprop='price']")
-						tableElement.each do |x|
+					tableElement = page.search(".prodSpec ul ul li span:nth-child(2)")
+					newprice = page.at("span[@itemprop='price']")
+					tableElement.each do |x|
 
-							if x.text.strip == input
-								newprice = newprice.text.strip.gsub(/\,/, '')
+						if x.text.strip == input
+							newprice = newprice.text.strip.gsub(/\,/, '')
 
-								open("csv/globalindustrial.csv", "a") do |csv|
-									csv << "Global Industrial,"
-									csv << x.text.strip
-									csv << ","
-									csv << newprice
-									csv << "\n"
-								end
+							open("csv/globalindustrial.csv", "a") do |csv|
+								csv << "Global Industrial,"
+								csv << x.text.strip
+								csv << ","
+								csv << newprice
+								csv << "\n"
 							end
 						end
 					end
 				end
 			end
-		return foundprices
+		end
 	end
 end
 
