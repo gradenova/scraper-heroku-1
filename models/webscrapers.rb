@@ -431,7 +431,7 @@ class Industrialproducts
 
 			mechanize.request_headers
 
-			url = "www.industrialproducts.com"
+			url = "http://www.industrialproducts.com"
 
 			page = mechanize.get(url)
 
