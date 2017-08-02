@@ -426,6 +426,8 @@ class Industrialproducts
 
 			mechanize = Mechanize.new
 
+			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
 			url = "http://www.industrialproducts.com/"
 
 			page = mechanize.get(url)
