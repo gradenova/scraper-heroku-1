@@ -228,7 +228,6 @@ class Toolfetch
 				end
 			end
 		end
-		return foundprices
 	end
 end
 
