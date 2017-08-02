@@ -417,6 +417,7 @@ class Industrialproducts
 			csv.truncate(0)
 		end
 
+		puts "Start"
 		event = event.gsub(/\s+/, '')
 		myarray = event.split(",")
 
@@ -424,9 +425,12 @@ class Industrialproducts
 
 		myarray.each do |input|
 
-			mechanize = Mechanize.new
+			mechanize = Mechanize.new { |agent|
+                    agent.user_agent_alias = 'Windows Chrome'
+				  	agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+					}
 
-			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			mechanize.request_headers
 
 			url = "http://www.industrialproducts.com/"
 
