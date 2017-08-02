@@ -648,8 +648,6 @@ class Webstaurantstore
 			csv.truncate(0)
 		end
 
-			foundprices = []
-
 			event = event.gsub(/\s+/, '')
 
 			myarray = event.split(",")
@@ -658,13 +656,11 @@ class Webstaurantstore
 
 				mechanize = Mechanize.new
 
-				aliases = ['Linux Firefox', 'Windows Chrome', 'Mac Safari']
-
-
-
 				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 				page = mechanize.get("https://www.webstaurantstore.com/")
+
+				sleep(rand(0..3))
 
 				if page
 					search_form = page.form
@@ -673,45 +669,27 @@ class Webstaurantstore
 
 					page = search_form.submit
 
-					price = page.at("p.price")
+					price = page.search("div.details a")
 
+					price.each do |x|
+						page = mechanize.click(x)
+						mypage = page.at(".mfr-number")
 
-					if price
+						if mypage == input
+							price = page.at("p.price span")
 
-						price = price.text.strip
-						price = price.gsub(/[$]/, "")
-						price = price.gsub(/[,]/, "")
+							open('csv/webstaurantstore.csv', 'a') do |csv|
+								csv <<  "Webstaurant"
+								csv << ","
+								csv << input
+								csv << ","
+								csv << price
+								csv << "\n"
+							end
 
-						foundprices.push(input)
-						foundprices.push(price)
-
-						open('csv/webstaurantstore.csv', 'a') do |csv|
-							csv <<  "Webstaurant"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << price
-							csv << "\n"
-						end
-					else
-
-						foundprices.push(input)
-						foundprices.push("0.00")
-
-						open('csv/webstaurantstore.csv', 'a') do |csv|
-							csv <<  "Webstaurant"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << "0.00"
-							csv << "\n"
 						end
 					end
-
 				else
-
-					foundprices.push(input)
-					foundprices.push("0.00")
 
 					open('csv/webstaurantstore.csv', 'a') do |csv|
 						csv <<  "Webstaurant"
@@ -723,10 +701,10 @@ class Webstaurantstore
 					end
 				end
 			end
-
-			return foundprices
 	end
 end
+
+
 #delayed
 class Bizchair
     include SuckerPunch::Job
