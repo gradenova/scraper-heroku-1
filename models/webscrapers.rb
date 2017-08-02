@@ -704,6 +704,62 @@ class Webstaurantstore
 	end
 end
 
+class Ckitchen
+	include SuckerPunch::Job
+
+    def perform(event)
+        ckitchen(event)
+    end
+
+	def ckitchen(event)
+		open("csv/ckitchen.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+			event = event.gsub(/\s+/, '')
+
+			myarray = event.split(",")
+
+			myarray.each do |input|
+
+				mechanize = Mechanize.new
+
+				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+				page = mechanize.get("https://www.ckitchen.com/")
+
+				sleep(rand(0..3))
+
+			if page
+				search_form = page.form
+
+				search_form['query'] = input
+				page = search_form.submit
+
+				item = page.search(".products-grid-item .desc-zone a")
+
+				item.each do |x|
+					page = mechanize.click(x)
+					sku = page.at("div.product-sku").text
+
+					if sku == input
+						price = page.at(".product-price .price-bold").text
+
+						open('csv/ckitchen.csv', 'a') do |csv|
+							csv <<  "Ckitchen"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << price
+							csv << "\n"
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
 
 #delayed
 class Bizchair
