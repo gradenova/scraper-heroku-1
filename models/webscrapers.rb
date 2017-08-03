@@ -399,6 +399,185 @@ class OpenTip
     end
 end
 
+class Webstaurantstore
+	include SuckerPunch::Job
+
+    def perform(event)
+        arraywebstaurantstore(event)
+    end
+
+	def arraywebstaurantstore(event)
+		open("csv/webstaurantstore.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+			event = event.gsub(/\s+/, '')
+
+			myarray = event.split(",")
+
+			myarray.each do |input|
+
+				mechanize = Mechanize.new
+
+				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+				page = mechanize.get("https://www.webstaurantstore.com/")
+
+				sleep(rand(0..3))
+
+				if page
+					search_form = page.form
+
+					search_form['searchval'] = input
+
+					page = search_form.submit
+
+					price = page.search("div.details a")
+
+					price.each do |x|
+						page = mechanize.click(x)
+						mypage = page.at(".mfr-number")
+
+						if mypage == input
+							price = page.at("p.price span")
+
+							open('csv/webstaurantstore.csv', 'a') do |csv|
+								csv <<  "Webstaurant"
+								csv << ","
+								csv << input
+								csv << ","
+								csv << price
+								csv << "\n"
+							end
+
+						end
+					end
+				else
+
+					open('csv/webstaurantstore.csv', 'a') do |csv|
+						csv <<  "Webstaurant"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << "0.00"
+						csv << "\n"
+					end
+				end
+			end
+	end
+end
+
+class Ckitchen
+	include SuckerPunch::Job
+
+    def perform(event)
+        ckitchen(event)
+    end
+
+	def ckitchen(event)
+		open("csv/ckitchen.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+			event = event.gsub(/\s+/, '')
+
+			myarray = event.split(",")
+
+			myarray.each do |input|
+
+				mechanize = Mechanize.new
+
+				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+				page = mechanize.get("https://www.ckitchen.com/")
+
+				sleep(rand(0..3))
+
+			if page
+				search_form = page.form
+
+				search_form['query'] = input
+				page = search_form.submit
+
+				item = page.search(".products-grid-item .desc-zone a")
+
+				item.each do |x|
+					page = mechanize.click(x)
+					sku = page.at("div.product-sku").text
+
+					if sku == input
+						price = page.at(".product-price .price-bold").text.gsub("$", "").gsub(",", "")
+
+						open('csv/ckitchen.csv', 'a') do |csv|
+							csv <<  "Ckitchen"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << price
+							csv << "\n"
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+class HotelRestaurant
+	include SuckerPunch::Job
+
+    def perform(event)
+        hotelRestaurantSupply(event)
+    end
+
+	def hotelRestaurantSupply(event)
+		open("csv/hotelrestaurant.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+		event = event.gsub(/\s+/, '')
+
+		myarray = event.split(",")
+
+		myarray.each do |input|
+
+			mechanize = Mechanize.new
+
+			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+			page = mechanize.get("https://www.hotelrestaurantsupply.com/mm5/merchant.mvc?Screen=JSON&Products=MTR-" + input)
+
+			sleep(rand(0..3))
+
+			if page
+
+				if page.at("span.subProdPrice span.red")
+					price = page.at("span.subProdPrice span.red").text.strip.gsub("Today's Price: $", "").gsub("/ Each", "")
+
+					open("csv/hotelrestaurant.csv", "a") do |csv|
+						csv << "HotelRestaurantSupply,"
+						csv << input
+						csv << ","
+						csv << price
+						csv << "\n"
+					end
+
+				else
+
+					open("csv/hotelrestaurant.csv", "a") do |csv|
+						csv << "HotelRestaurantSupply,"
+						csv << input
+						csv << ","
+						csv << "0.00"
+						csv << "\n"
+					end
+
+				end
+			end
+		end
+	end
+end
+
 #website responds with weird search return occasionally
 # eg query => q=WP-4848-84B-FF
 class Industrialproducts
@@ -636,131 +815,6 @@ class Guardian
     end
 end
 
-class Webstaurantstore
-	include SuckerPunch::Job
-
-    def perform(event)
-        arraywebstaurantstore(event)
-    end
-
-	def arraywebstaurantstore(event)
-		open("csv/webstaurantstore.csv", "w") do |csv|
-			csv.truncate(0)
-		end
-
-			event = event.gsub(/\s+/, '')
-
-			myarray = event.split(",")
-
-			myarray.each do |input|
-
-				mechanize = Mechanize.new
-
-				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-				page = mechanize.get("https://www.webstaurantstore.com/")
-
-				sleep(rand(0..3))
-
-				if page
-					search_form = page.form
-
-					search_form['searchval'] = input
-
-					page = search_form.submit
-
-					price = page.search("div.details a")
-
-					price.each do |x|
-						page = mechanize.click(x)
-						mypage = page.at(".mfr-number")
-
-						if mypage == input
-							price = page.at("p.price span")
-
-							open('csv/webstaurantstore.csv', 'a') do |csv|
-								csv <<  "Webstaurant"
-								csv << ","
-								csv << input
-								csv << ","
-								csv << price
-								csv << "\n"
-							end
-
-						end
-					end
-				else
-
-					open('csv/webstaurantstore.csv', 'a') do |csv|
-						csv <<  "Webstaurant"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
-					end
-				end
-			end
-	end
-end
-
-class Ckitchen
-	include SuckerPunch::Job
-
-    def perform(event)
-        ckitchen(event)
-    end
-
-	def ckitchen(event)
-		open("csv/ckitchen.csv", "w") do |csv|
-			csv.truncate(0)
-		end
-
-			event = event.gsub(/\s+/, '')
-
-			myarray = event.split(",")
-
-			myarray.each do |input|
-
-				mechanize = Mechanize.new
-
-				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-				page = mechanize.get("https://www.ckitchen.com/")
-
-				sleep(rand(0..3))
-
-			if page
-				search_form = page.form
-
-				search_form['query'] = input
-				page = search_form.submit
-
-				item = page.search(".products-grid-item .desc-zone a")
-
-				item.each do |x|
-					page = mechanize.click(x)
-					sku = page.at("div.product-sku").text
-
-					if sku == input
-						price = page.at(".product-price .price-bold").text
-
-						open('csv/ckitchen.csv', 'a') do |csv|
-							csv <<  "Ckitchen"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << price
-							csv << "\n"
-						end
-					end
-				end
-			end
-		end
-	end
-end
-
-
 #delayed
 class Bizchair
     include SuckerPunch::Job
@@ -785,10 +839,9 @@ class Bizchair
                 #grabs website
                 page = mechanize.get("http://www.bizchair.com/")
 
-
                 search_form = page.form
 
-                search_form["w"] = input
+                search_form["q"] = input
 
                 page = search_form.submit
 

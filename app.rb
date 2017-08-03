@@ -27,6 +27,16 @@ post "/search" do
 	@toolfetch = params[:toolfetch]
 	@zorinmaterial = params[:zorinmaterial]
 	@opentip = params[:opentip]
+	@ckitchen = params[:ckitchen]
+	@hotelrestaurant = params[:hotelrestaurant]
+
+	if @hotelrestaurant == "hotelrestaurant"
+		HotelRestaurant.perform_async(@query)
+	end
+
+	if @ckitchen == "ckitchen"
+		Ckitchen.perform_async(@query)
+	end
 
 	if @hofequipment == "hofequipment"
     	HOFequipment.perform_async(@query)
@@ -72,6 +82,10 @@ get "/schedule" do
 	return "OH NO! YOU BROKE THE WEBSITE! QUICKLY RETURN TO WHERE YOU CAME FROM."
 end
 
+get "/csv/hotelrestaurant" do
+		send_file('csv/hotelrestaurant.csv', :filename => "csv/hotelrestaurant.csv")
+end
+
 
 get "/csv/hofequipment" do
 		send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")
@@ -111,6 +125,10 @@ end
 
 get "/csv/toolfetch" do
 		send_file('csv/toolfetch.csv', :filename => "csv/toolfetch.csv")
+end
+
+get "/csv/ckitchen" do
+		send_file('csv/ckitchen.csv', :filename => "csv/ckitchen.csv")
 end
 
 get '/products' do
