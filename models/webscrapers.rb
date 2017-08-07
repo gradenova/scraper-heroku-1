@@ -1,6 +1,7 @@
 require "sucker_punch"
 require "mechanize"
 
+#accounts for not found
 class HOFequipment
 	include SuckerPunch::Job
 
@@ -119,7 +120,7 @@ class Industrialsafety
 
 		myarray = event.split(",")
 
-		myarray.each do |input|
+			myarray.each do |input|
 
 			url = "http://www.industrialsafety.com/searchresults.asp?Search=" + input + "&Submit="
 
@@ -130,11 +131,25 @@ class Industrialsafety
 			#do better
 			sleep(rand(0..3))
 
+
 			if page
 
 				product = page.search(".v-product")
 
+				if product.empty?
+					open("csv/industrialsafety.csv", "a") do |csv|
+						csv << "Industrial Safety"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << "0.00"
+						csv << "\n"
+					end
+				end
+
+
                 product.each do |individualProduct|
+
 					if !(individualProduct.at("a.v-product__img")["title"].include? input + "-")
 
 						array = individualProduct.at("a.v-product__img")["title"].split(" ")
@@ -157,18 +172,8 @@ class Industrialsafety
 									csv << "\n"
 								end
 							end
-
-						end
+	                	end
 					end
-                end
-			else
-				open("csv/industrialsafety.csv", "a") do |csv|
-					csv << "Industrial Safety"
-					csv << ","
-					csv << input
-					csv << ","
-					csv << "0.00"
-					csv << "\n"
 				end
 			end
 		end
