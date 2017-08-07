@@ -1,7 +1,6 @@
 require "sucker_punch"
 require "mechanize"
 
-#accounts for not found
 class HOFequipment
 	include SuckerPunch::Job
 
@@ -188,7 +187,7 @@ class Toolfetch
     end
 
 	def arraytoolfetch(event)
-		open("toolfetch.csv", "w") do |csv|
+		open("csv/toolfetch.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
@@ -208,26 +207,25 @@ class Toolfetch
 
 			if page
 
-				product = page.links
+				product = page.search("h2 a")
 
 				product.each do |x|
-					if (x.to_s.include? input)
-						page = mechanize.click(x)
+					page = mechanize.click(x)
+					title = page.title.split(" ")
 
+					if title[1] == input #this is going to break --- be aware
 						price = page.at(".price").text.strip
-
 						price = price.gsub(/[$]/, "").gsub(/[,]/, "")
 
-
 						open("csv/toolfetch.csv", "a") do |csv|
-							csv << "Toolfetch"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << price
-							csv << "\n"
+							csv << "Toolfetch, " + input + "," + price + "\n"
 						end
 					end
+
+				end
+			else
+				open("csv/toolfetch.csv", "a") do |csv|
+					csv << "Toolfetch, " + input + "," + "0.00" + "\n"
 				end
 			end
 		end
