@@ -268,6 +268,19 @@ class Zorinmaterial
 
 				viewproduct = page.search(".products-list .product-item .body .title a:nth-last-child(1)")
 
+
+				if viewproduct.empty?
+					open('csv/zorinmaterial.csv', 'a') do |csv|
+						csv <<  "Zorinmaterial"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << "0.00"
+						csv << "\n"
+					end
+				end
+
+
 				viewproduct.each do |x|
 					if !(x.to_s.include? input + "-")
 						page = mechanize.click(x)
