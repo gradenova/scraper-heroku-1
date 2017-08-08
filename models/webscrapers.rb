@@ -34,12 +34,7 @@ class HOFequipment
 				end
 			else
 	        	productLink.each do |thisLink|
-					#loops through every product on the page and get the title
-					#compares the title to the individualItem, which is the SKU number
-					#if the individualItem + "-" is included in the title, eg(Wp-4848-48BB when the search term is WP-4848) then we know to exclude it
-					#when the individualItem does NOT include that, we click it because that is the correct one
-					#this is very messy and desperately needs to be refactored
-	            	if !(thisLink.at(".photoClass")["title"].include? individualItem + "-")
+
 	                    page = mechanize.click(thisLink)
 
 	                    price = page.at(".item-price").text.strip
@@ -80,7 +75,7 @@ class HOFequipment
                                 csv << "HOFequipment," + individualItem + "," + price + "\n"
                             end
 	                    end
-		            end
+
 		        end
 			end
 		end
