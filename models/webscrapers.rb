@@ -35,46 +35,46 @@ class HOFequipment
 			else
 	        	productLink.each do |thisLink|
 
-	                    page = mechanize.click(thisLink)
+                    page = mechanize.click(thisLink)
 
-	                    price = page.at(".item-price").text.strip
-	                    table = page.at("table")
+                    price = page.at(".item-price").text.strip
+                    table = page.at("table")
 
-						#checks to see if the information is in a table
-	                    if page.at(".chartPersonalization")
+					#checks to see if the information is in a table
+                    if page.at(".chartPersonalization")
 
-							#table_data is an array with every individual cell as an item
-	                        table_data = table.search('tr').map do |row|
-	                            row.search('th, td').map { |cell| cell.text.strip }
-	                        end
+						#table_data is an array with every individual cell as an item
+                        table_data = table.search('tr').map do |row|
+                            row.search('th, td').map { |cell| cell.text.strip }
+                        end
 
-	                        table_data.each do |row|
-	                            row.each do |x|
-	                                if x == individualItem
-										#grabs price, row[-2] = price
-	                                    price = row[-2]
+                        table_data.each do |row|
+                            row.each do |x|
+                                if x == individualItem
+									#grabs price, row[-2] = price
+                                    price = row[-2]
 
-										#clean up price, and takes away commas, parentetheses, dollar sign
-	                                    price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
+									#clean up price, and takes away commas, parentetheses, dollar sign
+                                    price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
 
 
-	                                    open("csv/hofequipment.csv", "a") do |csv|
-	                                        csv << "HOFequipment," + individualItem + "," + price + "\n"
-	                                    end
+                                    open("csv/hofequipment.csv", "a") do |csv|
+                                        csv << "HOFequipment," + individualItem + "," + price + "\n"
+                                    end
 
-	                                end
-	                            end
-	                        end
-
-						#if not in a table, it grabs the price
-	                    elsif page.at(".item-price")
-							#clean up price, and takes away commas, parentetheses, dollar sign
-                            price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
-
-                            open("csv/hofequipment.csv", "a") do |csv|
-                                csv << "HOFequipment," + individualItem + "," + price + "\n"
+                                end
                             end
-	                    end
+                        end
+
+					#if not in a table, it grabs the price
+                    elsif page.at(".item-price")
+						#clean up price, and takes away commas, parentetheses, dollar sign
+                        price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
+
+                        open("csv/hofequipment.csv", "a") do |csv|
+                            csv << "HOFequipment," + individualItem + "," + price + "\n"
+                        end
+                    end
 
 		        end
 			end
@@ -116,18 +116,15 @@ class Industrialsafety
 
 				if product.empty?
 					open("csv/industrialsafety.csv", "a") do |csv|
-						csv << "Industrial Safety"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
+						csv << "Industrial Safety," + input + "," + "0.00" + "\n"
 					end
 				end
 
 
                 product.each do |individualProduct|
 
+					#basically makes selection faster
+					#will
 					if !(individualProduct.at("a.v-product__img")["title"].include? input + "-")
 
 						array = individualProduct.at("a.v-product__img")["title"].split(" ")
@@ -142,12 +139,7 @@ class Industrialsafety
 								price.slice! "Our Price: "
 
 								open("csv/industrialsafety.csv", "a") do |csv|
-									csv << "Industrial Safety"
-									csv << ","
-									csv << input
-									csv << ","
-									csv << price
-									csv << "\n"
+									csv << "Industrial Safety," + input + "," + price + "\n"
 								end
 							end
 	                	end
@@ -250,12 +242,7 @@ class Zorinmaterial
 
 				if viewproduct.empty?
 					open('csv/zorinmaterial.csv', 'a') do |csv|
-						csv <<  "Zorinmaterial"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
+						csv <<  "Zorinmaterial," + input +  "," + "0.00" + "\n"
 					end
 				end
 
@@ -268,12 +255,7 @@ class Zorinmaterial
 
 
 						open('csv/zorinmaterial.csv', 'a') do |csv|
-							csv <<  "Zorinmaterial"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << price
-							csv << "\n"
+							csv <<  "Zorinmaterial," + input +  "," + price + "\n"
 						end
 					end
 				end
@@ -318,11 +300,7 @@ class GlobalIndustrial
 
 				if price.empty?
 					open("csv/globalindustrial.csv", "a") do |csv|
-						csv << "Global Industrial,"
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
+						csv << "Global Industrial," +  input + "," + "0.00" + "\n"
 					end
 				end
 
@@ -337,11 +315,7 @@ class GlobalIndustrial
 							newprice = newprice.text.strip.gsub(/\,/, '')
 
 							open("csv/globalindustrial.csv", "a") do |csv|
-								csv << "Global Industrial,"
-								csv << x.text.strip
-								csv << ","
-								csv << newprice
-								csv << "\n"
+								csv << "Global Industrial," +  input + "," + newprice + "\n"
 							end
 						end
 					end
@@ -388,12 +362,7 @@ class OpenTip
 
 					if product.empty?
 						open("csv/opentip.csv", "a") do |csv|
-							csv << "OpenTip"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << "0.00"
-							csv << "\n"
+							csv << "OpenTip," +  input + "," + "0.00" + "\n"
 						end
 					end
 
@@ -403,12 +372,7 @@ class OpenTip
 						if modelNumber == input
 
 							open("csv/opentip.csv", "a") do |csv|
-								csv << "OpenTip"
-								csv << ","
-								csv << modelNumber
-								csv << ","
-								csv << x.at(".usedNewPrice").text.strip.gsub(/[,]/, "").gsub(/[$]/, "")
-								csv << "\n"
+								csv << "OpenTip," +  input + "," + x.at(".usedNewPrice").text.strip.gsub(/[,]/, "").gsub(/[$]/, "") + "\n"
 							end
 						end
 					end
@@ -429,70 +393,53 @@ class Webstaurantstore
 			csv.truncate(0)
 		end
 
-			event = event.gsub(/\s+/, '')
+		myarray = event.gsub(/\s+/, '').split(",")
 
-			myarray = event.split(",")
+		myarray.each do |input|
 
-			myarray.each do |input|
+			mechanize = Mechanize.new
 
-				mechanize = Mechanize.new
+			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-				mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			page = mechanize.get("https://www.webstaurantstore.com/")
 
-				page = mechanize.get("https://www.webstaurantstore.com/")
+			sleep(rand(0..3))
 
-				sleep(rand(0..3))
+			if page
+				search_form = page.form
 
-				if page
-					search_form = page.form
+				search_form['searchval'] = input
 
-					search_form['searchval'] = input
+				page = search_form.submit
 
-					page = search_form.submit
+				price = page.search("div.details a")
 
-					price = page.search("div.details a")
-
-					if price.empty?
-						open('csv/webstaurantstore.csv', 'a') do |csv|
-							csv <<  "Webstaurant"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << "0.00"
-							csv << "\n"
-						end
-					end
-
-					price.each do |x|
-						page = mechanize.click(x)
-						mypage = page.at(".mfr-number")
-
-						if mypage == input
-							price = page.at("p.price span")
-
-							open('csv/webstaurantstore.csv', 'a') do |csv|
-								csv <<  "Webstaurant"
-								csv << ","
-								csv << input
-								csv << ","
-								csv << price
-								csv << "\n"
-							end
-
-						end
-					end
-				else
-
+				if price.empty?
 					open('csv/webstaurantstore.csv', 'a') do |csv|
-						csv <<  "Webstaurant"
-						csv << ","
-						csv << input
-						csv << ","
-						csv << "0.00"
-						csv << "\n"
+						csv <<  "Webstaurant," +  input + "," + price + "\n"
 					end
 				end
+
+				price.each do |x|
+					page = mechanize.click(x)
+					mypage = page.at(".mfr-number")
+
+					if mypage == input
+						price = page.at("p.price span")
+
+						open('csv/webstaurantstore.csv', 'a') do |csv|
+							csv <<  "Webstaurant," +  input + "," + price + "\n"
+						end
+
+					end
+				end
+			else
+
+				open('csv/webstaurantstore.csv', 'a') do |csv|
+					csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
+				end
 			end
+		end
 	end
 end
 
@@ -671,6 +618,7 @@ class Industrialproducts
 					table = page.search(".data-table tbody tr td a")
 
 					table.each do |x|
+						#if the input is a substring of another model number, it should return false
 						if !(x.text.include? input + "-") && (x.text.include? input)
 							page = mechanize.click(x)
 							price = page.at("span.map").text
@@ -709,9 +657,7 @@ class Radwell
 
 		foundprices = []
 
-		query = query.gsub(/\s+/, '')
-
-		myarray = query.split(",")
+		myarray = query.gsub(/\s+/, '').split(",")
 
 		myarray.each do |input|
 
@@ -730,9 +676,6 @@ class Radwell
 
 				if price
 
-					foundprices.push(input)
-					foundprices.push(price)
-
 					open('csv/radwell.csv', 'a') do |csv|
 						csv <<  "Radwell"
 						csv << ","
@@ -741,11 +684,7 @@ class Radwell
 						csv << price.text.strip
 						csv << "\n"
 					end
-
 				else
-
-					foundprices.push(input)
-					foundprices.push("0.00")
 
 					open('csv/radwell.csv', 'a') do |csv|
 						csv <<  "Radwell"
@@ -755,11 +694,9 @@ class Radwell
 						csv << "0.00"
 						csv << "\n"
 					end
+
 				end
 			else
-
-				foundprices.push(input)
-				foundprices.push("0.00")
 
 				open('csv/radwell.csv', 'a') do |csv|
 					csv <<  "Radwell"
@@ -769,10 +706,9 @@ class Radwell
 					csv << price
 					csv << "\n"
 				end
+
 			end
 		end
-
-		return foundprices
 	end
 end
 
@@ -788,57 +724,46 @@ class Guardian
 		 open("csv/guardiancatalog.csv", "w") do |csv|
              csv.truncate(0)
          end
-            event = event.gsub(/\s+/, '')
-            myarray = event.split(",")
-            foundprices = []
 
-            myarray.each do |input|
+        event = event.gsub(/\s+/, '')
+        myarray = event.split(",")
+        foundprices = []
 
-                mechanize = Mechanize.new
+        myarray.each do |input|
 
-                #grabs website
-                page = mechanize.get("http://www.guardiancatalog.com/default.asp")
+            mechanize = Mechanize.new
 
-                #grabs first form on website, inputs model number and submits
-                search_form = page.form
-                search_form['Search'] = input
-				page = search_form.submit
+            #grabs website
+            page = mechanize.get("http://www.guardiancatalog.com/default.asp")
 
-                #grabs url of first product, clicks and grabs price
-				url = page.at("a.productnamecolor")
+            #grabs first form on website, inputs model number and submits
+            search_form = page.form
+            search_form['Search'] = input
+			page = search_form.submit
 
-                if url
-                    page = mechanize.click(url)
-                    price = page.at(".product_saleprice span")
+            #grabs url of first product, clicks and grabs price
+			url = page.at("a.productnamecolor")
 
-                    if price
-                        price = price.text.strip
-                        price = price.gsub(/[()]/, "")
-                        price = price.gsub(/[$]/, "")
-                        price = price.gsub(/[,]/, "")
-                        foundprices.push(input)
-                        foundprices.push(price)
+            if url
+                page = mechanize.click(url)
+                price = page.at(".product_saleprice span")
+
+                if price
+                    price = price.text.strip
+                    price = price.gsub(/[()]/, "")
+                    price = price.gsub(/[$]/, "")
+                    price = price.gsub(/[,]/, "")
+                    foundprices.push(input)
+                    foundprices.push(price)
 
 
-                        open("csv/guardiancatalog.csv", "a") do |csv|
-                            csv << "Guardian Catalog"
-                            csv << ","
-                            csv << input
-                            csv << ","
-                            csv << price
-                            csv << "\n"
-                        end
-                    else
-
-                        open("csv/guardiancatalog.csv", "a") do |csv|
-                            csv << "Guardian Catalog"
-                            csv << ","
-                            csv << input
-                            csv << ","
-                            csv << "0.00"
-                            csv << "\n"
-                        end
-
+                    open("csv/guardiancatalog.csv", "a") do |csv|
+                        csv << "Guardian Catalog"
+                        csv << ","
+                        csv << input
+                        csv << ","
+                        csv << price
+                        csv << "\n"
                     end
                 else
 
@@ -852,7 +777,19 @@ class Guardian
                     end
 
                 end
+            else
+
+                open("csv/guardiancatalog.csv", "a") do |csv|
+                    csv << "Guardian Catalog"
+                    csv << ","
+                    csv << input
+                    csv << ","
+                    csv << "0.00"
+                    csv << "\n"
+                end
+
             end
+        end
     end
 end
 
@@ -869,64 +806,64 @@ class Bizchair
 		open("csv/bizchair.csv", "w") do |csv|
           csv.truncate(0)
         end
-            event = event.gsub(/\s+/, '')
-            myarray = event.split(",")
-            foundprices = []
 
-            myarray.each do |input|
+        event = event.gsub(/\s+/, '')
+        myarray = event.split(",")
+        foundprices = []
 
-                mechanize = Mechanize.new
+        myarray.each do |input|
 
-                #grabs website
-                page = mechanize.get("http://www.bizchair.com/")
+            mechanize = Mechanize.new
 
-                search_form = page.form
+            #grabs website
+            page = mechanize.get("http://www.bizchair.com/")
 
-                search_form["q"] = input
+            search_form = page.form
 
-                page = search_form.submit
+            search_form["q"] = input
 
-                if page
+            page = search_form.submit
 
-                    price = page.at(".sale-price").text.strip
+            if page
 
-                    if price
+                price = page.at(".sale-price").text.strip
 
-                        price = price.gsub("$", "")
-						price.slice! "Your Price:"
+                if price
 
-                        open("csv/bizchair.csv", "a") do |csv|
-                            csv << "Bizchair,"
-                            csv << price
-                            csv << ","
-                            csv << input
-                            csv << "\n"
-                        end
+                    price = price.gsub("$", "")
+					price.slice! "Your Price:"
 
-                    else
-
-	                    open("csv/bizchair.csv", "a") do |csv|
-	                        csv << "Bizchair,"
-	                        csv << "0.00"
-	                        csv << ","
-	                        csv << input
-	                        csv << "\n"
-	                    end
-
+                    open("csv/bizchair.csv", "a") do |csv|
+                        csv << "Bizchair,"
+                        csv << price
+                        csv << ","
+                        csv << input
+                        csv << "\n"
                     end
                 else
 
-	                open("csv/bizchair.csv", "a") do |csv|
-	                    csv << "Bizchair,"
-	                    csv << "0.00"
-	                    csv << ","
-	                    csv << input
-	                    csv << "\n"
-	                end
+                    open("csv/bizchair.csv", "a") do |csv|
+                        csv << "Bizchair,"
+                        csv << "0.00"
+                        csv << ","
+                        csv << input
+                        csv << "\n"
+                    end
 
+                end
+            else
+
+                open("csv/bizchair.csv", "a") do |csv|
+                    csv << "Bizchair,"
+                    csv << "0.00"
+                    csv << ","
+                    csv << input
+                    csv << "\n"
                 end
 
             end
+
+        end
     end
 end
 
@@ -944,67 +881,66 @@ class Kimco
          csv.truncate(0)
         end
 
-            event = event.gsub(/\s+/, '')
-            myarray = event.split(",")
-            foundprices = []
+        event = event.gsub(/\s+/, '')
+        myarray = event.split(",")
+        foundprices = []
 
-            myarray.each do |input|
+        myarray.each do |input|
 
-                mechanize = Mechanize.new
+            mechanize = Mechanize.new
 
-                mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-                #grabs website
-                page = mechanize.get("https://gokimco.com/")
+            mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            #grabs website
+            page = mechanize.get("https://gokimco.com/")
 
-                search_form = page.form
+            search_form = page.form
 
-                search_form["q"] = input
+            search_form["q"] = input
 
-                page = search_form.submit
+            page = search_form.submit
 
-                if page
-					sleep(2)
-                    price = page.at(".price")
+            if page
+				sleep(2)
+                price = page.at(".price")
 
-                    if price
+                if price
 
-                        price = price.text.strip
-                        price = price.gsub("$", "")
+                    price = price.text.strip
+                    price = price.gsub("$", "")
 
-                        open("kimco.csv", "a") do |csv|
-                            csv << "Kimco,"
-                            csv << price
-                            csv << ","
-                            csv << input
-                            csv << "\n"
-
-                        end
-
-                    else
-
-	                    open("kimco.csv", "a") do |csv|
-	                        csv << "Kimco,"
-	                        csv << "0.00"
-	                        csv << ","
-	                        csv << input
-	                        csv << "\n"
-
-	                    end
+                    open("kimco.csv", "a") do |csv|
+                        csv << "Kimco,"
+                        csv << price
+                        csv << ","
+                        csv << input
+                        csv << "\n"
 
                     end
+
                 else
 
-	                open("kimco.csv", "a") do |csv|
-	                    csv << "Kimco,"
-	                    csv << "0.00"
-	                    csv << ","
-	                    csv << input
-	                    csv << "\n"
+                    open("kimco.csv", "a") do |csv|
+                        csv << "Kimco,"
+                        csv << "0.00"
+                        csv << ","
+                        csv << input
+                        csv << "\n"
 
-	                end
+                    end
+
+                end
+            else
+
+                open("kimco.csv", "a") do |csv|
+                    csv << "Kimco,"
+                    csv << "0.00"
+                    csv << ","
+                    csv << input
+                    csv << "\n"
 
                 end
 
             end
+        end
     end
 end
