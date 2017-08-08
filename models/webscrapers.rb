@@ -209,6 +209,12 @@ class Toolfetch
 
 				product = page.search("h2 a")
 
+				if product.empty?
+					open("csv/toolfetch.csv", "a") do |csv|
+						csv << "Toolfetch, " + input + "," + "0.00" + "\n"
+					end
+				end
+
 				product.each do |x|
 					page = mechanize.click(x)
 					title = page.title.split(" ")
@@ -221,11 +227,6 @@ class Toolfetch
 							csv << "Toolfetch, " + input + "," + price + "\n"
 						end
 					end
-
-				end
-			else
-				open("csv/toolfetch.csv", "a") do |csv|
-					csv << "Toolfetch, " + input + "," + "0.00" + "\n"
 				end
 			end
 		end
