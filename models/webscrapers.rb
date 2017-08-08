@@ -406,6 +406,18 @@ class OpenTip
                 if page
 
                     product = page.search(".data")
+
+					if product.empty?
+						open("csv/opentip.csv", "a") do |csv|
+							csv << "OpenTip"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << "0.00"
+							csv << "\n"
+						end
+					end
+
 					product.each do |x|
 						modelNumber = x.at(".products_sku").text.strip.gsub("SKU: ETI-", "")
 
@@ -460,6 +472,17 @@ class Webstaurantstore
 					page = search_form.submit
 
 					price = page.search("div.details a")
+
+					if price.empty?
+						open('csv/webstaurantstore.csv', 'a') do |csv|
+							csv <<  "Webstaurant"
+							csv << ","
+							csv << input
+							csv << ","
+							csv << "0.00"
+							csv << "\n"
+						end
+					end
 
 					price.each do |x|
 						page = mechanize.click(x)
@@ -527,6 +550,18 @@ class Ckitchen
 				page = search_form.submit
 
 				item = page.search(".products-grid-item .desc-zone a")
+
+				if item.empty?
+					open('csv/webstaurantstore.csv', 'a') do |csv|
+						csv <<  "Webstaurant"
+						csv << ","
+						csv << input
+						csv << ","
+						csv << "0.00"
+						csv << "\n"
+					end
+				end
+
 
 				item.each do |x|
 					page = mechanize.click(x)
