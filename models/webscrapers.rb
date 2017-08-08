@@ -337,6 +337,16 @@ class GlobalIndustrial
 
 				price = page.search(".info .title a")
 
+				if price.empty?
+					open("csv/globalindustrial.csv", "a") do |csv|
+						csv << "Global Industrial,"
+						csv << input
+						csv << ","
+						csv << "0.00"
+						csv << "\n"
+					end
+				end
+
 				price.each do |link|
 					page = mechanize.click(link)
 
