@@ -16,8 +16,7 @@ class HOFequipment
 
 	    mechanize = Mechanize.new
 
-	    myQuery = event.split(",")
-	    event = event.gsub(/\s+/, '')
+	    myQuery = event.gsub(/\s+/, '').split(",")
 
 	    myQuery.each do |individualItem|
 	        page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + individualItem)
@@ -31,12 +30,7 @@ class HOFequipment
 			#if there are no products returned
 			if productLink.empty?
 				open("csv/hofequipment.csv", "a") do |csv|
-					csv << "HOFequipment"
-					csv << ","
-					csv << individualItem
-					csv << ","
-					csv << "0.00"
-					csv << "\n"
+					csv << "HOFequipment," + individualItem + ",0.00" + "\n"
 				end
 			else
 	        	productLink.each do |thisLink|
@@ -70,12 +64,7 @@ class HOFequipment
 
 
 	                                    open("csv/hofequipment.csv", "a") do |csv|
-	                                        csv << "HOFequipment"
-	                                        csv << ","
-	                                        csv << individualItem
-	                                        csv << ","
-	                                        csv << price
-	                                        csv << "\n"
+	                                        csv << "HOFequipment," + individualItem + "," + price + "\n"
 	                                    end
 
 	                                end
@@ -88,12 +77,7 @@ class HOFequipment
                             price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
 
                             open("csv/hofequipment.csv", "a") do |csv|
-                                csv << "HOFequipment"
-                                csv << ","
-                                csv << individualItem
-                                csv << ","
-                                csv << price
-                                csv << "\n"
+                                csv << "HOFequipment," + individualItem + "," + price + "\n"
                             end
 	                    end
 		            end
