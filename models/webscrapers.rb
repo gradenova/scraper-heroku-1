@@ -140,14 +140,34 @@ class Industrialsafety
         arrayindustrialsafety(event)
     end
 
+	def stripQuery(string)
+		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
+
+		arr = string.map do |x|
+			x.gsub(/\s+/, "")
+		end
+
+		(0..3).each do |x|
+			arr.shift()
+		end
+
+		(0..2).each do |x|
+			arr.pop()
+		end
+
+		arr = arr.uniq
+
+		arr.shift()
+
+		return arr
+	end
+
 	def arrayindustrialsafety(event)
 		open("csv/industrialsafety.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
-		event = event.gsub(/\s+/, '')
-
-		myarray = event.split(",")
+		myarray = stripQuery(event)
 
 			myarray.each do |input|
 
