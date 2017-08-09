@@ -1,6 +1,7 @@
 require "sucker_punch"
 require "mechanize"
 
+
 class HOFequipment
 	include SuckerPunch::Job
 
@@ -8,74 +9,124 @@ class HOFequipment
 		arrayhofequipment(event)
 	end
 
+	def stripQuery(string)
+		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
+
+	    arr = string.map do |x|
+	    	x.gsub(/\s+/, "")
+	    end
+
+	    (0..3).each do |x|
+      		arr.shift()
+	    end
+
+	    (0..2).each do |x|
+	    	arr.pop()
+	    end
+
+	    arr = arr.uniq
+
+	    arr.shift()
+
+	    return arr
+	end
+
 	def arrayhofequipment(event)
 		open("csv/hofequipment.csv", "w") do |csv|
 	        csv.truncate(0)
 	    end
 
-
 	    mechanize = Mechanize.new
 
-	    myQuery = event.gsub(/\s+/, '').split(",")
+		myQuery = stripQuery(event)
 
 	    myQuery.each do |individualItem|
 	        page = mechanize.get("http://hofequipment.com/cart.php?m=search_results&search=" + individualItem)
 
 			puts "hofequipment has been gotten"
+			puts individualItem
 			#need to better throttle requests
 			sleep(rand(0..3))
 
 	        productLink = page.search(".grid__item a.thumb")
 
-			#if there are no products returned
+
 			if productLink.empty?
 				open("csv/hofequipment.csv", "a") do |csv|
-					csv << "HOFequipment," + individualItem + ",0.00" + "\n"
-				end
-			else
+					csv << "HOFequipment,"
+					csv << individualItem
+					csv << ","
+					csv << "0.00"
+					csv << "\n"
+				 end
+
+			 else
 	        	productLink.each do |thisLink|
 
-                    page = mechanize.click(thisLink)
+					#loops through every product on the page and get the title		 +
+					#compares the title to the individualItem, which is the SKU number
+					#if the individualItem + "-" is included in the title, eg(Wp-4848-48BB when the search term is WP-4848) then we know to exclude it
+					#when the individualItem does NOT include that, we click it because that is the correct one
+					#this is very messy and desperately needs to be refactored
+					if !(thisLink.at(".photoClass")["title"].include? individualItem + "-")
+  	                    page = mechanize.click(thisLink)
 
-                    price = page.at(".item-price").text.strip
-                    table = page.at("table")
+  	                    price = page.at(".item-price").text.strip
+ 	                    table = page.at("table")
 
-					#checks to see if the information is in a table
-                    if page.at(".chartPersonalization")
+ 						#checks to see if the information is in a table
+ 	                    if page.at(".chartPersonalization")
 
-						#table_data is an array with every individual cell as an item
-                        table_data = table.search('tr').map do |row|
-                            row.search('th, td').map { |cell| cell.text.strip }
-                        end
+ 							#table_data is an array with every individual cell as an item
+ 	                        table_data = table.search('tr').map do |row|
+ 	                            row.search('th, td').map { |cell| cell.text.strip }
+ 	                        end
 
-                        table_data.each do |row|
-                            row.each do |x|
-                                if x == individualItem
-									#grabs price, row[-2] = price
-                                    price = row[-2]
+ 	                        table_data.each do |row|
+ 	                            row.each do |x|
+ 	                                if x == individualItem
+ 										#grabs price, row[-2] = price
+ 	                                    price = row[-2]
 
-									#clean up price, and takes away commas, parentetheses, dollar sign
-                                    price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
+ 										#clean up price, and takes away commas, parentetheses, dollar sign
+ 	                                    price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
 
 
-                                    open("csv/hofequipment.csv", "a") do |csv|
-                                        csv << "HOFequipment," + individualItem + "," + price + "\n"
-                                    end
+ 	                                    open("csv/hofequipment.csv", "a") do |csv|
+ 	                                        csv << "HOFequipment,"
+											csv << individualItem
+											csv << ","
+											csv << price
+											csv << "\n"
+ 	                                    end
 
-                                end
-                            end
-                        end
+ 	                                end
+ 	                            end
+ 	                        end
 
-					#if not in a table, it grabs the price
-                    elsif page.at(".item-price")
-						#clean up price, and takes away commas, parentetheses, dollar sign
-                        price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
+ 						#if not in a table, it grabs the price
+ 	                    elsif page.at(".item-price")
+ 							#clean up price, and takes away commas, parentetheses, dollar sign
+                             price = price.gsub(/[()]/, "").gsub(/[$]/, "").gsub(/[,]/, "")
 
-                        open("csv/hofequipment.csv", "a") do |csv|
-                            csv << "HOFequipment," + individualItem + "," + price + "\n"
-                        end
-                    end
+                             open("csv/hofequipment.csv", "a") do |csv|
+								 csv << "HOFequipment,"
+								 csv << individualItem
+								 csv << ","
+								 csv << price
+								 csv << "\n"
+                              end
 
+						else
+							open("csv/hofequipment.csv", "a") do |csv|
+								csv << "HOFequipment,"
+								csv << individualItem
+								csv << ","
+								csv << "0.00"
+								csv << "\n"
+							 end
+  	                    end
+ 		            end
 		        end
 			end
 		end
