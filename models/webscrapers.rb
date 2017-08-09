@@ -228,18 +228,47 @@ class Toolfetch
         arraytoolfetch(event)
     end
 
+	def stripQuery(string)
+		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
+
+	    arr = string.map do |x|
+	    	x.gsub(/\s+/, "")
+	    end
+
+	    (0..3).each do |x|
+      		arr.shift()
+	    end
+
+	    (0..2).each do |x|
+	    	arr.pop()
+	    end
+
+	    arr = arr.uniq
+
+	    arr.shift()
+
+	    return arr
+	end
+
 	def arraytoolfetch(event)
 		open("csv/toolfetch.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
-		event = event.gsub(/\s+/, '')
+		puts "destroyed csv"
 
-		myarray = event.split(",")
+		myarray = stripQuery(event)
+
+		puts "made array"
+
+		blacklisted = [".pdf"]
 
 		myarray.each do |input|
 
+			puts "looping"
+			puts input
 			mechanize = Mechanize.new
+			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 			url = "http://www.bing.com/search?q=site:toolfetch.com+" + input
 
@@ -249,7 +278,7 @@ class Toolfetch
 
 			if page
 
-				product = page.search("h2 a")
+				product = page.search("li.b_algo h2 a")
 
 				if product.empty?
 					open("csv/toolfetch.csv", "a") do |csv|
@@ -259,14 +288,20 @@ class Toolfetch
 
 				product.each do |x|
 					page = mechanize.click(x)
-					title = page.title.split(" ")
 
-					if title[1] == input #this is going to break --- be aware
-						price = page.at(".price").text.strip
-						price = price.gsub(/[$]/, "").gsub(/[,]/, "")
+					if page
+						title = page.title.split(" ")
+						puts title
 
-						open("csv/toolfetch.csv", "a") do |csv|
-							csv << "Toolfetch, " + input + "," + price + "\n"
+						if title[1] == input #this is going to break --- be aware
+							puts "getting price"
+
+							price = page.at(".price").text.strip
+							price = price.gsub(/[$]/, "").gsub(/[,]/, "")
+
+							open("csv/toolfetch.csv", "a") do |csv|
+								csv << "Toolfetch, " + input + "," + price + "\n"
+							end
 						end
 					end
 				end
