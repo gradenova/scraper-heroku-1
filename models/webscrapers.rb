@@ -546,19 +546,44 @@ class OpenTip
     end
 end
 
-class Webstaurantstore
+#VERY difficult to scrape
+#class Webstaurantstore
 	include SuckerPunch::Job
 
     def perform(event)
         arraywebstaurantstore(event)
     end
 
+	def stripQuery(string)
+		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
+
+		arr = string.map do |x|
+			x.gsub(/\s+/, "")
+		end
+
+		(0..3).each do |x|
+			arr.shift()
+		end
+
+		(0..2).each do |x|
+			arr.pop()
+		end
+
+		arr = arr.uniq
+
+		arr.shift()
+
+		return arr
+	end
+
 	def arraywebstaurantstore(event)
 		open("csv/webstaurantstore.csv", "w") do |csv|
 			csv.truncate(0)
 		end
 
-		myarray = event.gsub(/\s+/, '').split(",")
+		myarray = stripQuery(event)
+
+		puts myarray
 
 		myarray.each do |input|
 
@@ -581,25 +606,35 @@ class Webstaurantstore
 
 				if price.empty?
 					open('csv/webstaurantstore.csv', 'a') do |csv|
-						csv <<  "Webstaurant," +  input + "," + price + "\n"
+						csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
 					end
 				end
 
+				notfound = price.length
+				notfoundcount = 0
+				puts notfound
 				price.each do |x|
 					page = mechanize.click(x)
 					mypage = page.at(".mfr-number")
 
-					if mypage == input
+					if mypage.contains? == input
 						price = page.at("p.price span")
 
 						open('csv/webstaurantstore.csv', 'a') do |csv|
 							csv <<  "Webstaurant," +  input + "," + price + "\n"
 						end
 
+					else
+						notfoundcount += 1
+
+						if notfound == notfoundcount
+							open('csv/webstaurantstore.csv', 'a') do |csv|
+								csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
+							end
+						end
 					end
 				end
 			else
-
 				open('csv/webstaurantstore.csv', 'a') do |csv|
 					csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
 				end
@@ -620,9 +655,7 @@ class Ckitchen
 			csv.truncate(0)
 		end
 
-			event = event.gsub(/\s+/, '')
-
-			myarray = event.split(",")
+			myarray = stripQuery(event)
 
 			myarray.each do |input|
 
@@ -805,6 +838,9 @@ class Industrialproducts
 		end
 	end
 end
+
+
+
 #################################### not working
 
 #having difficulty - not completed
