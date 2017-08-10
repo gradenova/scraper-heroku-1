@@ -255,18 +255,11 @@ class Toolfetch
 			csv.truncate(0)
 		end
 
-		puts "destroyed csv"
-
 		myarray = stripQuery(event)
-
-		puts "made array"
-
-		blacklisted = [".pdf"]
 
 		myarray.each do |input|
 
-			puts "looping"
-			puts input
+
 			mechanize = Mechanize.new
 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
@@ -287,22 +280,26 @@ class Toolfetch
 				end
 
 				product.each do |x|
-					page = mechanize.click(x)
+					if x['href'].include? ".pdf"
+						puts x
+						puts "passed"
 
-					if page
-						title = page.title.split(" ")
-						puts title
+					else
+						page = mechanize.click(x)
 
-						if title[1] == input #this is going to break --- be aware
-							puts "getting price"
+							if page
+								title = page.title.split(" ")
 
-							price = page.at(".price").text.strip
-							price = price.gsub(/[$]/, "").gsub(/[,]/, "")
+								if title[1] == input #this is going to break --- be aware
 
-							open("csv/toolfetch.csv", "a") do |csv|
-								csv << "Toolfetch, " + input + "," + price + "\n"
+									price = page.at(".price").text.strip
+									price = price.gsub(/[$]/, "").gsub(/[,]/, "")
+
+									open("csv/toolfetch.csv", "a") do |csv|
+										csv << "Toolfetch, " + input + "," + price + "\n"
+									end
+								end
 							end
-						end
 					end
 				end
 			end
