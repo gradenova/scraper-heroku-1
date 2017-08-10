@@ -547,104 +547,126 @@ class OpenTip
 end
 
 #VERY difficult to scrape
-#class Webstaurantstore
-	include SuckerPunch::Job
+# class Webstaurantstore
+# 	include SuckerPunch::Job
+#
+#     def perform(event)
+#         arraywebstaurantstore(event)
+#     end
+#
+# 	def stripQuery(string)
+# 		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
+#
+# 		arr = string.map do |x|
+# 			x.gsub(/\s+/, "")
+# 		end
+#
+# 		(0..3).each do |x|
+# 			arr.shift()
+# 		end
+#
+# 		(0..2).each do |x|
+# 			arr.pop()
+# 		end
+#
+# 		arr = arr.uniq
+#
+# 		arr.shift()
+#
+# 		return arr
+# 	end
+#
+# 	def arraywebstaurantstore(event)
+# 		open("csv/webstaurantstore.csv", "w") do |csv|
+# 			csv.truncate(0)
+# 		end
+#
+# 		myarray = stripQuery(event)
+#
+# 		puts myarray
+#
+# 		myarray.each do |input|
+#
+# 			mechanize = Mechanize.new
+#
+# 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+#
+# 			page = mechanize.get("https://www.webstaurantstore.com/")
+#
+# 			sleep(rand(0..3))
+#
+# 			if page
+# 				search_form = page.form
+#
+# 				search_form['searchval'] = input
+#
+# 				page = search_form.submit
+#
+# 				price = page.search("div.details a")
+#
+# 				if price.empty?
+# 					open('csv/webstaurantstore.csv', 'a') do |csv|
+# 						csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
+# 					end
+# 				end
+#
+# 				notfound = price.length
+# 				notfoundcount = 0
+# 				puts notfound
+# 				price.each do |x|
+# 					page = mechanize.click(x)
+# 					mypage = page.at(".mfr-number")
+#
+# 					if mypage.contains? == input
+# 						price = page.at("p.price span")
+#
+# 						open('csv/webstaurantstore.csv', 'a') do |csv|
+# 							csv <<  "Webstaurant," +  input + "," + price + "\n"
+# 						end
+#
+# 					else
+# 						notfoundcount += 1
+#
+# 						if notfound == notfoundcount
+# 							open('csv/webstaurantstore.csv', 'a') do |csv|
+# 								csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
+# 							end
+# 						end
+# 					end
+# 				end
+# 			else
+# 				open('csv/webstaurantstore.csv', 'a') do |csv|
+# 					csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
+# 				end
+# 			end
+# 		end
+# 	end
+# end
 
-    def perform(event)
-        arraywebstaurantstore(event)
-    end
+class Ckitchen
+	include SuckerPunch::Job
 
 	def stripQuery(string)
 		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
 
-		arr = string.map do |x|
-			x.gsub(/\s+/, "")
-		end
+	    arr = string.map do |x|
+	    	x.gsub(/\s+/, "")
+	    end
 
-		(0..3).each do |x|
-			arr.shift()
-		end
+	    (0..3).each do |x|
+      		arr.shift()
+	    end
 
-		(0..2).each do |x|
-			arr.pop()
-		end
+	    (0..2).each do |x|
+	    	arr.pop()
+	    end
 
-		arr = arr.uniq
+	    arr = arr.uniq
 
-		arr.shift()
+	    arr.shift()
 
-		return arr
+	    return arr
 	end
-
-	def arraywebstaurantstore(event)
-		open("csv/webstaurantstore.csv", "w") do |csv|
-			csv.truncate(0)
-		end
-
-		myarray = stripQuery(event)
-
-		puts myarray
-
-		myarray.each do |input|
-
-			mechanize = Mechanize.new
-
-			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-			page = mechanize.get("https://www.webstaurantstore.com/")
-
-			sleep(rand(0..3))
-
-			if page
-				search_form = page.form
-
-				search_form['searchval'] = input
-
-				page = search_form.submit
-
-				price = page.search("div.details a")
-
-				if price.empty?
-					open('csv/webstaurantstore.csv', 'a') do |csv|
-						csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
-					end
-				end
-
-				notfound = price.length
-				notfoundcount = 0
-				puts notfound
-				price.each do |x|
-					page = mechanize.click(x)
-					mypage = page.at(".mfr-number")
-
-					if mypage.contains? == input
-						price = page.at("p.price span")
-
-						open('csv/webstaurantstore.csv', 'a') do |csv|
-							csv <<  "Webstaurant," +  input + "," + price + "\n"
-						end
-
-					else
-						notfoundcount += 1
-
-						if notfound == notfoundcount
-							open('csv/webstaurantstore.csv', 'a') do |csv|
-								csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
-							end
-						end
-					end
-				end
-			else
-				open('csv/webstaurantstore.csv', 'a') do |csv|
-					csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
-				end
-			end
-		end
-	end
-end
-
-class Ckitchen
-	include SuckerPunch::Job
 
     def perform(event)
         ckitchen(event)
@@ -656,6 +678,8 @@ class Ckitchen
 		end
 
 			myarray = stripQuery(event)
+
+			puts myarray
 
 			myarray.each do |input|
 
@@ -676,8 +700,9 @@ class Ckitchen
 				item = page.search(".products-grid-item .desc-zone a")
 
 				if item.empty?
-					open('csv/webstaurantstore.csv', 'a') do |csv|
-						csv <<  "Webstaurant"
+					puts "the are no prices --- computing... beep boop"
+					open('csv/ckitchen.csv', 'a') do |csv|
+						csv <<  "Ckitchen"
 						csv << ","
 						csv << input
 						csv << ","
@@ -688,19 +713,26 @@ class Ckitchen
 
 
 				item.each do |x|
+					puts "looping through items. this might take some time. have a coffee sam."
 					page = mechanize.click(x)
-					sku = page.at("div.product-sku").text
+					sku = page.at("div.product-sku")
 
-					if sku == input
-						price = page.at(".product-price .price-bold").text.gsub("$", "").gsub(",", "")
+					if !(sku.text)
+						puts "beep boop. no sku.text detected"
+					else
+						puts sku.text
+						if sku.text == input
+							price = page.at(".product-price .price-bold").text.gsub("$", "").gsub(",", "")
+							puts "price found... inputting.... beep boop"
 
-						open('csv/ckitchen.csv', 'a') do |csv|
-							csv <<  "Ckitchen"
-							csv << ","
-							csv << input
-							csv << ","
-							csv << price
-							csv << "\n"
+							open('csv/ckitchen.csv', 'a') do |csv|
+								csv <<  "Ckitchen"
+								csv << ","
+								csv << input
+								csv << ","
+								csv << price
+								csv << "\n"
+							end
 						end
 					end
 				end
@@ -712,6 +744,28 @@ end
 class HotelRestaurant
 	include SuckerPunch::Job
 
+	def stripQuery(string)
+		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
+
+	    arr = string.map do |x|
+	    	x.gsub(/\s+/, "")
+	    end
+
+	    (0..3).each do |x|
+      		arr.shift()
+	    end
+
+	    (0..2).each do |x|
+	    	arr.pop()
+	    end
+
+	    arr = arr.uniq
+
+	    arr.shift()
+
+	    return arr
+	end
+
     def perform(event)
         hotelRestaurantSupply(event)
     end
@@ -721,9 +775,7 @@ class HotelRestaurant
 			csv.truncate(0)
 		end
 
-		event = event.gsub(/\s+/, '')
-
-		myarray = event.split(",")
+		myarray = stripQuery(event)
 
 		myarray.each do |input|
 
