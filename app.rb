@@ -13,7 +13,6 @@ get "/search" do
     erb :search
 end
 
-
 post "/search" do
     @query = params[:query]
 
@@ -85,7 +84,6 @@ end
 get "/csv/hotelrestaurant" do
 	send_file('csv/hotelrestaurant.csv', :filename => "csv/hotelrestaurant.csv")
 end
-
 
 get "/csv/hofequipment" do
 	send_file('csv/hofequipment.csv', :filename => "csv/hofequipment.csv")

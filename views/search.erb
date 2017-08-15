@@ -115,7 +115,7 @@
 	</div>
 	<div class="row pt-3">
 		<form>
-			<input type="text" id="myvalue">
+			<textarea rows="8" cols="80" type="text" id="myvalue"></textarea>
 			<input type="submit" id="submission">
 		</form>
 
@@ -260,34 +260,30 @@
 </body>
 </html>
 <script type="text/javascript">
-	var getInfo = document.getElementById("submission").addEventListener("click", function(e){
+document.getElementById("submission").addEventListener("click", function(e){
+  e.preventDefault();
 
-		e.preventDefault();
+  var string = document.getElementById("myvalue").value;
+  string = string.replace("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").replace(/\$(\d+)\.(\d+)/, "").replace(/\t/, "").split("\n")
 
-		var myLength = document.getElementById("myvalue").value;
+  var sum = 0;
 
-		myLength = myLength.split(",");
+  for(var i = 0; i < string.length; i++){
+    sum += Math.round((Math.random() * 3) + 1, 2);
+  }
 
-		var sum = 0;
+  lengthOfTime(sum);
 
-			for(var i = 0; i < myLength.length; i++){
-				sum += Math.round((Math.random() * 3) + 1, 2);
-			}
+  document.getElementById("myvalue").value = "";
 
-			lengthOfTime(sum)
+})
 
-		document.getElementById("myvalue").value = "";
-
-	});
-
-
-
-	function lengthOfTime(sum){
-		if(sum > 60){
-			//console.log(sum/60, 3);
-			document.getElementsByClassName("info")[0].innerHTML = "About " + Math.round(sum/60, 2) + " minutes to finish";
-		} else {
-			document.getElementsByClassName("info")[0].innerHTML = "About " + sum + " seconds to finish";
-		}
+function lengthOfTime(sum){
+	if(sum > 60){
+		//console.log(sum/60, 3);
+		document.getElementsByClassName("info")[0].innerHTML = "About " + Math.round(sum/60, 2) + " minutes to finish";
+	} else {
+		document.getElementsByClassName("info")[0].innerHTML = "About " + sum + " seconds to finish";
 	}
+}
 </script>

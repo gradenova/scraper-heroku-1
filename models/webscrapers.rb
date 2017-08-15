@@ -547,101 +547,101 @@ class OpenTip
 end
 
 #VERY difficult to scrape
-# class Webstaurantstore
-# 	include SuckerPunch::Job
-#
-#     def perform(event)
-#         arraywebstaurantstore(event)
-#     end
-#
-# 	def stripQuery(string)
-# 		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
-#
-# 		arr = string.map do |x|
-# 			x.gsub(/\s+/, "")
-# 		end
-#
-# 		(0..3).each do |x|
-# 			arr.shift()
-# 		end
-#
-# 		(0..2).each do |x|
-# 			arr.pop()
-# 		end
-#
-# 		arr = arr.uniq
-#
-# 		arr.shift()
-#
-# 		return arr
-# 	end
-#
-# 	def arraywebstaurantstore(event)
-# 		open("csv/webstaurantstore.csv", "w") do |csv|
-# 			csv.truncate(0)
-# 		end
-#
-# 		myarray = stripQuery(event)
-#
-# 		puts myarray
-#
-# 		myarray.each do |input|
-#
-# 			mechanize = Mechanize.new
-#
-# 			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-#
-# 			page = mechanize.get("https://www.webstaurantstore.com/")
-#
-# 			sleep(rand(0..3))
-#
-# 			if page
-# 				search_form = page.form
-#
-# 				search_form['searchval'] = input
-#
-# 				page = search_form.submit
-#
-# 				price = page.search("div.details a")
-#
-# 				if price.empty?
-# 					open('csv/webstaurantstore.csv', 'a') do |csv|
-# 						csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
-# 					end
-# 				end
-#
-# 				notfound = price.length
-# 				notfoundcount = 0
-# 				puts notfound
-# 				price.each do |x|
-# 					page = mechanize.click(x)
-# 					mypage = page.at(".mfr-number")
-#
-# 					if mypage.contains? == input
-# 						price = page.at("p.price span")
-#
-# 						open('csv/webstaurantstore.csv', 'a') do |csv|
-# 							csv <<  "Webstaurant," +  input + "," + price + "\n"
-# 						end
-#
-# 					else
-# 						notfoundcount += 1
-#
-# 						if notfound == notfoundcount
-# 							open('csv/webstaurantstore.csv', 'a') do |csv|
-# 								csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
-# 							end
-# 						end
-# 					end
-# 				end
-# 			else
-# 				open('csv/webstaurantstore.csv', 'a') do |csv|
-# 					csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
-# 				end
-# 			end
-# 		end
-# 	end
-# end
+class Webstaurantstore
+	include SuckerPunch::Job
+
+    def perform(event)
+        arraywebstaurantstore(event)
+    end
+
+	def stripQuery(string)
+		string = string.gsub("MODEL	OUR PRICE	LIST PRICE	OUR COST	COMPETITOR	COMPETITOR NAME", "").gsub(/\$(\d+)\.(\d+)/, "").gsub(/\t/, "").split("\n")
+
+		arr = string.map do |x|
+			x.gsub(/\s+/, "")
+		end
+
+		(0..3).each do |x|
+			arr.shift()
+		end
+
+		(0..2).each do |x|
+			arr.pop()
+		end
+
+		arr = arr.uniq
+
+		arr.shift()
+
+		return arr
+	end
+
+	def arraywebstaurantstore(event)
+		open("csv/webstaurantstore.csv", "w") do |csv|
+			csv.truncate(0)
+		end
+
+		myarray = stripQuery(event)
+
+		puts myarray
+
+		myarray.each do |input|
+
+			mechanize = Mechanize.new
+
+			mechanize.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+			page = mechanize.get("https://www.webstaurantstore.com/")
+
+			sleep(rand(0..3))
+
+			if page
+				search_form = page.form
+
+				search_form['searchval'] = input
+
+				page = search_form.submit
+
+				price = page.search("div.details a")
+
+				if price.empty?
+					open('csv/webstaurantstore.csv', 'a') do |csv|
+						csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
+					end
+				end
+
+				notfound = price.length
+				notfoundcount = 0
+				puts notfound
+				price.each do |x|
+					page = mechanize.click(x)
+					mypage = page.at(".mfr-number")
+
+					if mypage.contains? == input
+						price = page.at("p.price span")
+
+						open('csv/webstaurantstore.csv', 'a') do |csv|
+							csv <<  "Webstaurant," +  input + "," + price + "\n"
+						end
+
+					else
+						notfoundcount += 1
+
+						if notfound == notfoundcount
+							open('csv/webstaurantstore.csv', 'a') do |csv|
+								csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
+							end
+						end
+					end
+				end
+			else
+				open('csv/webstaurantstore.csv', 'a') do |csv|
+					csv <<  "Webstaurant," +  input + "," + "0.00" + "\n"
+				end
+			end
+		end
+	end
+end
 
 class Ckitchen
 	include SuckerPunch::Job
@@ -914,7 +914,8 @@ end
 
 
 
-#################################### not working
+####################################
+#not working
 
 #having difficulty - not completed
 class Radwell
