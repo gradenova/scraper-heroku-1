@@ -38,9 +38,12 @@ GEM
     mustermann (1.0.0)
     net-http-digest_auth (1.4.1)
     net-http-persistent (2.9.4)
+    nokogiri (1.8.0)
+      mini_portile2 (~> 2.2.0)
     nokogiri (1.8.0-x86-mingw32)
       mini_portile2 (~> 2.2.0)
     ntlm-http (0.1.1)
+    pg (0.21.0)
     pg (0.21.0-x86-mingw32)
     rack (2.0.3)
     rack-protection (2.0.0)
@@ -64,14 +67,16 @@ GEM
       concurrent-ruby (~> 1.0.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    tzinfo (1.2.3)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
+    unf_ext (0.0.7.4)
     unf_ext (0.0.7.4-x86-mingw32)
     webrobots (0.1.2)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES
